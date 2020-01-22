@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2015-2016 Red Hat, Inc, and individual contributors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jboss</groupId>
+        <artifactId>jboss-parent</artifactId>
+        <version>36</version>
+    </parent>
+
+    <groupId>org.wildfly.halos</groupId>
+    <artifactId>halos-parent</artifactId>
+    <version>0.0.1</version>
+    <name>halOS :: Parent</name>
+    <description>WildFly OpenShift Management Console</description>
+    <packaging>pom</packaging>
+    <url>https://halos.github.io/</url>
+
+    <organization>
+        <name>JBoss, a division of Red Hat</name>
+        <url>https://developer.jboss.org/</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Harald Pehl</name>
+            <id>hpehl</id>
+            <email>hpehl@redhat.com</email>
+            <organization>Red Hat</organization>
+            <timezone>+1</timezone>
+            <roles>
+                <role>Lead</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>https://repository.jboss.org/licenses/apache-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+        <license>
+            <name>MIT License</name>
+            <url>https://repository.jboss.org/licenses/mit.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git@github.com:hal/halos.git</connection>
+        <developerConnection>scm:git:git@github.com:hal/halos.git</developerConnection>
+        <url>git@github.com:hal/halos.git</url>
+    </scm>
+
+    <properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <crysknife.version>0.1-SNAPSHOT</crysknife.version>
+        <elemento.version>HEAD-SNAPSHOT</elemento.version>
+        <gwt-maven-plugin.version>1.0.0</gwt-maven-plugin.version>
+        <gwt.version>HEAD-SNAPSHOT</gwt.version>
+        <patternfly.java.version>0.0.1</patternfly.java.version>
+    </properties>
+
+    <modules>
+        <module>console</module>
+        <!--        <module>core</module>-->
+        <!--        <module>dmr</module>-->
+        <!--        <module>meta</module>-->
+        <module>resources</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- halOS -->
+            <dependency>
+                <groupId>org.wildfly.halos</groupId>
+                <artifactId>halos-resources</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- Crysknife -->
+            <dependency>
+                <groupId>org.treblereel.gwt.crysknife</groupId>
+                <artifactId>crysknife-annotations</artifactId>
+                <version>${crysknife.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.treblereel.gwt.crysknife</groupId>
+                <artifactId>crysknife-processor</artifactId>
+                <version>${crysknife.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.treblereel.gwt.crysknife</groupId>
+                <artifactId>crysknife-core</artifactId>
+                <version>${crysknife.version}</version>
+            </dependency>
+
+            <!-- PatternFly -->
+            <dependency>
+                <groupId>org.patternfly</groupId>
+                <artifactId>patternfly-java</artifactId>
+                <version>${patternfly.java.version}</version>
+            </dependency>
+
+            <!-- Elemento -->
+            <dependency>
+                <groupId>org.jboss.elemento</groupId>
+                <artifactId>elemento-core</artifactId>
+                <version>${elemento.version}</version>
+            </dependency>
+
+            <!-- Classic GWT (necessary for the GWT Maven Plugin) -->
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt</artifactId>
+                <version>${gwt.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>net.ltgt.gwt.maven</groupId>
+                    <artifactId>gwt-maven-plugin</artifactId>
+                    <version>${gwt-maven-plugin.version}</version>
+                    <extensions>true</extensions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>oss-sonatype</id>
+            <name>OSS Sonatype</name>
+            <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+</project>
