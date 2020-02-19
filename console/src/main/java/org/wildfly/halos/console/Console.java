@@ -1,6 +1,6 @@
-package org.wildfly.halos.client;
+package org.wildfly.halos.console;
 
-import com.google.gwt.core.client.EntryPoint;
+import org.gwtproject.core.client.EntryPoint;
 import org.patternfly.components.Navigation;
 import org.patternfly.components.NavigationItem;
 import org.patternfly.components.Page;
@@ -8,13 +8,11 @@ import org.wildfly.halos.resources.Ids;
 
 import static org.jboss.elemento.Elements.body;
 import static org.jboss.elemento.Elements.h;
+import static org.jboss.elemento.Elements.nav;
 import static org.jboss.elemento.Elements.p;
 import static org.patternfly.components.AlertGroup.toast;
 import static org.patternfly.components.Content.content;
-import static org.patternfly.components.Page.header;
-import static org.patternfly.components.Page.main;
-import static org.patternfly.components.Page.page;
-import static org.patternfly.components.Page.section;
+import static org.patternfly.components.Page.*;
 import static org.patternfly.resources.CSS.modifier;
 import static org.patternfly.resources.Constants.light;
 
@@ -29,7 +27,7 @@ public class Console implements EntryPoint {
 
         Page page = page()
                 .add(header("halOS", "#"))
-                .add(navigation)
+                .add(sidebar().add(navigation))
                 .add(main(Ids.ROOT_CONTAINER)
                         .add(section().css(modifier(light))
                                 .add(content()

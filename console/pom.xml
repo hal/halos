@@ -27,7 +27,7 @@
 
     <artifactId>halos-console</artifactId>
     <name>halOS :: Console</name>
-    <packaging>gwt-app</packaging>
+    <packaging>war</packaging>
 
     <dependencies>
         <dependency>
@@ -39,40 +39,43 @@
             <artifactId>patternfly-java</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>patternfly__patternfly</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.jboss.elemento</groupId>
             <artifactId>elemento-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
+            <groupId>org.gwtproject.core</groupId>
+            <artifactId>gwt-core</artifactId>
         </dependency>
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
+
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
+                <groupId>nl.geodienstencentrum.maven</groupId>
+                <artifactId>sass-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-patternfly-resources</id>
+                        <id>compile-scss</id>
                         <phase>process-resources</phase>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>update-stylesheets</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.outputDirectory}/org/wildfly/halos/public</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/node_modules/@patternfly/patternfly</directory>
-                                    <includes>
-                                        <include>assets/**</include>
-                                        <include>patternfly.*</include>
-                                    </includes>
+                                    <source>
+                                        <directory>${basedir}/src/main/webapp</directory>
+                                        <includes>
+                                            <include>**/*.scss</include>
+                                        </includes>
+                                    </source>
+                                    <destination>${project.build.directory}/${project.build.finalName}</destination>
                                 </resource>
                             </resources>
                         </configuration>
@@ -80,19 +83,102 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>net.ltgt.gwt.maven</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-patternfly</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.webjars.npm</groupId>
+                                    <artifactId>patternfly__patternfly</artifactId>
+                                    <version>${patternfly.html.version}</version>
+                                    <type>jar</type>
+                                </artifactItem>
+                            </artifactItems>
+                            <includes>**/assets/**,**/patternfly.*,</includes>
+                            <outputDirectory>${project.build.directory}/patternfly</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-patternfly</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <copy todir="${project.build.directory}/${project.build.finalName}">
+                                    <fileset dir="${project.build.directory}/patternfly/">
+                                        <include name="**/assets/"/>
+                                        <include name="**/patternfly.*"/>
+                                    </fileset>
+                                    <cutdirsmapper dirs="5"/>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.vertispan.j2cl</groupId>
+                <artifactId>j2cl-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-js</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <devmodeArgs>
-                        <devmodeArg>-startupUrl</devmodeArg>
-                        <devmodeArg>halos/index.html</devmodeArg>
-                    </devmodeArgs>
-                    <logLevel>INFO</logLevel>
-                    <moduleName>org.wildfly.halos.Console</moduleName>
-                    <moduleShortName>halos</moduleShortName>
-                    <sourceLevel>1.8</sourceLevel>
+                    <defaultWebappDirectory>${project.build.directory}/gwt/launcherDir</defaultWebappDirectory>
+                    <compilationLevel>${j2cl-compilation.level}</compilationLevel>
+                    <entrypoint>org.wildfly.halos.console.Console</entrypoint>
+                    <initialScriptFilename>halos.js</initialScriptFilename>
+                    <defines>
+                        <locale>en_US</locale>
+                    </defines>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <packagingExcludes>WEB-INF/classes/**</packagingExcludes>
+                    <packagingExcludes>WEB-INF/lib/**</packagingExcludes>
+                    <warName>${project.build.finalName}</warName>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat7-plugin.version}</version>
+                <configuration>
+                    <contextFile>${basedir}/src/main/tomcat/context.xml</contextFile>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <j2cl-compilation.level>ADVANCED</j2cl-compilation.level>
+            </properties>
+        </profile>
+    </profiles>
 </project>

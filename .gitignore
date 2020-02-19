@@ -1,0 +1,13 @@
+*.bak
+*.iml
+.DS_Store
+.classpath
+.factorypath
+.idea
+.project
+.settings
+.vscode
+dependency-reduced-pom.xml
+hs_err*
+out
+target

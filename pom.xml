@@ -28,9 +28,9 @@
     <groupId>org.wildfly.halos</groupId>
     <artifactId>halos-parent</artifactId>
     <version>0.0.1</version>
+    <packaging>pom</packaging>
     <name>halOS :: Parent</name>
     <description>WildFly OpenShift Management Console</description>
-    <packaging>pom</packaging>
     <url>https://halos.github.io/</url>
 
     <organization>
@@ -71,15 +71,20 @@
     </scm>
 
     <properties>
+        <j2cl-compilation.level>BUNDLE</j2cl-compilation.level>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <j2cl-plugin.version>0.13-SNAPSHOT</j2cl-plugin.version>
+        <sass-plugin.version>3.7.2</sass-plugin.version>
+        <tomcat7-plugin.version>2.2</tomcat7-plugin.version>
+
         <crysknife.version>0.1-SNAPSHOT</crysknife.version>
         <elemento.version>HEAD-SNAPSHOT</elemento.version>
-        <gwt-maven-plugin.version>1.0.0</gwt-maven-plugin.version>
-        <gwt.version>HEAD-SNAPSHOT</gwt.version>
+        <gwt-core.version>1.0-SNAPSHOT</gwt-core.version>
+        <patternfly.html.version>2.65.0</patternfly.html.version>
         <patternfly.java.version>0.0.1</patternfly.java.version>
     </properties>
 
@@ -124,6 +129,11 @@
                 <artifactId>patternfly-java</artifactId>
                 <version>${patternfly.java.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.webjars.npm</groupId>
+                <artifactId>patternfly__patternfly</artifactId>
+                <version>${patternfly.html.version}</version>
+            </dependency>
 
             <!-- Elemento -->
             <dependency>
@@ -132,41 +142,101 @@
                 <version>${elemento.version}</version>
             </dependency>
 
-            <!-- Classic GWT (necessary for the GWT Maven Plugin) -->
+            <!-- GWT -->
             <dependency>
-                <groupId>com.google.gwt</groupId>
-                <artifactId>gwt</artifactId>
-                <version>${gwt.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>org.gwtproject.core</groupId>
+                <artifactId>gwt-core</artifactId>
+                <version>${gwt-core.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>org/wildfly/halos/**/*.java</include>
+                </includes>
+            </resource>
+        </resources>
+
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>net.ltgt.gwt.maven</groupId>
-                    <artifactId>gwt-maven-plugin</artifactId>
-                    <version>${gwt-maven-plugin.version}</version>
-                    <extensions>true</extensions>
+                    <groupId>nl.geodienstencentrum.maven</groupId>
+                    <artifactId>sass-maven-plugin</artifactId>
+                    <version>${sass-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.vertispan.j2cl</groupId>
+                    <artifactId>j2cl-maven-plugin</artifactId>
+                    <version>${j2cl-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[1.8,1.9)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <repositories>
         <repository>
-            <id>oss-sonatype</id>
+            <id>google-snapshots</id>
             <name>OSS Sonatype</name>
             <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
+        </repository>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <name>Sonatype Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+        <repository>
+            <id>vertispan-releases</id>
+            <name>Vertispan hosted artifacts-releases</name>
+            <url>https://repo.vertispan.com/j2cl/</url>
+        </repository>
+        <repository>
+            <id>vertispan-j2cl-snapshots</id>
+            <name>Vertispan hosted artifacts-snapshots</name>
+            <url>https://repo.vertispan.com/j2cl/</url>
+        </repository>
+        <repository>
+            <id>vertispan-gwt3-snapshots</id>
+            <name>Vertispan Snapshots</name>
+            <url>https://repo.vertispan.com/gwt-snapshot/</url>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
             </snapshots>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>vertispan-releases</id>
+            <name>Vertispan hosted plugin-releases</name>
+            <url>https://repo.vertispan.com/j2cl/</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
