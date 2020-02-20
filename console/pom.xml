@@ -26,16 +26,17 @@
     </parent>
 
     <groupId>org.wildfly.halos</groupId>
-    <artifactId>halos-parent</artifactId>
+    <artifactId>halos-console-parent</artifactId>
     <version>0.0.1</version>
     <packaging>pom</packaging>
+
     <name>halOS :: Parent</name>
     <description>WildFly OpenShift Management Console</description>
-    <url>https://halos.github.io/</url>
+    <url>https://github.com/hal/halos</url>
 
     <organization>
-        <name>JBoss, a division of Red Hat</name>
-        <url>https://developer.jboss.org/</url>
+        <name>Red Hat</name>
+        <url>https://developers.redhat.com/</url>
     </organization>
 
     <developers>
@@ -55,11 +56,6 @@
         <license>
             <name>Apache License 2.0</name>
             <url>https://repository.jboss.org/licenses/apache-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-        <license>
-            <name>MIT License</name>
-            <url>https://repository.jboss.org/licenses/mit.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>

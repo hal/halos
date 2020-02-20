@@ -21,7 +21,7 @@
 
     <parent>
         <groupId>org.wildfly.halos</groupId>
-        <artifactId>halos-parent</artifactId>
+        <artifactId>halos-console-parent</artifactId>
         <version>0.0.1</version>
     </parent>
 
