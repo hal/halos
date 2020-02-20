@@ -1,0 +1,23 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+    <id>resources</id>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <formats>
+        <format>jar</format>
+    </formats>
+
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}/${project.build.finalName}</directory>
+            <outputDirectory>META-INF/resources</outputDirectory>
+            <includes>
+                <include>assets</include>
+                <include>apple-touch-icon.png</include>
+                <include>favicon.ico</include>
+                <include>halos.*</include>
+                <include>index.html</include>
+                <include>patternfly.*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>

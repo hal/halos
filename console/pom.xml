@@ -97,6 +97,12 @@
             <!-- halOS -->
             <dependency>
                 <groupId>org.wildfly.halos</groupId>
+                <artifactId>halos-console</artifactId>
+                <version>${project.version}</version>
+                <classifier>resources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.halos</groupId>
                 <artifactId>halos-resources</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -26,11 +26,11 @@
     </parent>
 
     <groupId>org.wildfly.halos</groupId>
-    <artifactId>halos-console-parent</artifactId>
+    <artifactId>halos-proxy</artifactId>
     <version>0.0.1</version>
 
     <name>halOS :: Proxy</name>
-    <description>WildFly OpenShift Management Console</description>
+    <description>WildFly OpenShift Management Proxy</description>
     <url>https://github.com/hal/halos</url>
 
     <organization>
@@ -74,11 +74,12 @@
 
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <quarkus-plugin.version>1.2.1.Final</quarkus-plugin.version>
+        <surefire-plugin.version>2.22.1</surefire-plugin.version>
 
+        <halos.resources.version>0.0.1</halos.resources.version>
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <quarkus.platform.version>1.2.1.Final</quarkus.platform.version>
-        <surefire-plugin.version>2.22.1</surefire-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -94,6 +95,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.wildfly.halos</groupId>
+            <artifactId>halos-console</artifactId>
+            <classifier>resources</classifier>
+            <version>${halos.resources.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy</artifactId>

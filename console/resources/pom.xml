@@ -25,6 +25,6 @@
         <version>0.0.1</version>
     </parent>
 
-    <artifactId>halos-console-resources</artifactId>
-    <name>halOS :: Console :: Resources</name>
+    <artifactId>halos-resources</artifactId>
+    <name>halOS :: Resources</name>
 </project>

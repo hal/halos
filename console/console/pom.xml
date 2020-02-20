@@ -148,9 +148,6 @@
                     <compilationLevel>${j2cl-compilation.level}</compilationLevel>
                     <entrypoint>org.wildfly.halos.console.Console</entrypoint>
                     <initialScriptFilename>halos.js</initialScriptFilename>
-                    <defines>
-                        <locale>en_US</locale>
-                    </defines>
                 </configuration>
             </plugin>
             <plugin>
@@ -161,6 +158,24 @@
                     <packagingExcludes>WEB-INF/lib/**</packagingExcludes>
                     <warName>${project.build.finalName}</warName>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>halos-console-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/assembly/resources.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
