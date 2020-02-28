@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -15,8 +16,12 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.sasl.RealmCallback;
 
 import com.sun.jdi.JDIPermission;
+import io.smallrye.mutiny.Multi;
 import org.jboss.as.controller.client.ModelControllerClient;
+import org.jboss.as.controller.client.Operation;
+import org.jboss.dmr.ModelNode;
 import org.jboss.logging.Logger;
+import org.jboss.threads.AsyncFuture;
 
 /** Manages connections to the WildFly management endpoints and execute DMR operations. */
 @ApplicationScoped
@@ -25,7 +30,7 @@ public class Dispatcher {
     private static final String REMOTE_HTTP = "remote+http";
     private static Logger log = Logger.getLogger("halos.proxy.dispatcher");
 
-    private final Map<String, ModelControllerClient> clients;
+    private final Map<Instance, ModelControllerClient> clients;
 
     @Inject
     public Dispatcher() {
@@ -51,7 +56,7 @@ public class Dispatcher {
                             }
                         }
                     });
-            clients.put(instance.name, client);
+            clients.put(instance, client);
             log.infof("Created client for %s", instance);
         } catch (UnknownHostException e) {
             String error = String.format("Unable to connect to %s: %s", instance, e.getLocalizedMessage());
@@ -61,7 +66,7 @@ public class Dispatcher {
     }
 
     public void unregister(Instance instance) throws DispatcherException {
-        ModelControllerClient client = clients.remove(instance.name);
+        ModelControllerClient client = clients.remove(instance);
         if (client != null) {
             try {
                 client.close();
@@ -72,5 +77,23 @@ public class Dispatcher {
                 throw new DispatcherException(error, e);
             }
         }
+    }
+
+    public Multi<ModelNode> execute(Operation operation) {
+        return Multi.createFrom().emitter(emitter -> {
+            for (Map.Entry<Instance, ModelControllerClient> entry : clients.entrySet()) {
+                Instance instance = entry.getKey();
+                ModelControllerClient client = entry.getValue();
+                try {
+                    ModelNode modelNode = client.execute(operation);
+                    emitter.emit(modelNode);
+                } catch (IOException e) {
+                    log.errorf("Error executing operation %s against %s: %s",
+                            operation.getOperation().toJSONString(true), instance, e.getMessage());
+                    emitter.fail(e);
+                }
+            }
+            emitter.complete();
+        });
     }
 }

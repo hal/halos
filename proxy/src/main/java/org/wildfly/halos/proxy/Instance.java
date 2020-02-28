@@ -26,6 +26,6 @@ public class Instance {
 
     @Override
     public String toString() {
-        return String.format("Instance(%s@%s:%d)", name, ip, port);
+        return String.format("%s@%s:%d", name, ip, port);
     }
 }
