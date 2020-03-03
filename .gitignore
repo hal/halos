@@ -1,13 +1,35 @@
-*.bak
-*.iml
-.DS_Store
-.classpath
-.factorypath
-.idea
+# Eclipse
 .project
-.settings
+.classpath
+.settings/
+bin/
+
+# IntelliJ
+.idea
+*.ipr
+*.iml
+*.iws
+
+# NetBeans
+nb-configuration.xml
+
+# Visual Studio Code
 .vscode
-dependency-reduced-pom.xml
-hs_err*
-out
-target
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# patch
+*.orig
+*.rej
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties

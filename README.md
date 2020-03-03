@@ -20,7 +20,7 @@ The proxy is a server side application running in a pod next to the WildFly inst
 - [Quarkus](https://quarkus.io)
 - JAX-RS
 - Server Sent Events
-- JBoss Management Client
+- JWildFly Controller Client
 - HTTP server for the console
 
 ### Console

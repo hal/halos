@@ -20,58 +20,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.jboss</groupId>
-        <artifactId>jboss-parent</artifactId>
-        <version>36</version>
+        <groupId>org.wildfly.halos</groupId>
+        <artifactId>halos-parent</artifactId>
+        <version>0.0.1</version>
     </parent>
 
-    <groupId>org.wildfly.halos</groupId>
-    <artifactId>halos-console-parent</artifactId>
-    <version>0.0.1</version>
-    <packaging>pom</packaging>
-
-    <name>halOS :: Parent</name>
-    <description>WildFly OpenShift Management Console</description>
-    <url>https://github.com/hal/halos</url>
-
-    <organization>
-        <name>Red Hat</name>
-        <url>https://developers.redhat.com/</url>
-    </organization>
-
-    <developers>
-        <developer>
-            <name>Harald Pehl</name>
-            <id>hpehl</id>
-            <email>hpehl@redhat.com</email>
-            <organization>Red Hat</organization>
-            <timezone>+1</timezone>
-            <roles>
-                <role>Lead</role>
-            </roles>
-        </developer>
-    </developers>
-
-    <licenses>
-        <license>
-            <name>Apache License 2.0</name>
-            <url>https://repository.jboss.org/licenses/apache-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <scm>
-        <connection>scm:git@github.com:hal/halos.git</connection>
-        <developerConnection>scm:git:git@github.com:hal/halos.git</developerConnection>
-        <url>git@github.com:hal/halos.git</url>
-    </scm>
+    <artifactId>halos-console</artifactId>
+    <name>halOS :: Console</name>
+    <packaging>war</packaging>
 
     <properties>
         <j2cl-compilation.level>BUNDLE</j2cl-compilation.level>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <j2cl-plugin.version>0.13-SNAPSHOT</j2cl-plugin.version>
         <sass-plugin.version>3.7.2</sass-plugin.version>
@@ -84,76 +43,48 @@
         <patternfly.java.version>0.0.1</patternfly.java.version>
     </properties>
 
-    <modules>
-        <module>console</module>
-        <!--        <module>core</module>-->
-        <!--        <module>dmr</module>-->
-        <!--        <module>meta</module>-->
-        <module>resources</module>
-    </modules>
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- halOS -->
-            <dependency>
-                <groupId>org.wildfly.halos</groupId>
-                <artifactId>halos-console</artifactId>
-                <version>${project.version}</version>
-                <classifier>resources</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly.halos</groupId>
-                <artifactId>halos-resources</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <!-- Crysknife -->
-            <dependency>
-                <groupId>org.treblereel.gwt.crysknife</groupId>
-                <artifactId>crysknife-annotations</artifactId>
-                <version>${crysknife.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.treblereel.gwt.crysknife</groupId>
-                <artifactId>crysknife-processor</artifactId>
-                <version>${crysknife.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.treblereel.gwt.crysknife</groupId>
-                <artifactId>crysknife-core</artifactId>
-                <version>${crysknife.version}</version>
-            </dependency>
-
-            <!-- PatternFly -->
-            <dependency>
-                <groupId>org.patternfly</groupId>
-                <artifactId>patternfly-java</artifactId>
-                <version>${patternfly.java.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.webjars.npm</groupId>
-                <artifactId>patternfly__patternfly</artifactId>
-                <version>${patternfly.html.version}</version>
-            </dependency>
-
-            <!-- Elemento -->
-            <dependency>
-                <groupId>org.jboss.elemento</groupId>
-                <artifactId>elemento-core</artifactId>
-                <version>${elemento.version}</version>
-            </dependency>
-
-            <!-- GWT -->
-            <dependency>
-                <groupId>org.gwtproject.core</groupId>
-                <artifactId>gwt-core</artifactId>
-                <version>${gwt-core.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.patternfly</groupId>
+            <artifactId>patternfly-java</artifactId>
+            <version>${patternfly.java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>patternfly__patternfly</artifactId>
+            <version>${patternfly.html.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.treblereel.gwt.crysknife</groupId>
+            <artifactId>crysknife-annotations</artifactId>
+            <version>${crysknife.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.treblereel.gwt.crysknife</groupId>
+            <artifactId>crysknife-processor</artifactId>
+            <version>${crysknife.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.treblereel.gwt.crysknife</groupId>
+            <artifactId>crysknife-core</artifactId>
+            <version>${crysknife.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.elemento</groupId>
+            <artifactId>elemento-core</artifactId>
+            <version>${elemento.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gwtproject.core</groupId>
+            <artifactId>gwt-core</artifactId>
+            <version>${gwt-core.version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
+
         <resources>
             <resource>
                 <directory>src/main/java</directory>
@@ -163,43 +94,149 @@
             </resource>
         </resources>
 
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>nl.geodienstencentrum.maven</groupId>
-                    <artifactId>sass-maven-plugin</artifactId>
-                    <version>${sass-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>com.vertispan.j2cl</groupId>
-                    <artifactId>j2cl-maven-plugin</artifactId>
-                    <version>${j2cl-plugin.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
+                <groupId>nl.geodienstencentrum.maven</groupId>
+                <artifactId>sass-maven-plugin</artifactId>
+                <version>${sass-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>enforce-java</id>
+                        <id>compile-scss</id>
+                        <phase>process-resources</phase>
                         <goals>
-                            <goal>enforce</goal>
+                            <goal>update-stylesheets</goal>
                         </goals>
                         <configuration>
-                            <rules>
-                                <requireJavaVersion>
-                                    <version>[1.8,1.9)</version>
-                                </requireJavaVersion>
-                            </rules>
+                            <resources>
+                                <resource>
+                                    <source>
+                                        <directory>${basedir}/src/main/webapp</directory>
+                                        <includes>
+                                            <include>**/*.scss</include>
+                                        </includes>
+                                    </source>
+                                    <destination>${project.build.directory}/${project.build.finalName}</destination>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-patternfly</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.webjars.npm</groupId>
+                                    <artifactId>patternfly__patternfly</artifactId>
+                                    <version>${patternfly.html.version}</version>
+                                    <type>jar</type>
+                                </artifactItem>
+                            </artifactItems>
+                            <includes>**/assets/**,**/patternfly.*,</includes>
+                            <outputDirectory>${project.build.directory}/patternfly</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-patternfly</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <copy todir="${project.build.directory}/${project.build.finalName}">
+                                    <fileset dir="${project.build.directory}/patternfly/">
+                                        <include name="**/assets/"/>
+                                        <include name="**/patternfly.*"/>
+                                    </fileset>
+                                    <cutdirsmapper dirs="5"/>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.vertispan.j2cl</groupId>
+                <artifactId>j2cl-maven-plugin</artifactId>
+                <version>${j2cl-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>build-js</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <defaultWebappDirectory>${project.build.directory}/gwt/launcherDir</defaultWebappDirectory>
+                    <compilationLevel>${j2cl-compilation.level}</compilationLevel>
+                    <entrypoint>org.wildfly.halos.console.Console</entrypoint>
+                    <initialScriptFilename>halos.js</initialScriptFilename>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <packagingExcludes>WEB-INF/classes/**</packagingExcludes>
+                    <packagingExcludes>WEB-INF/lib/**</packagingExcludes>
+                    <warName>${project.build.finalName}</warName>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>halos-console-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/assembly/resources.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat7-plugin.version}</version>
+                <configuration>
+                    <contextFile>${basedir}/src/main/tomcat/context.xml</contextFile>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <j2cl-compilation.level>ADVANCED</j2cl-compilation.level>
+            </properties>
+        </profile>
+    </profiles>
 
     <repositories>
         <repository>
