@@ -27,7 +27,7 @@
 
     <artifactId>halos-proxy</artifactId>
     <name>halOS :: Proxy</name>
-    <url>https://github.com/hal/halos</url>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.parameters>true</maven.compiler.parameters>
@@ -258,6 +258,7 @@
                 </plugins>
             </build>
         </profile>
+
         <profile>
             <id>native</id>
             <activation>
@@ -265,6 +266,9 @@
                     <name>native</name>
                 </property>
             </activation>
+            <properties>
+                <quarkus.package.type>native</quarkus.package.type>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -288,9 +292,6 @@
                     </plugin>
                 </plugins>
             </build>
-            <properties>
-                <quarkus.package.type>native</quarkus.package.type>
-            </properties>
         </profile>
     </profiles>
 </project>

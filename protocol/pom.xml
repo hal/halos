@@ -30,54 +30,16 @@
     <packaging>jar</packaging>
 
     <properties>
-        <jboss.dmr.version>1.5.0.Final</jboss.dmr.version>
         <jboss.logging.version>3.4.1.Final</jboss.logging.version>
         <jboss.logging-tools.version>2.2.1.Final</jboss.logging-tools.version>
-        <jboss.modules.version>1.9.2.Final</jboss.modules.version>
         <jboss.remoting.version>5.0.17.Final</jboss.remoting.version>
-        <jboss.threads.version>3.0.1.Final</jboss.threads.version>
-        <wildfly.common.version>1.5.2.Final</wildfly.common.version>
-        <wildfly.core.version>11.0.0.Beta8</wildfly.core.version>
-        <wildfly.elytron.version>1.11.2.Final</wildfly.elytron.version>
-        <xnio.version>3.7.7.Final</xnio.version>
+        <jboss.xnio.version>3.7.7.Final</jboss.xnio.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.jboss.modules</groupId>
-            <artifactId>jboss-modules</artifactId>
-            <version>${jboss.modules.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.remoting</groupId>
-            <artifactId>jboss-remoting</artifactId>
-            <version>${jboss.remoting.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.security</groupId>
-            <artifactId>wildfly-elytron</artifactId>
-            <version>${wildfly.elytron.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.xnio</groupId>
-            <artifactId>xnio-api</artifactId>
-            <version>${xnio.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.xnio</groupId>
-            <artifactId>xnio-nio</artifactId>
-            <version>${xnio.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.threads</groupId>
+            <groupId>org.wildfly.halos</groupId>
             <artifactId>jboss-threads</artifactId>
-            <version>${jboss.threads.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.logging</groupId>
@@ -88,19 +50,46 @@
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging-annotations</artifactId>
             <version>${jboss.logging-tools.version}</version>
-            <!-- This is a compile-time dependency of this project, but is not needed at compile or runtime by other
-                  projects that depend on this project.-->
-            <scope>provided</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging-processor</artifactId>
             <version>${jboss.logging-tools.version}</version>
-            <!-- This is a compile-time dependency of this project, but is not needed at compile or runtime by other
-                  projects that depend on this project.-->
-            <scope>provided</scope>
-            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.remoting</groupId>
+            <artifactId>jboss-remoting</artifactId>
+            <version>${jboss.remoting.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jboss-logging</artifactId>
+                    <groupId>org.jboss.logging</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>wildfly-common</artifactId>
+                    <groupId>org.wildfly.common</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xnio-api</artifactId>
+                    <groupId>org.jboss.xnio</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.xnio</groupId>
+            <artifactId>xnio-api</artifactId>
+            <version>${jboss.xnio.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jboss-threads</artifactId>
+                    <groupId>org.jboss.threads</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.xnio</groupId>
+            <artifactId>xnio-nio</artifactId>
+            <version>${jboss.xnio.version}</version>
         </dependency>
     </dependencies>
 </project>

@@ -23,22 +23,13 @@
 package org.jboss.as.controller.client;
 
 import java.io.Closeable;
-import java.security.PrivilegedAction;
-import java.time.Duration;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.security.auth.callback.CallbackHandler;
 
 import org.jboss.as.controller.client.impl.ClientConfigurationImpl;
-import org.jboss.threads.EnhancedQueueExecutor;
-import org.jboss.threads.JBossThreadFactory;
-
-import static java.security.AccessController.doPrivileged;
 
 /**
  * The configuration used to create the {@code ModelControllerClient}.
@@ -183,25 +174,9 @@ public interface ModelControllerClientConfiguration extends Closeable {
          * @return the configuration
          */
         public ModelControllerClientConfiguration build() {
-            return new ClientConfigurationImpl(hostName, port, handler, createDefaultExecutor(), true,
+            ExecutorService executorService = Executors.newFixedThreadPool(6);
+            return new ClientConfigurationImpl(hostName, port, handler, executorService, true,
                     connectionTimeout, protocol, clientBindAddress);
-        }
-
-        private ExecutorService createDefaultExecutor() {
-            final ThreadFactory threadFactory = doPrivileged(
-                    (PrivilegedAction<JBossThreadFactory>) () -> new JBossThreadFactory(defaultThreadGroup,
-                            Boolean.FALSE, null,
-                            "%G " + executorCount.incrementAndGet() + "-%t",
-                            null, null));
-            return EnhancedQueueExecutor.DISABLE_HINT ?
-                    new ThreadPoolExecutor(2, 6, 60, TimeUnit.SECONDS,
-                            new LinkedBlockingDeque<>(), threadFactory) :
-                    new EnhancedQueueExecutor.Builder()
-                            .setCorePoolSize(2)
-                            .setMaximumPoolSize(6)
-                            .setKeepAliveTime(Duration.ofSeconds(60))
-                            .setThreadFactory(threadFactory)
-                            .build();
         }
     }
 }

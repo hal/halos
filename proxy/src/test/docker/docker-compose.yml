@@ -1,14 +1,14 @@
 version: '3'
 services:
   wf0:
-    build: ../java
+    build: .
     ports:
       - "9990:9990"
   wf1:
-    build: ../java
+    build: .
     ports:
       - "9991:9990"
   wf2:
-    build: ../java
+    build: .
     ports:
       - "9992:9990"

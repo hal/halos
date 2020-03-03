@@ -35,53 +35,32 @@
         <jboss.logging-tools.version>2.2.1.Final</jboss.logging-tools.version>
         <jboss.threads.version>3.0.1.Final</jboss.threads.version>
         <wildfly.common.version>1.5.2.Final</wildfly.common.version>
-        <wildfly.core.version>11.0.0.Beta8</wildfly.core.version>
         <wildfly.elytron.version>1.11.2.Final</wildfly.elytron.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.wildfly.core</groupId>
+            <groupId>org.wildfly.halos</groupId>
+            <artifactId>jboss-threads</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.halos</groupId>
             <artifactId>wildfly-protocol</artifactId>
-            <version>${wildfly.core.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jboss.threads</groupId>
-                    <artifactId>jboss-threads</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wildfly.common</groupId>
             <artifactId>wildfly-common</artifactId>
             <version>${wildfly.common.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.wildfly.security</groupId>
-                    <artifactId>wildfly-security-manager</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wildfly.security</groupId>
             <artifactId>wildfly-elytron</artifactId>
             <version>${wildfly.elytron.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jboss</groupId>
             <artifactId>jboss-dmr</artifactId>
             <version>${jboss.dmr.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.threads</groupId>
-            <artifactId>jboss-threads</artifactId>
-            <version>${jboss.threads.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.logging</groupId>
@@ -92,19 +71,11 @@
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging-annotations</artifactId>
             <version>${jboss.logging-tools.version}</version>
-            <!-- This is a compile-time dependency of this project, but is not needed at compile or runtime by other
-                  projects that depend on this project.-->
-            <scope>provided</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging-processor</artifactId>
             <version>${jboss.logging-tools.version}</version>
-            <!-- This is a compile-time dependency of this project, but is not needed at compile or runtime by other
-                  projects that depend on this project.-->
-            <scope>provided</scope>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 </project>

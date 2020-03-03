@@ -64,6 +64,11 @@
             </dependency>
             <dependency>
                 <groupId>org.wildfly.halos</groupId>
+                <artifactId>jboss-threads</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.halos</groupId>
                 <artifactId>wildfly-protocol</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -85,5 +90,19 @@
         <module>controller-client</module>
         <module>protocol</module>
         <module>proxy</module>
+        <module>threads</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <!-- no console-->
+            <id>noc</id>
+            <modules>
+                <module>controller-client</module>
+                <module>protocol</module>
+                <module>proxy</module>
+                <module>threads</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>

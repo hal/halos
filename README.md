@@ -20,7 +20,7 @@ The proxy is a server side application running in a pod next to the WildFly inst
 - [Quarkus](https://quarkus.io)
 - JAX-RS
 - Server Sent Events
-- JWildFly Controller Client
+- WildFly Controller Client
 - HTTP server for the console
 
 ### Console
@@ -33,8 +33,3 @@ The console is a [RIA](https://en.wikipedia.org/wiki/Rich_web_application) / [SP
 - [Elemento](https://github.com/hal/elemento)
 - [Crysknife](https://github.com/treblereel/crysknife)
 - [PatternFly Java](https://github.com/patternfly-java/)
-
-------
-
-Please note that this is heavily work in progress.
-
