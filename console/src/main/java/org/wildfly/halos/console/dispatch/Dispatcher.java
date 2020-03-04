@@ -20,8 +20,15 @@ import javax.inject.Inject;
 import elemental2.dom.Headers;
 import elemental2.dom.RequestInit;
 import elemental2.promise.Promise;
+import org.wildfly.halos.console.dmr.Composite;
+import org.wildfly.halos.console.dmr.CompositeResult;
+import org.wildfly.halos.console.dmr.ModelNode;
+import org.wildfly.halos.console.dmr.Operation;
 
 import static elemental2.dom.DomGlobal.fetch;
+import static org.wildfly.halos.console.dispatch.RequestHeader.ACCEPT;
+import static org.wildfly.halos.console.dispatch.RequestHeader.CONTENT_TYPE;
+import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.RESULT;
 
 /** Executes operations against the management endpoint. */
 public class Dispatcher {

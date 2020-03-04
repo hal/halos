@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
-import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.OP;
+import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.*;
 
 /** Represents a DMR operation. */
 public class Operation extends ModelNode {
