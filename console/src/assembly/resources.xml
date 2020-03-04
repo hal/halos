@@ -11,7 +11,7 @@
             <directory>${project.build.directory}/${project.build.finalName}</directory>
             <outputDirectory>META-INF/resources</outputDirectory>
             <includes>
-                <include>assets</include>
+                <include>assets/**</include>
                 <include>apple-touch-icon.png</include>
                 <include>favicon.ico</include>
                 <include>halos.*</include>
