@@ -24,7 +24,7 @@ import org.jboss.hal.dmr.NamedNode;
 import org.jboss.hal.dmr.Property;
 import org.jboss.hal.dmr.ResourceAddress;
 import org.jboss.hal.meta.ManagementModel;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 
 import static org.jboss.hal.dmr.ModelDescriptionConstants.*;
 import static org.jboss.hal.dmr.ModelNodeHelper.asEnumValue;

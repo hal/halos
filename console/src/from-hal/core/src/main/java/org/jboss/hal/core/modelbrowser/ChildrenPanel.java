@@ -41,9 +41,9 @@ import org.jboss.hal.meta.Metadata;
 import org.jboss.hal.meta.processing.MetadataProcessor;
 import org.jboss.hal.meta.security.AuthorisationDecision;
 import org.jboss.hal.meta.security.Constraint;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Names;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Names;
+import org.wildfly.halos.console.resources.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

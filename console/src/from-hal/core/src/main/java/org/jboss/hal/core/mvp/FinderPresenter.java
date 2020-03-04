@@ -25,7 +25,7 @@ import org.jboss.hal.core.finder.FinderColumn;
 import org.jboss.hal.core.finder.FinderContext;
 import org.jboss.hal.core.finder.FinderPath;
 import org.jboss.hal.core.finder.PreviewContent;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Resources;
 import org.jboss.hal.spi.Message;
 import org.jboss.hal.spi.MessageEvent;
 

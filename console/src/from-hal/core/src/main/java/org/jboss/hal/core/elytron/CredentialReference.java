@@ -40,9 +40,9 @@ import org.jboss.hal.dmr.ResourceAddress;
 import org.jboss.hal.dmr.dispatch.Dispatcher;
 import org.jboss.hal.meta.Metadata;
 import org.jboss.hal.meta.security.Constraint;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Names;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Names;
+import org.wildfly.halos.console.resources.Resources;
 import org.jboss.hal.spi.Callback;
 import org.jboss.hal.spi.Message;
 import org.jboss.hal.spi.MessageEvent;
@@ -50,7 +50,7 @@ import org.jboss.hal.spi.MessageEvent;
 import static elemental2.dom.DomGlobal.setTimeout;
 import static java.util.Arrays.asList;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.*;
-import static org.wildfly.halos.resources.UIConstants.SHORT_TIMEOUT;
+import static org.wildfly.halos.console.resources.UIConstants.SHORT_TIMEOUT;
 
 /**
  * Provides building blocks for dealing with the {@code credential-reference} complex attribute used in several

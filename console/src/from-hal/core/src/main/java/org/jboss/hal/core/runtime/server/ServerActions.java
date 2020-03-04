@@ -69,9 +69,9 @@ import org.jboss.hal.meta.Metadata;
 import org.jboss.hal.meta.StatementContext;
 import org.jboss.hal.meta.processing.MetadataProcessor;
 import org.jboss.hal.meta.processing.SuccessfulMetadataCallback;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Names;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Names;
+import org.wildfly.halos.console.resources.Resources;
 import org.jboss.hal.spi.Callback;
 import org.jboss.hal.spi.Footer;
 import org.jboss.hal.spi.Message;
@@ -97,11 +97,11 @@ import static org.jboss.hal.dmr.ModelNodeHelper.getOrDefault;
 import static org.jboss.hal.dmr.dispatch.TimeoutHandler.repeatOperationUntil;
 import static org.jboss.hal.dmr.dispatch.TimeoutHandler.repeatUntilTimeout;
 import static org.jboss.hal.flow.Flow.series;
-import static org.wildfly.halos.resources.CSS.fontAwesome;
-import static org.wildfly.halos.resources.CSS.marginLeft5;
-import static org.wildfly.halos.resources.CSS.pfIcon;
-import static org.wildfly.halos.resources.Ids.FORM;
-import static org.wildfly.halos.resources.UIConstants.SHORT_TIMEOUT;
+import static org.wildfly.halos.console.resources.CSS.fontAwesome;
+import static org.wildfly.halos.console.resources.CSS.marginLeft5;
+import static org.wildfly.halos.console.resources.CSS.pfIcon;
+import static org.wildfly.halos.console.resources.Ids.FORM;
+import static org.wildfly.halos.console.resources.UIConstants.SHORT_TIMEOUT;
 
 public class ServerActions implements Timeouts {
 

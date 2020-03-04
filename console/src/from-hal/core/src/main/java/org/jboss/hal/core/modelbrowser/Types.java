@@ -17,7 +17,7 @@ package org.jboss.hal.core.modelbrowser;
 
 import org.jboss.hal.dmr.ModelNode;
 import org.jboss.hal.dmr.ModelType;
-import org.wildfly.halos.resources.Names;
+import org.wildfly.halos.console.resources.Names;
 
 import static org.jboss.hal.dmr.ModelDescriptionConstants.TYPE;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.VALUE_TYPE;

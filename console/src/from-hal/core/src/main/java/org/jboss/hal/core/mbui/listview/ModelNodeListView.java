@@ -42,7 +42,7 @@ import org.jboss.hal.core.Core;
 import org.jboss.hal.dmr.ModelNode;
 import org.jboss.hal.meta.Metadata;
 import org.jboss.hal.meta.security.AuthorisationDecision;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 
 import static java.util.stream.Collectors.toList;
 import static org.jboss.gwt.elemento.core.Elements.div;
@@ -50,7 +50,7 @@ import static org.jboss.hal.ballroom.LayoutBuilder.column;
 import static org.jboss.hal.ballroom.LayoutBuilder.row;
 import static org.jboss.hal.ballroom.Skeleton.MARGIN_BIG;
 import static org.jboss.hal.ballroom.Skeleton.applicationOffset;
-import static org.wildfly.halos.resources.CSS.vh;
+import static org.wildfly.halos.console.resources.CSS.vh;
 
 /**
  * A list view for model nodes with a toolbar, pager and empty states. Actions are filtered according to their

@@ -24,8 +24,8 @@ import elemental2.dom.HTMLInputElement;
 import org.jboss.gwt.elemento.core.InputType;
 import org.jboss.hal.ballroom.tree.Node;
 import org.jboss.hal.ballroom.wizard.WizardStep;
-import org.wildfly.halos.resources.CSS;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.CSS;
+import org.wildfly.halos.console.resources.Resources;
 
 import static org.jboss.gwt.elemento.core.Elements.div;
 import static org.jboss.gwt.elemento.core.Elements.input;

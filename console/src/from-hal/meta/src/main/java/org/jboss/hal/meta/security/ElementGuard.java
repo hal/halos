@@ -22,13 +22,13 @@ import elemental2.dom.Element;
 import elemental2.dom.HTMLElement;
 import elemental2.dom.NodeList;
 import org.jboss.gwt.elemento.core.Elements;
-import org.wildfly.halos.resources.UIConstants;
-import org.wildfly.halos.resources.CSS;
+import org.wildfly.halos.console.resources.UIConstants;
+import org.wildfly.halos.console.resources.CSS;
 
 import static elemental2.dom.DomGlobal.document;
-import static org.wildfly.halos.resources.CSS.hidden;
-import static org.wildfly.halos.resources.CSS.rbacHidden;
-import static org.wildfly.halos.resources.UIConstants.data;
+import static org.wildfly.halos.console.resources.CSS.hidden;
+import static org.wildfly.halos.console.resources.CSS.rbacHidden;
+import static org.wildfly.halos.console.resources.UIConstants.data;
 
 /**
  * Helper class to process elements with constraints in their {@code data-constraint} attributes. Toggles the

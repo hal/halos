@@ -24,7 +24,7 @@ import org.jboss.hal.ballroom.form.FormItem;
 import org.jboss.hal.ballroom.form.FormValidation;
 import org.jboss.hal.ballroom.form.ValidationResult;
 import org.jboss.hal.dmr.ModelNode;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Resources;
 
 import static java.util.stream.Collectors.toList;
 

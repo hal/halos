@@ -29,7 +29,7 @@ import org.jboss.hal.dmr.dispatch.Dispatcher;
 import org.jboss.hal.flow.Progress;
 import org.jboss.hal.meta.MetadataRegistry;
 import org.jboss.hal.meta.StatementContext;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Resources;
 import org.jboss.hal.spi.Footer;
 
 /** Holds common classes needed by UI views. */

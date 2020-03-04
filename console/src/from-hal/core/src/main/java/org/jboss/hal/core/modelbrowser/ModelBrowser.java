@@ -56,10 +56,10 @@ import org.jboss.hal.meta.AddressTemplate;
 import org.jboss.hal.meta.Metadata;
 import org.jboss.hal.meta.processing.MetadataProcessor;
 import org.jboss.hal.meta.processing.SuccessfulMetadataCallback;
-import org.wildfly.halos.resources.CSS;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Names;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.CSS;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Names;
+import org.wildfly.halos.console.resources.Resources;
 import org.jboss.hal.spi.Footer;
 import org.jboss.hal.spi.Message;
 import org.jboss.hal.spi.MessageEvent;
@@ -89,7 +89,7 @@ import static org.jboss.hal.dmr.ModelDescriptionConstants.SERVER_GROUP;
 import static org.jboss.hal.flow.Flow.series;
 import static org.jboss.hal.meta.StatementContext.Expression.SELECTED_GROUP;
 import static org.jboss.hal.meta.StatementContext.Expression.SELECTED_PROFILE;
-import static org.wildfly.halos.resources.Ids.MODEL_BROWSER_ROOT;
+import static org.wildfly.halos.console.resources.Ids.MODEL_BROWSER_ROOT;
 
 /** Model browser element which can be embedded in other elements. */
 public class ModelBrowser implements IsElement<HTMLElement> {

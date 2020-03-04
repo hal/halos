@@ -26,7 +26,7 @@ import org.jboss.hal.ballroom.dialog.DialogFactory;
 import org.jboss.hal.core.CrudOperations;
 import org.jboss.hal.meta.AddressTemplate;
 import org.jboss.hal.meta.security.Constraint;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Resources;
 
 import static org.jboss.hal.core.finder.FinderColumn.RefreshMode.CLEAR_SELECTION;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.REMOVE;

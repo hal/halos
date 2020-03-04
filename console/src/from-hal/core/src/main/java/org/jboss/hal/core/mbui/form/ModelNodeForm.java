@@ -64,7 +64,7 @@ import org.jboss.hal.meta.security.AuthorisationDecision;
 import org.jboss.hal.meta.security.Constraint;
 import org.jboss.hal.meta.security.ElementGuard;
 import org.jboss.hal.meta.security.SecurityContext;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 import org.jboss.hal.spi.Callback;
 import org.jboss.hal.spi.EsParam;
 import org.jboss.hal.spi.EsReturn;

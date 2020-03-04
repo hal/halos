@@ -21,9 +21,9 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.jboss.hal.meta.token.NameTokens;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Names;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Names;
+import org.wildfly.halos.console.resources.Resources;
 
 import static org.jboss.hal.dmr.ModelDescriptionConstants.*;
 

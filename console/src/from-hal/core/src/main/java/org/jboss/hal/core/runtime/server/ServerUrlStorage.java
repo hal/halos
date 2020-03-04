@@ -17,7 +17,7 @@ package org.jboss.hal.core.runtime.server;
 
 import elemental2.webstorage.Storage;
 import elemental2.webstorage.WebStorageWindow;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 
 import static elemental2.dom.DomGlobal.window;
 

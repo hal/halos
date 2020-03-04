@@ -45,8 +45,8 @@ import org.jboss.hal.meta.AddressTemplate;
 import org.jboss.hal.meta.Metadata;
 import org.jboss.hal.meta.processing.MetadataProcessor;
 import org.jboss.hal.meta.processing.MetadataProcessor.MetadataCallback;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Resources;
 import org.jboss.hal.spi.Footer;
 import org.jboss.hal.spi.Message;
 import org.jboss.hal.spi.MessageEvent;
@@ -61,7 +61,7 @@ import static org.jboss.hal.ballroom.dialog.Dialog.Size.MEDIUM;
 import static org.jboss.hal.core.runtime.Timeouts.hostTimeout;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.*;
 import static org.jboss.hal.dmr.dispatch.TimeoutHandler.repeatUntilTimeout;
-import static org.wildfly.halos.resources.UIConstants.SHORT_TIMEOUT;
+import static org.wildfly.halos.console.resources.UIConstants.SHORT_TIMEOUT;
 
 public class HostActions implements Timeouts {
 

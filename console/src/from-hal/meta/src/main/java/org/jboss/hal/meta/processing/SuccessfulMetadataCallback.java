@@ -16,7 +16,7 @@
 package org.jboss.hal.meta.processing;
 
 import com.google.web.bindery.event.shared.EventBus;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Resources;
 import org.jboss.hal.spi.Message;
 import org.jboss.hal.spi.MessageEvent;
 

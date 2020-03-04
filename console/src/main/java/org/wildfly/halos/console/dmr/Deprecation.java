@@ -13,11 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.resources;
+package org.wildfly.halos.console.dmr;
 
-/**
- * Contains CSS classes used in halOS. The constants in this interface are not involved in any kind of code generation
- * or GWT magic. They're just here to have them in one place.
- */
-public interface CSS {
+import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.REASON;
+import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.SINCE;
+
+public class Deprecation extends ModelNode {
+
+    public Deprecation(ModelNode modelNode) {
+        set(modelNode);
+    }
+
+    public String getSince() {
+        return hasDefined(SINCE) ? get(SINCE).asString() : null;
+    }
+
+    public String getReason() {
+        return hasDefined(REASON) ? get(REASON).asString() : null;
+    }
 }

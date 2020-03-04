@@ -22,7 +22,7 @@ import org.jboss.hal.js.JsonObject;
 import org.jboss.hal.js.JsonType;
 
 import static org.jboss.hal.dmr.ModelDescriptionConstants.*;
-import static org.wildfly.halos.resources.Names.UNKNOWN;
+import static org.wildfly.halos.console.resources.Names.UNKNOWN;
 
 public class UploadPayloadProcessor implements PayloadProcessor {
 

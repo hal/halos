@@ -33,7 +33,6 @@
         <j2cl-compilation.level>BUNDLE</j2cl-compilation.level>
 
         <j2cl-plugin.version>0.13-SNAPSHOT</j2cl-plugin.version>
-        <sass-plugin.version>3.7.2</sass-plugin.version>
         <tomcat7-plugin.version>2.2</tomcat7-plugin.version>
 
         <crysknife.version>0.1-SNAPSHOT</crysknife.version>
@@ -96,31 +95,21 @@
 
         <plugins>
             <plugin>
-                <groupId>nl.geodienstencentrum.maven</groupId>
-                <artifactId>sass-maven-plugin</artifactId>
-                <version>${sass-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>compile-scss</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>update-stylesheets</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <source>
-                                        <directory>${basedir}/src/main/webapp</directory>
-                                        <includes>
-                                            <include>**/*.scss</include>
-                                        </includes>
-                                    </source>
-                                    <destination>${project.build.directory}/${project.build.finalName}</destination>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>src/main/webapp</directory>
+                            <includes>
+                                <include>patternfly.*</include>
+                            </includes>
+                        </fileset>
+                        <fileset>
+                            <directory>src/main/webapp/assets</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -159,7 +148,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <copy todir="${project.build.directory}/${project.build.finalName}">
+                                <copy todir="${basedir}/src/main/webapp">
                                     <fileset dir="${project.build.directory}/patternfly/">
                                         <include name="**/assets/"/>
                                         <include name="**/patternfly.*"/>
@@ -224,6 +213,7 @@
                 <version>${tomcat7-plugin.version}</version>
                 <configuration>
                     <contextFile>${basedir}/src/main/tomcat/context.xml</contextFile>
+                    <port>8888</port>
                 </configuration>
             </plugin>
         </plugins>

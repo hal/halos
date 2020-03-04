@@ -26,8 +26,8 @@ import org.jboss.hal.core.finder.FinderSegment;
 import org.jboss.hal.dmr.ResourceAddress;
 import org.jboss.hal.meta.StatementContext;
 import org.jboss.hal.meta.token.NameTokens;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Names;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Names;
 
 import static java.util.Collections.singletonList;
 import static org.jboss.hal.core.finder.FinderContext.PATH_PARAM;

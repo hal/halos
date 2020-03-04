@@ -27,7 +27,7 @@ import org.jboss.hal.dmr.Composite;
 import org.jboss.hal.dmr.ModelDescriptionConstants;
 import org.jboss.hal.dmr.ModelNode;
 import org.jboss.hal.dmr.Operation;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 
 import static elemental2.dom.DomGlobal.window;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.*;

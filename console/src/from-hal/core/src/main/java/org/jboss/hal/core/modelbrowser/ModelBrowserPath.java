@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jboss.hal.ballroom.tree.Node;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 
 public class ModelBrowserPath implements Iterable<ModelBrowserPath.Segment[]> {
 

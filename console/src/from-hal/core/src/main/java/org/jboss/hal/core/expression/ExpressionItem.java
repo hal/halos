@@ -18,7 +18,7 @@ package org.jboss.hal.core.expression;
 import org.jboss.hal.ballroom.LabelBuilder;
 import org.jboss.hal.ballroom.form.TextBoxItem;
 import org.jboss.hal.ballroom.form.ValidationResult;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Resources;
 
 /** A special form item which is used to resolve expressions. */
 @SuppressWarnings("DuplicateStringLiteralInspection")

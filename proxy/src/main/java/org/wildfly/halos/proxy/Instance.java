@@ -6,7 +6,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 
 /** A WildFly instance with information how to access the management endpoint */
 @RegisterForReflection
-public class Instance {
+public class Instance implements Comparable<Instance> {
 
     public String name;
     public String host;
@@ -33,6 +33,11 @@ public class Instance {
         if (o == null || getClass() != o.getClass()) { return false; }
         Instance instance = (Instance) o;
         return Objects.equals(name, instance.name);
+    }
+
+    @Override
+    public int compareTo(Instance o) {
+        return name.compareTo(o.name);
     }
 
     @Override

@@ -28,12 +28,12 @@ import org.jboss.gwt.elemento.core.builder.HtmlContentBuilder;
 import org.jboss.hal.ballroom.HelpTextBuilder;
 import org.jboss.hal.dmr.ModelNode;
 import org.jboss.hal.dmr.Property;
-import org.wildfly.halos.resources.CSS;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.CSS;
+import org.wildfly.halos.console.resources.Resources;
 
 import static org.jboss.gwt.elemento.core.Elements.*;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.*;
-import static org.wildfly.halos.resources.UIConstants.NBSP;
+import static org.wildfly.halos.console.resources.UIConstants.NBSP;
 
 class AttributesTable implements IsElement {
 

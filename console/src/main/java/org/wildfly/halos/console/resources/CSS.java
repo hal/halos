@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.resources;
+package org.wildfly.halos.console.resources;
 
-/** UI related constants used in more than one place. */
-public interface UIConstants {
+/**
+ * Contains CSS classes used in halOS. The constants in this interface are not involved in any kind of code generation
+ * or GWT magic. They're just here to have them in one place.
+ */
+public interface CSS {
 }

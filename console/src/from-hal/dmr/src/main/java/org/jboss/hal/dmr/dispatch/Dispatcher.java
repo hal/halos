@@ -53,7 +53,7 @@ import org.jboss.hal.dmr.macro.MacroOptions;
 import org.jboss.hal.dmr.macro.Macros;
 import org.jboss.hal.dmr.macro.RecordingEvent;
 import org.jboss.hal.dmr.macro.RecordingEvent.RecordingHandler;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Resources;
 import org.jboss.hal.spi.EsParam;
 import org.jboss.hal.spi.Message;
 import org.jboss.hal.spi.MessageEvent;

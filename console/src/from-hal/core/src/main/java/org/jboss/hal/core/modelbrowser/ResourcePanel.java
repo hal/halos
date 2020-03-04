@@ -30,15 +30,15 @@ import org.jboss.hal.dmr.Operation;
 import org.jboss.hal.dmr.ResourceAddress;
 import org.jboss.hal.dmr.dispatch.Dispatcher;
 import org.jboss.hal.meta.Metadata;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Resources;
 
 import static org.jboss.gwt.elemento.core.Elements.p;
 import static org.jboss.hal.core.modelbrowser.ModelBrowser.PLACE_HOLDER_ELEMENT;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.ATTRIBUTES;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.INCLUDE_RUNTIME;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.READ_RESOURCE_OPERATION;
-import static org.wildfly.halos.resources.CSS.lead;
+import static org.wildfly.halos.console.resources.CSS.lead;
 
 /**
  * Panel which holds the resource description, the model node form and a detailed description of the attributes and

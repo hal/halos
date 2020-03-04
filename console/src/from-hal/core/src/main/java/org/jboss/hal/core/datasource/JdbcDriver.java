@@ -17,7 +17,7 @@ package org.jboss.hal.core.datasource;
 
 import org.jboss.hal.dmr.ModelNode;
 import org.jboss.hal.dmr.Property;
-import org.wildfly.halos.resources.Names;
+import org.wildfly.halos.console.resources.Names;
 import org.jboss.hal.spi.NamedObject;
 
 import static org.jboss.hal.dmr.ModelDescriptionConstants.*;

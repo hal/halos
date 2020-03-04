@@ -40,7 +40,7 @@ import org.jboss.hal.core.ApplicationReadyEvent.ApplicationReadyHandler;
 import org.jboss.hal.core.extension.Extension.Point;
 import org.jboss.hal.js.Json;
 import org.jboss.hal.js.JsonObject;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 import org.jboss.hal.spi.EsParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,8 +50,8 @@ import static org.jboss.gwt.elemento.core.Elements.a;
 import static org.jboss.gwt.elemento.core.Elements.li;
 import static org.jboss.gwt.elemento.core.EventType.click;
 import static org.jboss.hal.dmr.dispatch.Dispatcher.HttpMethod.GET;
-import static org.wildfly.halos.resources.CSS.clickable;
-import static org.wildfly.halos.resources.CSS.hidden;
+import static org.wildfly.halos.console.resources.CSS.clickable;
+import static org.wildfly.halos.console.resources.CSS.hidden;
 
 /** Registry to manage HAL extensions written in JavaScript. */
 @JsType(namespace = "hal.core")

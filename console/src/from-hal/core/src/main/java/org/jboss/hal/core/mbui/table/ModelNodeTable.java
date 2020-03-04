@@ -43,8 +43,8 @@ import org.jboss.hal.meta.AddressTemplate;
 import org.jboss.hal.meta.Metadata;
 import org.jboss.hal.meta.security.AuthorisationDecision;
 import org.jboss.hal.meta.security.ElementGuard;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.UIConstants;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.UIConstants;
 import org.jboss.hal.spi.EsParam;
 import org.jboss.hal.spi.EsReturn;
 import org.slf4j.Logger;
@@ -54,7 +54,7 @@ import static java.util.Arrays.asList;
 import static org.jboss.hal.ballroom.table.RefreshMode.RESET;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.ATTRIBUTES;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.NAME;
-import static org.wildfly.halos.resources.UIConstants.data;
+import static org.wildfly.halos.console.resources.UIConstants.data;
 
 public class ModelNodeTable<T extends ModelNode> extends DataTable<T> {
 

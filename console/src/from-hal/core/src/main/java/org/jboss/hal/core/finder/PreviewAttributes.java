@@ -35,9 +35,9 @@ import org.jboss.hal.ballroom.form.ResolveExpressionEvent;
 import org.jboss.hal.core.Core;
 import org.jboss.hal.core.expression.Expression;
 import org.jboss.hal.dmr.ModelNode;
-import org.wildfly.halos.resources.CSS;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Names;
+import org.wildfly.halos.console.resources.CSS;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Names;
 
 import static elemental2.dom.DomGlobal.document;
 import static org.jboss.gwt.elemento.core.Elements.*;

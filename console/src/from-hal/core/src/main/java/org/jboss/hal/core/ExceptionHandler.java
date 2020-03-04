@@ -22,8 +22,8 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import org.jboss.gwt.elemento.core.Elements;
 import org.jboss.hal.flow.Progress;
-import org.wildfly.halos.resources.Names;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Names;
+import org.wildfly.halos.console.resources.Resources;
 import org.jboss.hal.spi.Footer;
 import org.jboss.hal.spi.Message;
 import org.jboss.hal.spi.MessageEvent;
@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static elemental2.dom.DomGlobal.document;
-import static org.wildfly.halos.resources.CSS.withProgress;
+import static org.wildfly.halos.console.resources.CSS.withProgress;
 
 public class ExceptionHandler {
 

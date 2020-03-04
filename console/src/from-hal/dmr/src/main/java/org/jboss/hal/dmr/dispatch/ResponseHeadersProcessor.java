@@ -18,7 +18,7 @@ package org.jboss.hal.dmr.dispatch;
 import javax.annotation.Nullable;
 
 import org.jboss.hal.dmr.ModelNode;
-import org.wildfly.halos.resources.Names;
+import org.wildfly.halos.console.resources.Names;
 
 /**
  * Interface to parse data from the responses headers of a DMR response. This is not about {@linkplain ResponseHeader

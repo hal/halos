@@ -29,7 +29,7 @@ import org.jboss.hal.core.CrudOperations.AddCallback;
 import org.jboss.hal.dmr.ModelNode;
 import org.jboss.hal.meta.AddressTemplate;
 import org.jboss.hal.meta.security.Constraint;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Resources;
 import org.jboss.hal.spi.Callback;
 
 import static org.jboss.hal.dmr.ModelDescriptionConstants.ADD;

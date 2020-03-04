@@ -26,16 +26,16 @@ import org.jboss.hal.ballroom.form.FormItemValidation;
 import org.jboss.hal.core.CrudOperations;
 import org.jboss.hal.meta.AddressTemplate;
 import org.jboss.hal.meta.security.Constraint;
-import org.wildfly.halos.resources.CSS;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Resources;
-import org.wildfly.halos.resources.UIConstants;
+import org.wildfly.halos.console.resources.CSS;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Resources;
+import org.wildfly.halos.console.resources.UIConstants;
 
 import static org.jboss.gwt.elemento.core.Elements.span;
 import static org.jboss.hal.core.finder.FinderColumn.RefreshMode.RESTORE_SELECTION;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.ADD;
-import static org.wildfly.halos.resources.CSS.fontAwesome;
-import static org.wildfly.halos.resources.CSS.pfIcon;
+import static org.wildfly.halos.console.resources.CSS.fontAwesome;
+import static org.wildfly.halos.console.resources.CSS.pfIcon;
 
 /** Provides methods to create common column actions. */
 public class ColumnActionFactory {

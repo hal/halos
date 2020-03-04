@@ -49,9 +49,9 @@ import org.jboss.hal.js.JsHelper;
 import org.jboss.hal.meta.security.AuthorisationDecision;
 import org.jboss.hal.meta.security.Constraint;
 import org.jboss.hal.meta.security.Constraints;
-import org.wildfly.halos.resources.CSS;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.UIConstants;
+import org.wildfly.halos.console.resources.CSS;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.UIConstants;
 import org.jboss.hal.spi.Callback;
 import org.jboss.hal.spi.NamedObject;
 import org.slf4j.Logger;
@@ -68,11 +68,11 @@ import static org.jboss.gwt.elemento.core.Key.ArrowUp;
 import static org.jboss.gwt.elemento.core.Key.Escape;
 import static org.jboss.hal.core.finder.Finder.DATA_BREADCRUMB;
 import static org.jboss.hal.core.finder.Finder.DATA_FILTER;
-import static org.wildfly.halos.resources.Names.NOT_AVAILABLE;
-import static org.wildfly.halos.resources.UIConstants.GROUP;
-import static org.wildfly.halos.resources.UIConstants.HASH;
-import static org.wildfly.halos.resources.UIConstants.ROLE;
-import static org.wildfly.halos.resources.UIConstants.TABINDEX;
+import static org.wildfly.halos.console.resources.Names.NOT_AVAILABLE;
+import static org.wildfly.halos.console.resources.UIConstants.GROUP;
+import static org.wildfly.halos.console.resources.UIConstants.HASH;
+import static org.wildfly.halos.console.resources.UIConstants.ROLE;
+import static org.wildfly.halos.console.resources.UIConstants.TABINDEX;
 
 /**
  * Describes a column in a finder. A column has an unique id, a title, a number of optional column actions and an {@link

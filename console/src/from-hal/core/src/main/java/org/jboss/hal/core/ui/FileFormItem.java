@@ -21,7 +21,7 @@ import org.jboss.hal.ballroom.form.FormItem;
 import org.jboss.hal.ballroom.form.TextBoxItem;
 import org.jboss.hal.core.configuration.PathsAutoComplete;
 import org.jboss.hal.dmr.ModelNode;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 
 import static java.util.Arrays.asList;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.PATH;

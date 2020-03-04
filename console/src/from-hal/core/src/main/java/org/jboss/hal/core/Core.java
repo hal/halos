@@ -41,7 +41,7 @@ import org.jboss.hal.meta.Metadata;
 import org.jboss.hal.meta.MetadataRegistry;
 import org.jboss.hal.meta.StatementContext;
 import org.jboss.hal.meta.processing.MetadataProcessor;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 import org.jboss.hal.spi.EsParam;
 import org.jboss.hal.spi.EsReturn;
 import org.jboss.hal.spi.Message;

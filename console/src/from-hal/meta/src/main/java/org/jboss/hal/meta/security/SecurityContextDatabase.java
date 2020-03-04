@@ -30,7 +30,7 @@ import org.jboss.hal.dmr.ModelNode;
 import org.jboss.hal.dmr.ResourceAddress;
 import org.jboss.hal.meta.AbstractDatabase;
 import org.jboss.hal.meta.StatementContext;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 
 import static java.util.stream.Collectors.joining;
 import static org.jboss.hal.config.AccessControlProvider.RBAC;

@@ -27,9 +27,9 @@ import org.jboss.gwt.elemento.core.builder.HtmlContentBuilder;
 import org.jboss.hal.ballroom.PatternFly;
 import org.jboss.hal.meta.security.AuthorisationDecision;
 import org.jboss.hal.meta.security.ElementGuard;
-import org.wildfly.halos.resources.CSS;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.UIConstants;
+import org.wildfly.halos.console.resources.CSS;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.UIConstants;
 
 import static java.util.stream.Collectors.toList;
 import static org.jboss.gwt.elemento.core.Elements.*;
@@ -37,9 +37,9 @@ import static org.jboss.gwt.elemento.core.EventType.bind;
 import static org.jboss.gwt.elemento.core.EventType.click;
 import static org.jboss.hal.core.finder.Finder.DATA_BREADCRUMB;
 import static org.jboss.hal.core.finder.Finder.DATA_FILTER;
-import static org.wildfly.halos.resources.Names.NOT_AVAILABLE;
-import static org.wildfly.halos.resources.UIConstants.HASH;
-import static org.wildfly.halos.resources.UIConstants.data;
+import static org.wildfly.halos.console.resources.Names.NOT_AVAILABLE;
+import static org.wildfly.halos.console.resources.UIConstants.HASH;
+import static org.wildfly.halos.console.resources.UIConstants.data;
 
 /** UI class for a single row in in a finder column. Only used internally in the finder. */
 class FinderRow<T> implements IsElement {

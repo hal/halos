@@ -23,9 +23,9 @@ import org.jboss.hal.core.runtime.server.Server;
 import org.jboss.hal.core.subsystem.SubsystemMetadata;
 import org.jboss.hal.core.subsystem.Subsystems;
 import org.jboss.hal.meta.StatementContext;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Names;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Names;
+import org.wildfly.halos.console.resources.Resources;
 
 import static org.jboss.hal.dmr.ModelDescriptionConstants.SERVER_GROUP;
 

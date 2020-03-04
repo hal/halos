@@ -43,7 +43,7 @@ import org.jboss.hal.flow.Outcome;
 import org.jboss.hal.flow.Progress;
 import org.jboss.hal.flow.Task;
 import org.jboss.hal.meta.security.SecurityContextRegistry;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 import org.jboss.hal.spi.Footer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ import static java.util.stream.StreamSupport.stream;
 import static org.jboss.gwt.elemento.core.Elements.div;
 import static org.jboss.hal.ballroom.Skeleton.applicationOffset;
 import static org.jboss.hal.flow.Flow.series;
-import static org.wildfly.halos.resources.Ids.FINDER;
+import static org.wildfly.halos.console.resources.Ids.FINDER;
 
 /**
  * The one and only finder which is shared across all different top level categories in HAL. The very same finder

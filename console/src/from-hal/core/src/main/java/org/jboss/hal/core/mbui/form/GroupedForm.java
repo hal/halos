@@ -38,7 +38,7 @@ import org.jboss.hal.ballroom.form.StateMachine;
 import org.jboss.hal.dmr.ModelNode;
 import org.jboss.hal.dmr.Property;
 import org.jboss.hal.meta.Metadata;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 
 import static com.google.common.collect.Lists.asList;
 import static java.util.stream.Collectors.toList;

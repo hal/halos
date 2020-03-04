@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.jboss.hal.dmr.Composite;
 import org.jboss.hal.dmr.Operation;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 
 import static java.util.stream.Collectors.joining;
 

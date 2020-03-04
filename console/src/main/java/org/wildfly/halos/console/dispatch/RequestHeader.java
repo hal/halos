@@ -13,8 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.resources;
+package org.wildfly.halos.console.dispatch;
 
-/** Common names and technical terms which are not meant to be translated. */
-public interface Names {
+public enum RequestHeader {
+
+    // only those which are used in HAL
+    ACCEPT("Accept"),
+    CONTENT_TYPE("Content-Type"),
+    X_MANAGEMENT_CLIENT_NAME("X-Management-Client-Name");
+
+    private final String header;
+
+    RequestHeader(String header) {
+        this.header = header;
+    }
+
+    public String header() {
+        return header;
+    }
 }

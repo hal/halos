@@ -22,7 +22,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import elemental2.webstorage.Storage;
 import elemental2.webstorage.WebStorageWindow;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 
 import static elemental2.dom.DomGlobal.window;
 

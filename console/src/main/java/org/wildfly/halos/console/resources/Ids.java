@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.resources;
+package org.wildfly.halos.console.resources;
 
 /**
  * IDs used in HTML elements and across multiple classes. Please add IDs to this interface even if there's already an

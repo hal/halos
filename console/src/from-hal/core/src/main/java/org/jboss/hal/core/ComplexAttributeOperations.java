@@ -43,7 +43,7 @@ import org.jboss.hal.meta.Metadata;
 import org.jboss.hal.meta.StatementContext;
 import org.jboss.hal.meta.processing.MetadataProcessor;
 import org.jboss.hal.meta.processing.SuccessfulMetadataCallback;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Resources;
 import org.jboss.hal.spi.Callback;
 import org.jboss.hal.spi.Footer;
 import org.jboss.hal.spi.Message;

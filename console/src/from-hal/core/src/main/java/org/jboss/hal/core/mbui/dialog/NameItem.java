@@ -17,7 +17,7 @@ package org.jboss.hal.core.mbui.dialog;
 
 import org.jboss.hal.ballroom.form.TextBoxItem;
 import org.jboss.hal.dmr.ModelDescriptionConstants;
-import org.wildfly.halos.resources.Names;
+import org.wildfly.halos.console.resources.Names;
 
 /**
  * A text box item useful for add resource dialogs. The form item has {@link ModelDescriptionConstants#NAME} as name,

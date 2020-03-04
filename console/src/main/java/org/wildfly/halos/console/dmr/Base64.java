@@ -13,8 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.resources;
+package org.wildfly.halos.console.dmr;
 
-/** Umbrella over all kind of resources in HAL. */
-public class Resources implements CSS, Ids, Names, UIConstants {
+import jsinterop.annotations.JsMethod;
+
+import static jsinterop.annotations.JsPackage.GLOBAL;
+
+/** Encodes and decodes to and from Base64 notation. */
+public class Base64 {
+
+    @JsMethod(namespace = GLOBAL, name = "btoa")
+    public static native String encode(String decoded);
+
+    @JsMethod(namespace = GLOBAL, name = "atob")
+    public static native String decode(String encoded);
+
+    /** Defeats instantiation. */
+    private Base64() {
+    }
 }

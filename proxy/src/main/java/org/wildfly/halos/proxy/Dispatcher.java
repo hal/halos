@@ -5,6 +5,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -27,11 +29,11 @@ class Dispatcher {
     private static final String REMOTE_HTTP = "remote+http";
     private static Logger log = Logger.getLogger("halos.proxy.dispatcher");
 
-    private final Map<Instance, ModelControllerClient> clients;
+    private final SortedMap<Instance, ModelControllerClient> clients;
 
     @Inject
     Dispatcher() {
-        this.clients = new HashMap<>();
+        this.clients = new TreeMap<>();
     }
 
     void register(Instance instance) throws DispatcherException {
@@ -66,16 +68,18 @@ class Dispatcher {
     boolean unregister(String name) throws DispatcherException {
         Map.Entry<Instance, ModelControllerClient> entry = findByName(name);
         if (entry != null) {
+            Instance instance = entry.getKey();
+            ModelControllerClient client = entry.getValue();
             try {
-                entry.getValue().close();
-                log.infof("Closed client for %s", entry.getValue());
+                client.close();
+                log.infof("Closed client for %s", instance);
                 return true;
             } catch (IOException e) {
-                String error = String.format("Unable to close client for %s: %s", entry.getKey(), e.getMessage());
+                String error = String.format("Unable to close client for %s: %s", instance, e.getMessage());
                 log.error(error);
                 throw new DispatcherException(error, e);
             } finally {
-                clients.remove(entry.getKey());
+                clients.remove(instance);
             }
         }
         return false;

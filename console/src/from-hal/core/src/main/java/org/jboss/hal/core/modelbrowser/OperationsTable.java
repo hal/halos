@@ -26,9 +26,9 @@ import org.jboss.gwt.elemento.core.IsElement;
 import org.jboss.gwt.elemento.core.builder.HtmlContentBuilder;
 import org.jboss.hal.dmr.ModelNode;
 import org.jboss.hal.dmr.Property;
-import org.wildfly.halos.resources.CSS;
-import org.wildfly.halos.resources.Names;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.CSS;
+import org.wildfly.halos.console.resources.Names;
+import org.wildfly.halos.console.resources.Resources;
 
 import static org.jboss.gwt.elemento.core.Elements.li;
 import static org.jboss.gwt.elemento.core.Elements.table;
@@ -42,11 +42,11 @@ import static org.jboss.hal.dmr.ModelDescriptionConstants.DESCRIPTION;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.REPLY_PROPERTIES;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.REQUEST_PROPERTIES;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.REQUIRED;
-import static org.wildfly.halos.resources.CSS.operationParameter;
-import static org.wildfly.halos.resources.CSS.table;
-import static org.wildfly.halos.resources.CSS.tableBordered;
-import static org.wildfly.halos.resources.CSS.tableStriped;
-import static org.wildfly.halos.resources.UIConstants.NBSP;
+import static org.wildfly.halos.console.resources.CSS.operationParameter;
+import static org.wildfly.halos.console.resources.CSS.table;
+import static org.wildfly.halos.console.resources.CSS.tableBordered;
+import static org.wildfly.halos.console.resources.CSS.tableStriped;
+import static org.wildfly.halos.console.resources.UIConstants.NBSP;
 
 class OperationsTable implements IsElement {
 

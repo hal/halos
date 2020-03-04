@@ -38,7 +38,7 @@ import org.jboss.hal.core.runtime.server.ServerSelectionEvent;
 import org.jboss.hal.flow.Progress;
 import org.jboss.hal.meta.StatementContext.Expression;
 import org.jboss.hal.meta.processing.MetadataProcessor;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Resources;
 import org.jboss.hal.spi.Footer;
 import org.jboss.hal.spi.Message;
 import org.jboss.hal.spi.MessageEvent;

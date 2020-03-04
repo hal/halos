@@ -40,7 +40,7 @@ import static org.jboss.hal.dmr.ModelDescriptionConstants.CHILD_TYPE;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.INCLUDE_SINGLETONS;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.READ_CHILDREN_NAMES_OPERATION;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.READ_CHILDREN_TYPES_OPERATION;
-import static org.wildfly.halos.resources.CSS.fontAwesome;
+import static org.wildfly.halos.console.resources.CSS.fontAwesome;
 
 /**
  * Function which gets invoked when the user opens a node in the model browser tree.

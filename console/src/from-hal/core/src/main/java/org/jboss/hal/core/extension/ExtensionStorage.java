@@ -25,7 +25,7 @@ import elemental2.webstorage.WebStorageWindow;
 import org.jboss.hal.dmr.ModelNode;
 import org.jboss.hal.dmr.NamedNode;
 import org.jboss.hal.dmr.Property;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.Ids;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

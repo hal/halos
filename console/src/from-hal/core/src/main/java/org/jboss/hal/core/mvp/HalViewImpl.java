@@ -33,7 +33,7 @@ import static org.jboss.gwt.elemento.core.Elements.code;
 import static org.jboss.gwt.elemento.core.Elements.div;
 import static org.jboss.gwt.elemento.core.Elements.p;
 import static org.jboss.gwt.elemento.core.Elements.span;
-import static org.wildfly.halos.resources.CSS.marginTopLarge;
+import static org.wildfly.halos.console.resources.CSS.marginTopLarge;
 
 /**
  * View which initializes JavaScript based PatternFly components like select picker, tooltips or data tables in its

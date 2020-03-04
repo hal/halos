@@ -29,7 +29,7 @@ import org.jboss.hal.meta.security.SecurityContextDatabase;
 
 import static jsinterop.annotations.JsPackage.GLOBAL;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.HAL_RECURSIVE;
-import static org.wildfly.halos.resources.UIConstants.OBJECT;
+import static org.wildfly.halos.console.resources.UIConstants.OBJECT;
 
 public class WorkerChannel {
 

@@ -25,8 +25,8 @@ import org.jboss.hal.spi.Callback;
 import static elemental2.dom.DomGlobal.clearTimeout;
 import static elemental2.dom.DomGlobal.document;
 import static elemental2.dom.DomGlobal.setTimeout;
-import static org.wildfly.halos.resources.CSS.withProgress;
-import static org.wildfly.halos.resources.UIConstants.MEDIUM_TIMEOUT;
+import static org.wildfly.halos.console.resources.CSS.withProgress;
+import static org.wildfly.halos.console.resources.UIConstants.MEDIUM_TIMEOUT;
 
 /**
  * Class to monitor item actions and show a progress indicator if they take longer than a given timeout. Relies on an

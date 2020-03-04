@@ -22,12 +22,12 @@ import elemental2.dom.HTMLElement;
 import org.jboss.gwt.elemento.core.IsElement;
 import org.jboss.hal.ballroom.HasTitle;
 import org.jboss.hal.core.mvp.ApplicationFinderPresenter;
-import org.wildfly.halos.resources.CSS;
-import org.wildfly.halos.resources.Ids;
+import org.wildfly.halos.console.resources.CSS;
+import org.wildfly.halos.console.resources.Ids;
 
 import static org.jboss.gwt.elemento.core.Elements.small;
 import static org.jboss.gwt.elemento.core.Elements.span;
-import static org.wildfly.halos.resources.CSS.itemText;
+import static org.wildfly.halos.console.resources.CSS.itemText;
 
 /**
  * Controls the layout of a finder item. For simple items you only need to implement the {@link #getTitle()} method.

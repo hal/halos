@@ -36,16 +36,16 @@ import org.jboss.hal.core.mbui.form.ModelNodeForm;
 import org.jboss.hal.core.runtime.server.Server;
 import org.jboss.hal.dmr.ModelNode;
 import org.jboss.hal.meta.Metadata;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Names;
-import org.wildfly.halos.resources.Resources;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Names;
+import org.wildfly.halos.console.resources.Resources;
 
 import static org.jboss.gwt.elemento.core.EventType.bind;
 import static org.jboss.gwt.elemento.core.EventType.keydown;
 import static org.jboss.hal.ballroom.form.Form.State.EDITING;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.EXPRESSION;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.VALUE;
-import static org.wildfly.halos.resources.CSS.formControl;
+import static org.wildfly.halos.console.resources.CSS.formControl;
 
 public class ExpressionDialog {
 

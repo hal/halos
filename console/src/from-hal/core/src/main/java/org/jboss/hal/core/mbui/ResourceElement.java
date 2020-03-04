@@ -48,8 +48,8 @@ import org.jboss.hal.dmr.Property;
 import org.jboss.hal.dmr.ResourceAddress;
 import org.jboss.hal.meta.AddressTemplate;
 import org.jboss.hal.meta.Metadata;
-import org.wildfly.halos.resources.Ids;
-import org.wildfly.halos.resources.Names;
+import org.wildfly.halos.console.resources.Ids;
+import org.wildfly.halos.console.resources.Names;
 import org.jboss.hal.spi.Callback;
 
 import static elemental2.dom.DomGlobal.alert;
