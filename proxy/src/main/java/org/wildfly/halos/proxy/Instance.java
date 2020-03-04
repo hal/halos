@@ -6,10 +6,23 @@ import java.util.Objects;
 public class Instance {
 
     public String name;
-    public String ip;
+    public String host;
     public int port;
     public String username;
     public String password;
+
+    @SuppressWarnings("unused")
+    public Instance() {
+        // used by JSON-B
+    }
+
+    public Instance(String name, String host, int port, String username, String password) {
+        this.name = name;
+        this.host = host;
+        this.port = port;
+        this.username = username;
+        this.password = password;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -26,6 +39,6 @@ public class Instance {
 
     @Override
     public String toString() {
-        return String.format("%s@%s:%d", name, ip, port);
+        return String.format("%s@%s:%d", name, host, port);
     }
 }

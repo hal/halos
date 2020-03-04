@@ -86,7 +86,6 @@
     </dependencyManagement>
 
     <modules>
-        <module>console</module>
         <module>controller-client</module>
         <module>protocol</module>
         <module>proxy</module>
@@ -95,13 +94,9 @@
 
     <profiles>
         <profile>
-            <!-- no console-->
-            <id>noc</id>
+            <id>console</id>
             <modules>
-                <module>controller-client</module>
-                <module>protocol</module>
-                <module>proxy</module>
-                <module>threads</module>
+                <module>console</module>
             </modules>
         </profile>
     </profiles>

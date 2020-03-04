@@ -90,10 +90,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+<!--
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-mutiny</artifactId>
         </dependency>
+-->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy</artifactId>
@@ -201,6 +203,9 @@
                                             <name>halos/wildfly</name>
                                             <alias>wf0</alias>
                                             <run>
+                                                <ports>
+                                                    <port>9990:9990</port>
+                                                </ports>
                                                 <wait>
                                                     <log>.+WildFly.+ started in \d+ms.+</log>
                                                     <time>60000</time>
@@ -211,6 +216,9 @@
                                             <name>halos/wildfly</name>
                                             <alias>wf1</alias>
                                             <run>
+                                                <ports>
+                                                    <port>9991:9990</port>
+                                                </ports>
                                                 <wait>
                                                     <log>.+WildFly.+ started in \d+ms.+</log>
                                                     <time>60000</time>
@@ -221,6 +229,9 @@
                                             <name>halos/wildfly</name>
                                             <alias>wf2</alias>
                                             <run>
+                                                <ports>
+                                                    <port>9992:9990</port>
+                                                </ports>
                                                 <wait>
                                                     <log>.+WildFly.+ started in \d+ms.+</log>
                                                     <time>60000</time>

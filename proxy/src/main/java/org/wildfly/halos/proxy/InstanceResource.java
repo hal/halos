@@ -26,11 +26,15 @@ public class InstanceResource {
 
     @POST
     public Response register(Instance instance) {
-        try {
-            dispatcher.register(instance);
-            return Response.status(Status.CREATED).entity(instance).build();
-        } catch (DispatcherException e) {
-            return Response.serverError().entity(e.getMessage()).build();
+        if (dispatcher.hasInstance(instance.name)) {
+            return Response.status(Status.NOT_MODIFIED).build();
+        } else {
+            try {
+                dispatcher.register(instance);
+                return Response.status(Status.CREATED).entity(instance).build();
+            } catch (DispatcherException e) {
+                return Response.serverError().entity(e.getMessage()).build();
+            }
         }
     }
 
@@ -41,7 +45,7 @@ public class InstanceResource {
             if (dispatcher.unregister(name)) {
                 return Response.noContent().build();
             } else {
-                return Response.status(Status.NOT_FOUND).entity("No instance found for '" + name + "'").build();
+                return Response.status(Status.NOT_FOUND).entity("No instance found for '" + name + "'.").build();
             }
         } catch (DispatcherException e) {
             return Response.serverError().entity(e.getMessage()).build();
