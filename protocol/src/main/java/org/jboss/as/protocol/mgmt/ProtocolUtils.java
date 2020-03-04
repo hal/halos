@@ -28,8 +28,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.jboss.as.protocol.logging.ProtocolLogger;
 import org.jboss.as.protocol.StreamUtils;
+import org.jboss.as.protocol.logging.ProtocolLogger;
 
 /**
  * Utility class providing methods for common management tasks.
@@ -58,12 +58,14 @@ public final class ProtocolUtils {
         };
     }
 
-    public static <A> void writeResponse(final ResponseWriter writer, final ManagementRequestContext<A> context) throws IOException {
+    public static <A> void writeResponse(final ResponseWriter writer, final ManagementRequestContext<A> context)
+            throws IOException {
         final ManagementResponseHeader header = ManagementResponseHeader.create(context.getRequestHeader());
         writeResponse(writer, context, header);
     }
 
-    public static <A> void writeResponse(final ResponseWriter writer, final ManagementRequestContext<A> context, final ManagementResponseHeader header) throws IOException {
+    public static <A> void writeResponse(final ResponseWriter writer, final ManagementRequestContext<A> context,
+            final ManagementResponseHeader header) throws IOException {
         final FlushableDataOutput output = context.writeMessage(header);
         try {
             writer.write(output);
@@ -94,16 +96,15 @@ public final class ProtocolUtils {
         int ch2 = in.read();
         int ch3 = in.read();
         int ch4 = in.read();
-        if ((ch1 | ch2 | ch3 | ch4) < 0)
-            throw new EOFException();
+        if ((ch1 | ch2 | ch3 | ch4) < 0) { throw new EOFException(); }
         return ((ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4 << 0));
     }
 
     public static void writeInt(final OutputStream out, final int v) throws IOException {
         out.write((v >>> 24) & 0xFF);
         out.write((v >>> 16) & 0xFF);
-        out.write((v >>>  8) & 0xFF);
-        out.write((v >>>  0) & 0xFF);
+        out.write((v >>> 8) & 0xFF);
+        out.write((v >>> 0) & 0xFF);
     }
 
     public static byte readByte(final InputStream stream) throws IOException {

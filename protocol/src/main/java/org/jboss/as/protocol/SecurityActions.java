@@ -22,15 +22,15 @@
 
 package org.jboss.as.protocol;
 
+import java.security.PrivilegedAction;
+
 import static java.lang.System.getProperty;
 import static java.lang.System.getSecurityManager;
 import static java.security.AccessController.doPrivileged;
 
-import java.security.PrivilegedAction;
-
 /**
- * Security actions to access system environment information.  No methods in
- * this class are to be made public under any circumstances!
+ * Security actions to access system environment information.  No methods in this class are to be made public under any
+ * circumstances!
  *
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  */

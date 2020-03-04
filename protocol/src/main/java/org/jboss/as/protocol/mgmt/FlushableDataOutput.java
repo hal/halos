@@ -23,7 +23,6 @@ import java.io.DataOutput;
 import java.io.Flushable;
 
 /**
- *
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  */
 public interface FlushableDataOutput extends DataOutput, Flushable, Closeable {

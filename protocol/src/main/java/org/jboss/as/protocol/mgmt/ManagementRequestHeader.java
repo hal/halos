@@ -27,9 +27,8 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * ManagementProtocol header used for management requests.  Provides the default header fields from
- * {@link ManagementProtocolHeader} as well as a field to identify who the
- * request should be handled by.
+ * ManagementProtocol header used for management requests.  Provides the default header fields from {@link
+ * ManagementProtocolHeader} as well as a field to identify who the request should be handled by.
  *
  * @author John Bailey
  * @author Kabir Khan
@@ -45,12 +44,12 @@ public class ManagementRequestHeader extends ManagementProtocolHeader {
     /**
      * Construct an instance with the protocol version and operation handler for the header.
      *
-     * @param version The protocol version
-     * @param requestId The request id
-     * @param batchId The batch id
+     * @param version     The protocol version
+     * @param requestId   The request id
+     * @param batchId     The batch id
      * @param operationId The operation to invoke on the server
      */
-    public ManagementRequestHeader(final int version, final  int requestId, final int batchId, final byte operationId) {
+    public ManagementRequestHeader(final int version, final int requestId, final int batchId, final byte operationId) {
         super(version);
         this.requestId = requestId;
         this.batchId = batchId;

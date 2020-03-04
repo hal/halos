@@ -62,34 +62,42 @@ public final class StreamUtils {
     }
 
     public static void safeClose(final Closeable closeable) {
-        if (closeable != null) try {
-            closeable.close();
-        } catch (Throwable t) {
-            ProtocolLogger.ROOT_LOGGER.failedToCloseResource(t, closeable);
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (Throwable t) {
+                ProtocolLogger.ROOT_LOGGER.failedToCloseResource(t, closeable);
+            }
         }
     }
 
     public static void safeClose(final Socket socket) {
-        if (socket != null) try {
-            socket.close();
-        } catch (Throwable t) {
-            ProtocolLogger.ROOT_LOGGER.failedToCloseResource(t, socket);
+        if (socket != null) {
+            try {
+                socket.close();
+            } catch (Throwable t) {
+                ProtocolLogger.ROOT_LOGGER.failedToCloseResource(t, socket);
+            }
         }
     }
 
     public static void safeClose(final ServerSocket serverSocket) {
-        if (serverSocket != null) try {
-            serverSocket.close();
-        } catch (IOException e) {
-            ProtocolLogger.ROOT_LOGGER.failedToCloseServerSocket(e, serverSocket);
+        if (serverSocket != null) {
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                ProtocolLogger.ROOT_LOGGER.failedToCloseServerSocket(e, serverSocket);
+            }
         }
     }
 
     public static void safeClose(final XMLStreamWriter writer) {
-        if (writer != null) try {
-            writer.close();
-        } catch (Throwable t) {
-            ProtocolLogger.ROOT_LOGGER.failedToCloseResource(t, writer);
+        if (writer != null) {
+            try {
+                writer.close();
+            } catch (Throwable t) {
+                ProtocolLogger.ROOT_LOGGER.failedToCloseResource(t, writer);
+            }
         }
     }
 }

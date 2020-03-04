@@ -22,9 +22,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Responsible for generating new unique batch ids on the server side
- * of a channel. The batch ids are used to group several individual channel requests
- * that make up a larger use case.
+ * Responsible for generating new unique batch ids on the server side of a channel. The batch ids are used to group
+ * several individual channel requests that make up a larger use case.
  *
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  * @version $Revision: 1.1 $
@@ -40,8 +39,7 @@ public interface ManagementBatchIdManager {
     boolean lockBatchId(int id);
 
     /**
-     * Creates a batch id. Once the batch has completed
-     * {@link ManagementBatchIdManager#freeBatchId} must be called.
+     * Creates a batch id. Once the batch has completed {@link ManagementBatchIdManager#freeBatchId} must be called.
      *
      * @return the created batch id
      */
@@ -60,7 +58,7 @@ public interface ManagementBatchIdManager {
 
         @Override
         public synchronized boolean lockBatchId(int id) {
-            if(ids.contains(id)) {
+            if (ids.contains(id)) {
                 return false;
             }
             ids.add(id);
@@ -69,9 +67,9 @@ public interface ManagementBatchIdManager {
 
         @Override
         public synchronized int createBatchId() {
-            int next = (int)(Math.random() * Integer.MAX_VALUE);
+            int next = (int) (Math.random() * Integer.MAX_VALUE);
             while (ids.contains(next)) {
-                next = (int)(Math.random() * Integer.MAX_VALUE);
+                next = (int) (Math.random() * Integer.MAX_VALUE);
             }
             ids.add(next);
             return next;

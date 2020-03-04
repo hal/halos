@@ -2,7 +2,10 @@ package org.wildfly.halos.proxy;
 
 import java.util.Objects;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 /** A WildFly instance with information how to access the management endpoint */
+@RegisterForReflection
 public class Instance {
 
     public String name;

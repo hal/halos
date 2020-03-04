@@ -22,10 +22,6 @@
 
 package org.jboss.as.protocol.logging;
 
-import static org.jboss.logging.Logger.Level.ERROR;
-import static org.jboss.logging.Logger.Level.INFO;
-import static org.jboss.logging.Logger.Level.WARN;
-
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.ServerSocket;
@@ -38,6 +34,10 @@ import org.jboss.logging.annotations.LogMessage;
 import org.jboss.logging.annotations.Message;
 import org.jboss.logging.annotations.MessageLogger;
 import org.jboss.remoting3.Channel;
+
+import static org.jboss.logging.Logger.Level.ERROR;
+import static org.jboss.logging.Logger.Level.INFO;
+import static org.jboss.logging.Logger.Level.WARN;
 
 /**
  * Date: 21.07.2011
@@ -52,15 +52,16 @@ public interface ProtocolLogger extends BasicLogger {
      */
     ProtocolLogger ROOT_LOGGER = Logger.getMessageLogger(ProtocolLogger.class, "org.jboss.as.protocol");
 
-//    /**
-//     * A logger with the category {@code org.jboss.as.protocol.client}.
-//     */
-//    ProtocolLogger CLIENT_LOGGER = Logger.getMessageLogger(ProtocolLogger.class, "org.jboss.as.protocol.client");
+    //    /**
+    //     * A logger with the category {@code org.jboss.as.protocol.client}.
+    //     */
+    //    ProtocolLogger CLIENT_LOGGER = Logger.getMessageLogger(ProtocolLogger.class, "org.jboss.as.protocol.client");
 
     /**
      * A logger with the category {@code org.jboss.as.protocol.connection}.
      */
-    ProtocolLogger CONNECTION_LOGGER = Logger.getMessageLogger(ProtocolLogger.class, "org.jboss.as.protocol.connection");
+    ProtocolLogger CONNECTION_LOGGER = Logger.getMessageLogger(ProtocolLogger.class,
+            "org.jboss.as.protocol.connection");
 
     /**
      * Logs a warning message indicating an error occurred when closing the channel.
@@ -136,9 +137,9 @@ public interface ProtocolLogger extends BasicLogger {
     //    @Message(id = 14, value = "Received end for wrong channel!")
     //    void receivedWrongChannel();
 
-//    @LogMessage(level = WARN)
-//    @Message(id = 15, value = "Executor is not needed for client")
-//    void executorNotNeeded();
+    //    @LogMessage(level = WARN)
+    //    @Message(id = 15, value = "Executor is not needed for client")
+    //    void executorNotNeeded();
 
     //    @LogMessage(level = WARN)
     //    @Message(id = 16, value = "Connection timeout is no longer needed for client")
@@ -167,8 +168,7 @@ public interface ProtocolLogger extends BasicLogger {
     /**
      * Creates an exception indicating a connection could not be made.
      *
-     * @param uri             the URI attempted to connect.
-     *
+     * @param uri the URI attempted to connect.
      * @return a {@link java.net.ConnectException} for the error.
      */
     @Message(id = 23, value = "Could not connect to %s. The connection timed out")
@@ -197,7 +197,6 @@ public interface ProtocolLogger extends BasicLogger {
      *
      * @param expected the expected value.
      * @param actual   the actual value.
-     *
      * @return an {@link java.io.IOException} for the error.
      */
     @Message(id = 30, value = "Invalid byte token.  Expecting '%d' received '%d'")
@@ -210,7 +209,6 @@ public interface ProtocolLogger extends BasicLogger {
      * Creates an exception indicating the signature is invalid.
      *
      * @param signature the invalid signature.
-     *
      * @return an {@link IOException} for the error.
      */
     @Message(id = 32, value = "Invalid signature [%s]")
@@ -223,7 +221,6 @@ public interface ProtocolLogger extends BasicLogger {
      * Creates an exception indicating the type is invalid.
      *
      * @param type the invalid type.
-     *
      * @return an {@link IOException} for the error.
      */
     @Message(id = 34, value = "Invalid type: %s")
@@ -235,7 +232,6 @@ public interface ProtocolLogger extends BasicLogger {
      * @param validType1   the first valid type.
      * @param validType2   the second valid type.
      * @param providedType the type provided.
-     *
      * @return an {@link IllegalArgumentException} for the error.
      */
     @Message(id = 35, value = "Type is neither %s or %s: %s")
@@ -300,9 +296,8 @@ public interface ProtocolLogger extends BasicLogger {
     /**
      * Creates an exception indicating a connection could not be made.
      *
-     * @param uri             the URI attempted to connect.
-     * @param cause           the cause of the failure.
-     *
+     * @param uri   the URI attempted to connect.
+     * @param cause the cause of the failure.
      * @return a {@link ConnectException} for the error.
      */
     @Message(id = 53, value = "Could not connect to %s. The connection failed")
@@ -323,7 +318,6 @@ public interface ProtocolLogger extends BasicLogger {
      * Creates an exception indicating the response handler id was not found for the request.
      *
      * @param id the id.
-     *
      * @return an {@link IOException} for the error.
      */
     @Message(id = 56, value = "No response handler for request %s")

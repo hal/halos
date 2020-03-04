@@ -49,7 +49,7 @@ class ActiveOperationImpl<T, A> extends AsyncFutureTask<T> implements ActiveOper
     private volatile Channel channel;
 
     ActiveOperationImpl(final Integer operationId, final A attachment, final CompletedCallback<T> callback,
-                        final AbstractMessageHandler handler) {
+            final AbstractMessageHandler handler) {
         super(directExecutor);
         this.operationId = operationId;
         this.attachment = attachment;
@@ -66,7 +66,7 @@ class ActiveOperationImpl<T, A> extends AsyncFutureTask<T> implements ActiveOper
 
             @Override
             public void handleFailed(AsyncFuture<? extends T> asyncFuture, Throwable cause, Object attachment) {
-                if(cause instanceof Exception) {
+                if (cause instanceof Exception) {
                     callback.failed((Exception) cause);
                 } else {
                     callback.failed(new RuntimeException(cause));
@@ -77,7 +77,8 @@ class ActiveOperationImpl<T, A> extends AsyncFutureTask<T> implements ActiveOper
             public void handleCancelled(AsyncFuture<? extends T> asyncFuture, Object attachment) {
                 handler.removeActiveOperation(operationId);
                 callback.cancelled();
-                ProtocolLogger.ROOT_LOGGER.debugf("cancelled operation (%d) attachment: (%s) handler: %s.", getOperationId(), getAttachment(), handler);
+                ProtocolLogger.ROOT_LOGGER.debugf("cancelled operation (%d) attachment: (%s) handler: %s.",
+                        getOperationId(), getAttachment(), handler);
             }
         }, null);
 
@@ -95,7 +96,7 @@ class ActiveOperationImpl<T, A> extends AsyncFutureTask<T> implements ActiveOper
             public boolean failed(Throwable t) {
                 try {
                     boolean failed = ActiveOperationImpl.this.setFailed(t);
-                    if(failed) {
+                    if (failed) {
                         ProtocolLogger.ROOT_LOGGER.debugf(t, "active-op (%d) failed %s", operationId, attachment);
                     }
                     return failed;
@@ -141,7 +142,7 @@ class ActiveOperationImpl<T, A> extends AsyncFutureTask<T> implements ActiveOper
                 return;
             }
             this.cancellables = CANCEL_REQUESTED;
-            if(cancellables == null) {
+            if (cancellables == null) {
                 setCancelled();
                 return;
             }
@@ -164,7 +165,8 @@ class ActiveOperationImpl<T, A> extends AsyncFutureTask<T> implements ActiveOper
                     if (cancellables == CANCEL_REQUESTED) {
                         break;
                     } else {
-                        ((cancellables == null) ? (this.cancellables = new ArrayList<Cancellable>()) : cancellables).add(cancellable);
+                        ((cancellables == null) ? (this.cancellables = new ArrayList<Cancellable>()) : cancellables).add(
+                                cancellable);
                     }
                 default:
                     return;

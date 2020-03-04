@@ -34,7 +34,8 @@ class ManagementRequestContextImpl<T, A> implements ManagementRequestContext<A> 
     private final ManagementProtocolHeader header;
     private final Executor executor;
 
-    ManagementRequestContextImpl(ActiveOperation<T, A> support, Channel channel, ManagementProtocolHeader header, Executor executor) {
+    ManagementRequestContextImpl(ActiveOperation<T, A> support, Channel channel, ManagementProtocolHeader header,
+            Executor executor) {
         this.support = support;
         this.channel = channel;
         this.header = header;
@@ -69,17 +70,11 @@ class ManagementRequestContextImpl<T, A> implements ManagementRequestContext<A> 
                 try {
                     task.execute(context);
                 } catch (Throwable t) {
-                    if(support.getResultHandler().failed(t)) {
-                        ManagementProtocolHeader requestHeader;
-                        if (task instanceof MultipleResponseAsyncTask) {
-                            requestHeader = ((MultipleResponseAsyncTask) task).getCurrentRequestHeader();
-                            requestHeader = requestHeader == null ? header : requestHeader;
-                        } else {
-                            requestHeader = header;
-                        }
-                        AbstractMessageHandler.safeWriteErrorResponse(channel, requestHeader, t);
+                    if (support.getResultHandler().failed(t)) {
+                        AbstractMessageHandler.safeWriteErrorResponse(channel, header, t);
                     }
-                    ProtocolLogger.ROOT_LOGGER.debugf(t, " failed to process async request for %s on channel %s", task, channel);
+                    ProtocolLogger.ROOT_LOGGER.debugf(t, " failed to process async request for %s on channel %s",
+                            task, channel);
                 }
             }
         };
@@ -110,7 +105,7 @@ class ManagementRequestContextImpl<T, A> implements ManagementRequestContext<A> 
             executor.execute(createAsyncTaskRunner(task, cancellable));
             return true;
         } catch (RejectedExecutionException e) {
-            if(support.getResultHandler().failed(e)) {
+            if (support.getResultHandler().failed(e)) {
                 AbstractMessageHandler.safeWriteErrorResponse(channel, header, e);
             }
         }
@@ -132,11 +127,12 @@ class ManagementRequestContextImpl<T, A> implements ManagementRequestContext<A> 
         private AsyncTaskRunner(boolean cancellable) {
             this.cancellable = cancellable;
         }
+
         @Override
         public Cancellable cancel() {
             if (cancellable && cancelled.compareAndSet(false, true)) {
                 final Thread thread = this.thread;
-                if(thread != null) {
+                if (thread != null) {
                     thread.interrupt();
                     ProtocolLogger.ROOT_LOGGER.cancelledAsyncTask(getClass().getSimpleName(), thread);
                 }

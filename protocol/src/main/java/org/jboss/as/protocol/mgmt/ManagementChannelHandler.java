@@ -22,12 +22,6 @@
 
 package org.jboss.as.protocol.mgmt;
 
-import org.jboss.as.protocol.logging.ProtocolLogger;
-import org.jboss.remoting3.Attachments;
-import org.jboss.remoting3.Channel;
-import org.jboss.remoting3.Connection;
-import org.jboss.threads.AsyncFuture;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -35,8 +29,15 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
+import org.jboss.as.protocol.logging.ProtocolLogger;
+import org.jboss.remoting3.Attachments;
+import org.jboss.remoting3.Channel;
+import org.jboss.remoting3.Connection;
+import org.jboss.threads.AsyncFuture;
+
 /**
- * Generic management channel handler allowing to assemble multiple {@code ManagementRequestHandlerFactory} per channel.
+ * Generic management channel handler allowing to assemble multiple {@code ManagementRequestHandlerFactory} per
+ * channel.
  *
  * @author Emanuel Muckenhuber
  */
@@ -47,7 +48,8 @@ public final class ManagementChannelHandler extends AbstractMessageHandler imple
      */
     public static final Attachments.Key<File> TEMP_DIR = new Attachments.Key<File>(File.class);
 
-    private static final AtomicReferenceFieldUpdater<ManagementChannelHandler, ManagementRequestHandlerFactory[]> updater = AtomicReferenceFieldUpdater.newUpdater(ManagementChannelHandler.class, ManagementRequestHandlerFactory[].class, "handlers");
+    private static final AtomicReferenceFieldUpdater<ManagementChannelHandler, ManagementRequestHandlerFactory[]> updater = AtomicReferenceFieldUpdater
+            .newUpdater(ManagementChannelHandler.class, ManagementRequestHandlerFactory[].class, "handlers");
     private static final ManagementRequestHandlerFactory[] NO_HANDLERS = new ManagementRequestHandlerFactory[0];
 
     /** The management request handlers. */
@@ -60,11 +62,13 @@ public final class ManagementChannelHandler extends AbstractMessageHandler imple
     private final ManagementClientChannelStrategy strategy;
     private final Attachments attachments = new Attachments();
 
-    public ManagementChannelHandler(final ManagementClientChannelStrategy strategy, final ExecutorService executorService) {
+    public ManagementChannelHandler(final ManagementClientChannelStrategy strategy,
+            final ExecutorService executorService) {
         this(strategy, executorService, NO_HANDLERS);
     }
 
-    public ManagementChannelHandler(final ManagementClientChannelStrategy strategy, final ExecutorService executorService, final ManagementRequestHandlerFactory... initial) {
+    public ManagementChannelHandler(final ManagementClientChannelStrategy strategy,
+            final ExecutorService executorService, final ManagementRequestHandlerFactory... initial) {
         super(executorService);
         this.strategy = strategy;
         this.handlers = initial;
@@ -99,13 +103,15 @@ public final class ManagementChannelHandler extends AbstractMessageHandler imple
     }
 
     @Override
-    public <T, A> ActiveOperation<T, A> initializeOperation(A attachment, ActiveOperation.CompletedCallback<T> callback) throws IOException {
+    public <T, A> ActiveOperation<T, A> initializeOperation(A attachment, ActiveOperation.CompletedCallback<T> callback)
+            throws IOException {
         return super.registerActiveOperation(attachment, callback);
     }
 
     /** {@inheritDoc} */
     @Override
-    public <T, A> ActiveOperation<T, A> executeRequest(ManagementRequest<T, A> request, A attachment, ActiveOperation.CompletedCallback<T> callback) throws IOException {
+    public <T, A> ActiveOperation<T, A> executeRequest(ManagementRequest<T, A> request, A attachment,
+            ActiveOperation.CompletedCallback<T> callback) throws IOException {
         final ActiveOperation<T, A> operation = super.registerActiveOperation(attachment, callback);
         executeRequest(operation, request);
         return operation;
@@ -113,7 +119,8 @@ public final class ManagementChannelHandler extends AbstractMessageHandler imple
 
     /** {@inheritDoc} */
     @Override
-    public <T, A> ActiveOperation<T, A> executeRequest(final ManagementRequest<T, A> request, final A attachment) throws IOException {
+    public <T, A> ActiveOperation<T, A> executeRequest(final ManagementRequest<T, A> request, final A attachment)
+            throws IOException {
         final ActiveOperation<T, A> operation = super.registerActiveOperation(attachment);
         executeRequest(operation, request);
         return operation;
@@ -121,9 +128,10 @@ public final class ManagementChannelHandler extends AbstractMessageHandler imple
 
     /** {@inheritDoc} */
     @Override
-    public <T, A> AsyncFuture<T> executeRequest(final Integer operationId, final ManagementRequest<T, A> request) throws IOException {
+    public <T, A> AsyncFuture<T> executeRequest(final Integer operationId, final ManagementRequest<T, A> request)
+            throws IOException {
         final ActiveOperation<T, A> operation = super.getActiveOperation(operationId);
-        if(operation == null) {
+        if (operation == null) {
             throw ProtocolLogger.ROOT_LOGGER.responseHandlerNotFound(operationId);
         }
         return executeRequest(operation, request);
@@ -131,7 +139,8 @@ public final class ManagementChannelHandler extends AbstractMessageHandler imple
 
     /** {@inheritDoc} */
     @Override
-    public <T, A> AsyncFuture<T> executeRequest(final ActiveOperation<T, A> support, final ManagementRequest<T, A> request) throws IOException {
+    public <T, A> AsyncFuture<T> executeRequest(final ActiveOperation<T, A> support,
+            final ManagementRequest<T, A> request) throws IOException {
         return super.executeRequest(request, strategy.getChannel(), support);
     }
 
@@ -146,11 +155,11 @@ public final class ManagementChannelHandler extends AbstractMessageHandler imple
 
             @Override
             public ManagementRequestHandler<?, ?> resolveNext() {
-                if(index++ == length) {
+                if (index++ == length) {
                     return getFallbackHandler(header);
                 }
                 final ManagementRequestHandlerFactory factory = snapshot[index];
-                if(factory == null) {
+                if (factory == null) {
                     // return getFallbackHandler(header);
                     return resolveNext();
                 }
@@ -163,7 +172,8 @@ public final class ManagementChannelHandler extends AbstractMessageHandler imple
             }
 
             @Override
-            public <T, A> ActiveOperation<T, A> createActiveOperation(A attachment, ActiveOperation.CompletedCallback<T> completedCallback) {
+            public <T, A> ActiveOperation<T, A> createActiveOperation(A attachment,
+                    ActiveOperation.CompletedCallback<T> completedCallback) {
                 return ManagementChannelHandler.this.registerActiveOperation(attachment, completedCallback);
             }
 
@@ -173,7 +183,8 @@ public final class ManagementChannelHandler extends AbstractMessageHandler imple
             }
 
             @Override
-            public <T, A> ActiveOperation<T, A> registerActiveOperation(Integer id, A attachment, ActiveOperation.CompletedCallback<T> completedCallback) {
+            public <T, A> ActiveOperation<T, A> registerActiveOperation(Integer id, A attachment,
+                    ActiveOperation.CompletedCallback<T> completedCallback) {
                 return ManagementChannelHandler.this.registerActiveOperation(id, attachment, completedCallback);
             }
 
@@ -200,7 +211,7 @@ public final class ManagementChannelHandler extends AbstractMessageHandler imple
      * @param factory the request handler to add
      */
     public void addHandlerFactory(ManagementRequestHandlerFactory factory) {
-        for (;;) {
+        for (; ; ) {
             final ManagementRequestHandlerFactory[] snapshot = updater.get(this);
             final int length = snapshot.length;
             final ManagementRequestHandlerFactory[] newVal = new ManagementRequestHandlerFactory[length + 1];
@@ -219,17 +230,17 @@ public final class ManagementChannelHandler extends AbstractMessageHandler imple
      * @return {@code true} if the instance was removed, {@code false} otherwise
      */
     public boolean removeHandlerFactory(ManagementRequestHandlerFactory instance) {
-        for(;;) {
+        for (; ; ) {
             final ManagementRequestHandlerFactory[] snapshot = updater.get(this);
             final int length = snapshot.length;
             int index = -1;
-            for(int i = 0; i < length; i++) {
-                if(snapshot[i] == instance) {
+            for (int i = 0; i < length; i++) {
+                if (snapshot[i] == instance) {
                     index = i;
                     break;
                 }
             }
-            if(index == -1) {
+            if (index == -1) {
                 return false;
             }
             final ManagementRequestHandlerFactory[] newVal = new ManagementRequestHandlerFactory[length - 1];

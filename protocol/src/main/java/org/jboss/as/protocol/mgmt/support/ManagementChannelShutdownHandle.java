@@ -19,9 +19,9 @@ package org.jboss.as.protocol.mgmt.support;
 import java.util.concurrent.TimeUnit;
 
 /**
- * A handle to a processor of management requests which can be used to coordinate a controlled shutdown
- * of a processor that allows active operations to complete before shutting down.
- *
+ * A handle to a processor of management requests which can be used to coordinate a controlled shutdown of a processor
+ * that allows active operations to complete before shutting down.
+ * <p>
  * TODO this should be redone to use callbacks to signal when all operations are completed
  *
  * @author Emanuel Muckenhuber
@@ -46,7 +46,7 @@ public interface ManagementChannelShutdownHandle {
      * Await the completion of all currently active operations.
      *
      * @param timeout the timeout
-     * @param unit the time unit
+     * @param unit    the time unit
      * @return {@code false} if the timeout was reached and there were still active operations
      * @throws InterruptedException
      */

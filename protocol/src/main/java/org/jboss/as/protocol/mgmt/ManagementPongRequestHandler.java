@@ -32,7 +32,8 @@ import org.jboss.as.protocol.StreamUtils;
  *
  * @author Brian Stansberry (c) 2012 Red Hat Inc.
  */
-public class ManagementPongRequestHandler implements ManagementRequestHandlerFactory, ManagementRequestHandler<Void, Void> {
+public class ManagementPongRequestHandler
+        implements ManagementRequestHandlerFactory, ManagementRequestHandler<Void, Void> {
 
     private volatile long connectionId = System.currentTimeMillis();
 
@@ -49,7 +50,7 @@ public class ManagementPongRequestHandler implements ManagementRequestHandlerFac
 
     @Override
     public void handleRequest(final DataInput input, final ActiveOperation.ResultHandler<Void> resultHandler,
-                              final ManagementRequestContext<Void> context) throws IOException {
+            final ManagementRequestContext<Void> context) throws IOException {
 
         final ManagementResponseHeader response = ManagementResponseHeader.create(context.getRequestHeader());
 
@@ -74,6 +75,7 @@ public class ManagementPongRequestHandler implements ManagementRequestHandlerFac
 
     /**
      * Gets the current id we send in pong responses
+     *
      * @return
      */
     public long getConnectionId() {

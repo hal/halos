@@ -25,8 +25,7 @@ package org.jboss.as.protocol.mgmt.support;
 import org.jboss.remoting3.Channel;
 
 /**
- * Initializes a {@link org.jboss.remoting3.Channel.Receiver} for receiving
- * messages over management channels.
+ * Initializes a {@link org.jboss.remoting3.Channel.Receiver} for receiving messages over management channels.
  *
  * @author Emanuel Muckenhuber
  */

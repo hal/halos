@@ -1,24 +1,24 @@
 /*
-* JBoss, Home of Professional Open Source.
-* Copyright 2006, Red Hat Middleware LLC, and individual contributors
-* as indicated by the @author tags. See the copyright.txt file in the
-* distribution for a full listing of individual contributors.
-*
-* This is free software; you can redistribute it and/or modify it
-* under the terms of the GNU Lesser General Public License as
-* published by the Free Software Foundation; either version 2.1 of
-* the License, or (at your option) any later version.
-*
-* This software is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public
-* License along with this software; if not, write to the Free
-* Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-* 02110-1301 USA, or see the FSF site: http://www.fsf.org.
-*/
+ * JBoss, Home of Professional Open Source.
+ * Copyright 2006, Red Hat Middleware LLC, and individual contributors
+ * as indicated by the @author tags. See the copyright.txt file in the
+ * distribution for a full listing of individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 package org.jboss.as.protocol.mgmt;
 
 import java.io.Closeable;
@@ -68,32 +68,34 @@ public abstract class ManagementClientChannelStrategy implements Closeable {
     /**
      * Create a new establishing management client channel-strategy
      *
-     * @param baseConfig the base connection configuration
-     * @param handler the {@code ManagementMessageHandler}
-     * @param cbHandler a callback handler
-     * @param saslOptions the sasl options
-     * @param sslContext the ssl context
+     * @param baseConfig   the base connection configuration
+     * @param handler      the {@code ManagementMessageHandler}
+     * @param cbHandler    a callback handler
+     * @param saslOptions  the sasl options
+     * @param sslContext   the ssl context
      * @param closeHandler a close handler
      * @return the management client channel strategy
      */
     public static ManagementClientChannelStrategy create(final ProtocolConnectionConfiguration baseConfig,
-                                                         final ManagementMessageHandler handler,
-                                                         final CallbackHandler cbHandler,
-                                                         final Map<String, String> saslOptions,
-                                                         final SSLContext sslContext,
-                                                         final CloseHandler<Channel> closeHandler) {
-        return create(createConfiguration(baseConfig, saslOptions, cbHandler, sslContext), ManagementChannelReceiver.createDelegating(handler), closeHandler);
+            final ManagementMessageHandler handler,
+            final CallbackHandler cbHandler,
+            final Map<String, String> saslOptions,
+            final SSLContext sslContext,
+            final CloseHandler<Channel> closeHandler) {
+        return create(createConfiguration(baseConfig, saslOptions, cbHandler, sslContext),
+                ManagementChannelReceiver.createDelegating(handler), closeHandler);
     }
 
     /**
      * Create a new establishing management client channel-strategy
      *
      * @param configuration the connection configuration
-     * @param receiver the channel receiver
-     * @param closeHandler the close handler
+     * @param receiver      the channel receiver
+     * @param closeHandler  the close handler
      * @return the management client channel strategy
      */
-    public static ManagementClientChannelStrategy create(final ProtocolConnectionConfiguration configuration, final Channel.Receiver receiver, final CloseHandler<Channel> closeHandler) {
+    public static ManagementClientChannelStrategy create(final ProtocolConnectionConfiguration configuration,
+            final Channel.Receiver receiver, final CloseHandler<Channel> closeHandler) {
         return new Establishing(configuration, receiver, closeHandler);
     }
 
@@ -101,16 +103,18 @@ public abstract class ManagementClientChannelStrategy implements Closeable {
      * The existing channel strategy.
      */
     private static class Existing extends ManagementClientChannelStrategy {
+
         // The underlying channel
         private final Channel channel;
         private volatile boolean closed = false;
+
         private Existing(final Channel channel) {
             this.channel = channel;
         }
 
         @Override
         public Channel getChannel() throws IOException {
-            if(closed) {
+            if (closed) {
                 throw ProtocolLogger.ROOT_LOGGER.channelClosed();
             }
             return channel;
@@ -123,9 +127,10 @@ public abstract class ManagementClientChannelStrategy implements Closeable {
         }
     }
 
-    private static ProtocolConnectionConfiguration createConfiguration(final ProtocolConnectionConfiguration configuration,
-                                                                       final Map<String, String> saslOptions, final CallbackHandler callbackHandler,
-                                                                       final SSLContext sslContext) {
+    private static ProtocolConnectionConfiguration createConfiguration(
+            final ProtocolConnectionConfiguration configuration,
+            final Map<String, String> saslOptions, final CallbackHandler callbackHandler,
+            final SSLContext sslContext) {
         final ProtocolConnectionConfiguration config = ProtocolConnectionConfiguration.copy(configuration);
         config.setCallbackHandler(callbackHandler);
         config.setSslContext(sslContext);
@@ -134,8 +139,8 @@ public abstract class ManagementClientChannelStrategy implements Closeable {
     }
 
     /**
-     * When getting the underlying channel this strategy is trying to automatically (re-)connect
-     * when either the connection or channel was closed.
+     * When getting the underlying channel this strategy is trying to automatically (re-)connect when either the
+     * connection or channel was closed.
      */
     private static class Establishing extends FutureManagementChannel {
 
@@ -147,7 +152,8 @@ public abstract class ManagementClientChannelStrategy implements Closeable {
         private final long timeout;
         private Long deadline;
 
-        private Establishing(final ProtocolConnectionConfiguration configuration, final Channel.Receiver receiver, final CloseHandler<Channel> closeHandler) {
+        private Establishing(final ProtocolConnectionConfiguration configuration, final Channel.Receiver receiver,
+                final CloseHandler<Channel> closeHandler) {
             this.receiver = receiver;
             this.channelOptions = configuration.getOptionMap();
             this.connectionManager = ProtocolConnectionManager.create(configuration, this);
@@ -158,7 +164,7 @@ public abstract class ManagementClientChannelStrategy implements Closeable {
         @Override
         public Channel getChannel() throws IOException {
             Channel channel = super.getChannel();
-            if(channel != null) {
+            if (channel != null) {
                 return channel;
             }
             // Try to connect and wait for the channel
@@ -169,7 +175,7 @@ public abstract class ManagementClientChannelStrategy implements Closeable {
             }
             // In case connect did not succeed the next getChannel() call needs to try to reconnect
             channel = super.getChannel();
-            if(channel == null) {
+            if (channel == null) {
                 throw ProtocolLogger.ROOT_LOGGER.channelClosed();
             }
             return channel;
@@ -178,7 +184,7 @@ public abstract class ManagementClientChannelStrategy implements Closeable {
         @Override
         public void connectionOpened(final Connection connection) throws IOException {
             final Channel channel = openChannel(connection, serviceType, channelOptions);
-            if(setChannel(channel)) {
+            if (setChannel(channel)) {
                 channel.receiveMessage(receiver);
             } else {
                 channel.closeAsync();
@@ -195,7 +201,8 @@ public abstract class ManagementClientChannelStrategy implements Closeable {
         }
 
         @Override
-        protected Channel openChannel(final Connection connection, final String serviceType, final OptionMap options) throws IOException {
+        protected Channel openChannel(final Connection connection, final String serviceType, final OptionMap options)
+                throws IOException {
             // This is only called as part of the connectionManager.connect() handling in getChannel() above.
             // So, we should hold the connectionManager lock. We want to ensure that so we know we have the right deadline.
             // We could synchronize again on connectionManager to ensure that, but then if there is some corner case

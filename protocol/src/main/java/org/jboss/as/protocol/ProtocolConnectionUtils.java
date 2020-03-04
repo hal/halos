@@ -22,8 +22,6 @@
 
 package org.jboss.as.protocol;
 
-import static java.security.AccessController.doPrivileged;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -56,6 +54,8 @@ import org.xnio.Option;
 import org.xnio.OptionMap;
 import org.xnio.Options;
 
+import static java.security.AccessController.doPrivileged;
+
 /**
  * Protocol Connection utils.
  *
@@ -66,9 +66,11 @@ import org.xnio.Options;
 public class ProtocolConnectionUtils {
 
     private static final String JBOSS_LOCAL_USER = "JBOSS-LOCAL-USER";
-    private static final Map<String, String> QUIET_LOCAL_AUTH = Collections.singletonMap(LocalUserClient.QUIET_AUTH, "true");
+    private static final Map<String, String> QUIET_LOCAL_AUTH = Collections.singletonMap(LocalUserClient.QUIET_AUTH,
+            "true");
 
-    private static final AuthenticationContextConfigurationClient AUTH_CONFIGURATION_CLIENT = doPrivileged(AuthenticationContextConfigurationClient.ACTION);
+    private static final AuthenticationContextConfigurationClient AUTH_CONFIGURATION_CLIENT = doPrivileged(
+            AuthenticationContextConfigurationClient.ACTION);
 
     /**
      * Connect.
@@ -81,13 +83,15 @@ public class ProtocolConnectionUtils {
         return connect(configuration.getCallbackHandler(), configuration);
     }
 
-    public static IoFuture<Connection> connect(final ProtocolConnectionConfiguration configuration, CallbackHandler handler) throws IOException {
+    public static IoFuture<Connection> connect(final ProtocolConnectionConfiguration configuration,
+            CallbackHandler handler) throws IOException {
         final ProtocolConnectionConfiguration config = ProtocolConnectionConfiguration.copy(configuration);
         config.setCallbackHandler(handler);
         return connect(config);
     }
 
-    public static IoFuture<Connection> connect(final ProtocolConnectionConfiguration configuration, CallbackHandler handler, Map<String, String> saslOptions, SSLContext sslContext) throws IOException {
+    public static IoFuture<Connection> connect(final ProtocolConnectionConfiguration configuration,
+            CallbackHandler handler, Map<String, String> saslOptions, SSLContext sslContext) throws IOException {
         final ProtocolConnectionConfiguration config = ProtocolConnectionConfiguration.copy(configuration);
         config.setCallbackHandler(handler);
         config.setSaslOptions(saslOptions);
@@ -130,13 +134,15 @@ public class ProtocolConnectionUtils {
         throw ProtocolLogger.ROOT_LOGGER.couldNotConnect(configuration.getUri());
     }
 
-    public static Connection connectSync(final ProtocolConnectionConfiguration configuration, CallbackHandler handler) throws IOException {
+    public static Connection connectSync(final ProtocolConnectionConfiguration configuration, CallbackHandler handler)
+            throws IOException {
         final ProtocolConnectionConfiguration config = ProtocolConnectionConfiguration.copy(configuration);
         config.setCallbackHandler(handler);
         return connectSync(config);
     }
 
-    public static Connection connectSync(final ProtocolConnectionConfiguration configuration, CallbackHandler handler, Map<String, String> saslOptions, SSLContext sslContext) throws IOException {
+    public static Connection connectSync(final ProtocolConnectionConfiguration configuration, CallbackHandler handler,
+            Map<String, String> saslOptions, SSLContext sslContext) throws IOException {
         final ProtocolConnectionConfiguration config = ProtocolConnectionConfiguration.copy(configuration);
         config.setCallbackHandler(handler);
         config.setSaslOptions(saslOptions);
@@ -150,14 +156,17 @@ public class ProtocolConnectionUtils {
             CallbackKind.REALM
     );
 
-    private static IoFuture<Connection> connect(final CallbackHandler handler, final ProtocolConnectionConfiguration configuration) throws IOException {
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static IoFuture<Connection> connect(final CallbackHandler handler,
+            final ProtocolConnectionConfiguration configuration) throws IOException {
         configuration.validate();
         final Endpoint endpoint = configuration.getEndpoint();
         final URI uri = configuration.getUri();
         String clientBindAddress = configuration.getClientBindAddress();
 
         AuthenticationContext captured = AuthenticationContext.captureCurrent();
-        AuthenticationConfiguration mergedConfiguration = AUTH_CONFIGURATION_CLIENT.getAuthenticationConfiguration(uri, captured);
+        AuthenticationConfiguration mergedConfiguration = AUTH_CONFIGURATION_CLIENT.getAuthenticationConfiguration(uri,
+                captured);
         if (handler != null) {
             mergedConfiguration = mergedConfiguration.useCallbackHandler(handler, DEFAULT_CALLBACK_KINDS);
         }
@@ -172,7 +181,7 @@ public class ProtocolConnectionUtils {
             saslOptions = new HashMap<>(saslOptions);
             // Drop SASL_DISALLOWED_MECHANISMS which we already handled
             saslOptions.remove(Options.SASL_DISALLOWED_MECHANISMS.getName());
-            mergedConfiguration = mergedConfiguration.useMechanismProperties(saslOptions);
+            mergedConfiguration = mergedConfiguration.useSaslMechanismProperties(saslOptions);
         }
 
         SSLContext sslContext = configuration.getSslContext();
@@ -190,10 +199,12 @@ public class ProtocolConnectionUtils {
         for (Option option : optionMap) {
             builder.set(option, optionMap.get(option));
         }
-        if (optionMap.get(Options.SSL_ENABLED) == null)
+        if (optionMap.get(Options.SSL_ENABLED) == null) {
             builder.set(Options.SSL_ENABLED, configuration.isSslEnabled());
-        if (optionMap.get(Options.SSL_STARTTLS) == null)
+        }
+        if (optionMap.get(Options.SSL_STARTTLS) == null) {
             builder.set(Options.SSL_STARTTLS, configuration.isUseStartTLS());
+        }
 
         AuthenticationContext authenticationContext = AuthenticationContext.empty();
         authenticationContext = authenticationContext.with(MatchRule.ALL, mergedConfiguration);
@@ -208,7 +219,8 @@ public class ProtocolConnectionUtils {
         }
     }
 
-    private static AuthenticationConfiguration configureSaslMechanisms(Map<String, String> saslOptions, boolean isLocal, AuthenticationConfiguration authenticationConfiguration) {
+    private static AuthenticationConfiguration configureSaslMechanisms(Map<String, String> saslOptions, boolean isLocal,
+            AuthenticationConfiguration authenticationConfiguration) {
         String[] mechanisms = null;
         String listed;
         if (saslOptions != null && (listed = saslOptions.get(Options.SASL_DISALLOWED_MECHANISMS.getName())) != null) {
@@ -222,10 +234,11 @@ public class ProtocolConnectionUtils {
                 mechanisms = split;
             }
         } else if (!isLocal) {
-            mechanisms = new String[]{ JBOSS_LOCAL_USER };
+            mechanisms = new String[]{JBOSS_LOCAL_USER};
         }
 
-        return (mechanisms != null && mechanisms.length > 0) ? authenticationConfiguration.setSaslMechanismSelector(SaslMechanismSelector.DEFAULT.forbidMechanisms(mechanisms)) : authenticationConfiguration;
+        return (mechanisms != null && mechanisms.length > 0) ? authenticationConfiguration.setSaslMechanismSelector(
+                SaslMechanismSelector.DEFAULT.forbidMechanisms(mechanisms)) : authenticationConfiguration;
     }
 
     private static boolean isLocal(final URI uri) {

@@ -39,7 +39,8 @@ import org.xnio.OptionMap;
  *
  * @author Emanuel Muckenhuber
  */
-public abstract class FutureManagementChannel extends ManagementClientChannelStrategy implements ProtocolConnectionManager.ConnectionOpenHandler {
+public abstract class FutureManagementChannel extends ManagementClientChannelStrategy
+        implements ProtocolConnectionManager.ConnectionOpenHandler {
 
     private final Object lock = new Object();
     private volatile Channel channel;
@@ -55,7 +56,7 @@ public abstract class FutureManagementChannel extends ManagementClientChannelStr
     @Override
     public Channel getChannel() throws IOException {
         final Channel channel = this.channel;
-        if(channel == null && state != State.OPEN) {
+        if (channel == null && state != State.OPEN) {
             throw channelClosed();
         }
         return channel;
@@ -68,7 +69,7 @@ public abstract class FutureManagementChannel extends ManagementClientChannelStr
     @Override
     public void close() throws IOException {
         synchronized (lock) {
-            if(state == State.CLOSED) {
+            if (state == State.CLOSED) {
                 return;
             }
             state = State.CLOSED;
@@ -98,19 +99,19 @@ public abstract class FutureManagementChannel extends ManagementClientChannelStr
      */
     protected Channel awaitChannel() throws IOException {
         Channel channel = this.channel;
-        if(channel != null) {
+        if (channel != null) {
             return channel;
         }
         synchronized (lock) {
-            for(;;) {
-                if(state == State.CLOSED) {
+            for (; ; ) {
+                if (state == State.CLOSED) {
                     throw ProtocolLogger.ROOT_LOGGER.channelClosed();
                 }
                 channel = this.channel;
-                if(channel != null) {
+                if (channel != null) {
                     return channel;
                 }
-                if(state == State.CLOSING) {
+                if (state == State.CLOSING) {
                     throw ProtocolLogger.ROOT_LOGGER.channelClosed();
                 }
                 try {
@@ -143,30 +144,33 @@ public abstract class FutureManagementChannel extends ManagementClientChannelStr
     /**
      * Open a channel.
      *
-     * @param connection the connection
+     * @param connection  the connection
      * @param serviceType the service type
-     * @param options the channel options
+     * @param options     the channel options
      * @return the opened channel
-     * @throws IOException if there is a remoting problem opening the channel or it cannot be opened in a reasonable amount of time
+     * @throws IOException if there is a remoting problem opening the channel or it cannot be opened in a reasonable
+     *                     amount of time
      */
-    protected Channel openChannel(final Connection connection, final String serviceType, final OptionMap options) throws IOException {
+    protected Channel openChannel(final Connection connection, final String serviceType, final OptionMap options)
+            throws IOException {
         return openChannel(connection, serviceType, options, null);
     }
 
     /**
      * Open a channel.
      *
-     * @param connection the connection
+     * @param connection  the connection
      * @param serviceType the service type
-     * @param options the channel options
-     * @param deadline time, in ms since the epoch, by which the channel must be created,
-     *                 or {@code null} if the caller is not imposing a specific deadline.
-     *                 Ignored if less than 10s from the current time, with 10s used as the
-     *                 default if this is {@code null}
+     * @param options     the channel options
+     * @param deadline    time, in ms since the epoch, by which the channel must be created, or {@code null} if the
+     *                    caller is not imposing a specific deadline. Ignored if less than 10s from the current time,
+     *                    with 10s used as the default if this is {@code null}
      * @return the opened channel
-     * @throws IOException if there is a remoting problem opening the channel or it cannot be opened in a reasonable amount of time
+     * @throws IOException if there is a remoting problem opening the channel or it cannot be opened in a reasonable
+     *                     amount of time
      */
-    final Channel openChannel(final Connection connection, final String serviceType, final OptionMap options, final Long deadline) throws IOException {
+    final Channel openChannel(final Connection connection, final String serviceType, final OptionMap options,
+            final Long deadline) throws IOException {
         final IoFuture<Channel> futureChannel = connection.openChannel(serviceType, options);
         long waitTime = deadline == null ? 10000 : Math.max(10000, deadline - System.currentTimeMillis());
         futureChannel.await(waitTime, TimeUnit.MILLISECONDS);
@@ -184,11 +188,11 @@ public abstract class FutureManagementChannel extends ManagementClientChannelStr
      * @return whether the operation succeeded or not
      */
     protected boolean setChannel(final Channel newChannel) {
-        if(newChannel == null) {
+        if (newChannel == null) {
             return false;
         }
         synchronized (lock) {
-            if(state != State.OPEN || channel != null) {
+            if (state != State.OPEN || channel != null) {
                 return false;
             }
             this.channel = newChannel;
@@ -196,7 +200,7 @@ public abstract class FutureManagementChannel extends ManagementClientChannelStr
                 @Override
                 public void handleClose(final Channel closed, final IOException exception) {
                     synchronized (lock) {
-                        if(FutureManagementChannel.this.channel == closed) {
+                        if (FutureManagementChannel.this.channel == closed) {
                             FutureManagementChannel.this.channel = null;
                         }
                         lock.notifyAll();

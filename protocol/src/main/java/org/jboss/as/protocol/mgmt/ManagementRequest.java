@@ -44,9 +44,10 @@ public interface ManagementRequest<T, A> extends ManagementResponseHandler<T, A>
      * Send the request.
      *
      * @param resultHandler the result handler
-     * @param context the request context
+     * @param context       the request context
      * @throws IOException for any error
      */
-    void sendRequest(ActiveOperation.ResultHandler<T> resultHandler, ManagementRequestContext<A> context) throws IOException;
+    void sendRequest(ActiveOperation.ResultHandler<T> resultHandler, ManagementRequestContext<A> context)
+            throws IOException;
 
 }

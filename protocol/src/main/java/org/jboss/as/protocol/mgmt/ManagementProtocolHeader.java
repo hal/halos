@@ -22,8 +22,6 @@
 
 package org.jboss.as.protocol.mgmt;
 
-import static org.jboss.as.protocol.mgmt.ProtocolUtils.expectHeader;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -31,9 +29,11 @@ import java.util.Arrays;
 
 import org.jboss.as.protocol.logging.ProtocolLogger;
 
+import static org.jboss.as.protocol.mgmt.ProtocolUtils.expectHeader;
+
 /**
- * ManagementProtocol header used to send the required information to establish a request with a remote controller.  The primary
- * pieces of the request are the protocol signature and the protocol version being used.
+ * ManagementProtocol header used to send the required information to establish a request with a remote controller.  The
+ * primary pieces of the request are the protocol signature and the protocol version being used.
  *
  * @author John Bailey
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
@@ -50,6 +50,7 @@ public abstract class ManagementProtocolHeader {
     protected ManagementProtocolHeader(int version) {
         this.version = version;
     }
+
     /**
      * Write the header information to the provided {@link java.io.DataOutput}.
      *

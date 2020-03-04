@@ -29,8 +29,8 @@ import org.xnio.IoFuture;
 import org.xnio.IoFuture.Status;
 
 /**
- * A general implementation of {@link ProtocolTimeoutHandler} that takes into account the time taken for {@link Runnable} tasks
- * to be executed.
+ * A general implementation of {@link ProtocolTimeoutHandler} that takes into account the time taken for {@link
+ * Runnable} tasks to be executed.
  *
  * @author <a href="mailto:darran.lofthouse@jboss.com">Darran Lofthouse</a>
  */

@@ -41,8 +41,8 @@ import org.jboss.remoting3.MessageOutputStream;
 public final class ManagementChannelReceiver implements Channel.Receiver {
 
     /**
-     * Create a {@code ManagementChannelReceiver} which delegates protocol messages to
-     * a {@code ManagementMessageHandler}.
+     * Create a {@code ManagementChannelReceiver} which delegates protocol messages to a {@code
+     * ManagementMessageHandler}.
      *
      * @param handler the handler
      * @return the receiver
@@ -95,7 +95,7 @@ public final class ManagementChannelReceiver implements Channel.Receiver {
                 }
             }
             message.close();
-        } catch(IOException e) {
+        } catch (IOException e) {
             handleError(channel, e);
         } catch (Exception e) {
             handleError(channel, new IOException(e));
@@ -136,7 +136,7 @@ public final class ManagementChannelReceiver implements Channel.Receiver {
      * Handle a simple ping request.
      *
      * @param channel the channel
-     * @param header the protocol header
+     * @param header  the protocol header
      * @throws IOException for any error
      */
     private static void handlePing(final Channel channel, final ManagementProtocolHeader header) throws IOException {
@@ -154,7 +154,7 @@ public final class ManagementChannelReceiver implements Channel.Receiver {
      * Write the management protocol header.
      *
      * @param header the mgmt protocol header
-     * @param os the output stream
+     * @param os     the output stream
      * @throws IOException
      */
     private static void writeHeader(final ManagementProtocolHeader header, final OutputStream os) throws IOException {

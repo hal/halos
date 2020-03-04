@@ -26,6 +26,7 @@ package org.jboss.as.protocol.mgmt;
  * @author John Bailey
  */
 public interface ManagementProtocol {
+
     // Headers
     byte[] SIGNATURE = {Byte.MAX_VALUE, Byte.MIN_VALUE, Byte.MAX_VALUE, Byte.MIN_VALUE};
     int VERSION_FIELD = 0x00; // The version field header

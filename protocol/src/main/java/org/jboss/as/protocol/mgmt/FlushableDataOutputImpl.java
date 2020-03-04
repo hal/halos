@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- *
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  */
 class FlushableDataOutputImpl implements FlushableDataOutput, Closeable {

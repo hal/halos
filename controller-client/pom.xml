@@ -34,6 +34,7 @@
         <jboss.logging.version>3.4.1.Final</jboss.logging.version>
         <jboss.logging-tools.version>2.2.1.Final</jboss.logging-tools.version>
         <jboss.threads.version>3.0.1.Final</jboss.threads.version>
+        <wildfly.client-config.version>1.0.1.Final</wildfly.client-config.version>
         <wildfly.common.version>1.5.2.Final</wildfly.common.version>
         <wildfly.elytron.version>1.11.2.Final</wildfly.elytron.version>
     </properties>
@@ -46,6 +47,31 @@
         <dependency>
             <groupId>org.wildfly.halos</groupId>
             <artifactId>wildfly-protocol</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.wildfly.client</groupId>
+                    <artifactId>wildfly-client-config</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wildfly.security</groupId>
+                    <artifactId>wildfly-elytron</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.client</groupId>
+            <artifactId>wildfly-client-config</artifactId>
+            <version>${wildfly.client-config.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jboss.logging</groupId>
+                    <artifactId>jboss-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wildfly.common</groupId>
+                    <artifactId>wildfly-common</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wildfly.common</groupId>
@@ -56,6 +82,12 @@
             <groupId>org.wildfly.security</groupId>
             <artifactId>wildfly-elytron</artifactId>
             <version>${wildfly.elytron.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jboss</groupId>
@@ -71,11 +103,15 @@
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging-annotations</artifactId>
             <version>${jboss.logging-tools.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging-processor</artifactId>
             <version>${jboss.logging-tools.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 </project>

@@ -95,7 +95,7 @@ class Dispatcher {
 
     ModelNode execute(Operation operation) {
         ModelNode result = new ModelNode();
-        clients.forEach((instance, client) -> result.get(instance.name).set(executeInternal(instance, client, operation)));
+        clients.forEach((instance, client) -> wrapResult(result, instance, client, operation));
         return result;
     }
 
@@ -103,9 +103,7 @@ class Dispatcher {
         Map.Entry<Instance, ModelControllerClient> entry = findByName(name);
         if (entry != null) {
             ModelNode result = new ModelNode();
-            Instance instance = entry.getKey();
-            ModelControllerClient client = entry.getValue();
-            result.get(instance.name).set(executeInternal(instance, client, operation));
+            wrapResult(result, entry.getKey(), entry.getValue(), operation);
             return result;
         } else {
             log.errorf("Unable to find client for instance %1s. Did you register %1s?", name);
@@ -113,16 +111,18 @@ class Dispatcher {
         }
     }
 
-    private ModelNode executeInternal(Instance instance, ModelControllerClient client, Operation operation) {
-        ModelNode modelNode;
+    private void wrapResult(ModelNode container, Instance instance, ModelControllerClient client, Operation operation) {
+        ModelNode result;
         try {
-            modelNode = client.execute(operation);
+            result = client.execute(operation);
         } catch (IOException e) {
             log.errorf("Error executing operation %s against %s: %s",
                     operation.getOperation().toJSONString(true), instance, e.getMessage());
-            modelNode = wrapException(e);
+            result = new ModelNode();
+            result.get(ClientConstants.OUTCOME).set("failed");
+            result.get(ClientConstants.FAILURE_DESCRIPTION).set(e.getMessage());
         }
-        return modelNode;
+        container.get(instance.name).set(result);
     }
 
     private Map.Entry<Instance, ModelControllerClient> findByName(String name) {
@@ -132,12 +132,5 @@ class Dispatcher {
             }
         }
         return null;
-    }
-
-    private ModelNode wrapException(Exception exception) {
-        ModelNode failure = new ModelNode();
-        failure.get(ClientConstants.OUTCOME).set("failed");
-        failure.get(ClientConstants.FAILURE_DESCRIPTION).set(exception.getMessage());
-        return failure;
     }
 }

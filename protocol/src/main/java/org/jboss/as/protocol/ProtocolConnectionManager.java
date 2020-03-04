@@ -22,16 +22,16 @@
 
 package org.jboss.as.protocol;
 
+import java.io.IOException;
+
 import org.jboss.as.protocol.logging.ProtocolLogger;
 import org.jboss.remoting3.CloseHandler;
 import org.jboss.remoting3.Connection;
 import org.wildfly.common.Assert;
 
-import java.io.IOException;
-
 /**
- * A basic connection manager, notifying clients when the connection is closed or shutdown. The
- * {@code ProtocolConnectionManager.ConnectTask} can be used to implement different (re-)connection strategies.
+ * A basic connection manager, notifying clients when the connection is closed or shutdown. The {@code
+ * ProtocolConnectionManager.ConnectTask} can be used to implement different (re-)connection strategies.
  *
  * @author Emanuel Muckenhuber
  */
@@ -64,11 +64,11 @@ public final class ProtocolConnectionManager {
     public Connection connect() throws IOException {
         Connection connection;
         synchronized (this) {
-            if(shutdown) throw ProtocolLogger.ROOT_LOGGER.channelClosed();
+            if (shutdown) { throw ProtocolLogger.ROOT_LOGGER.channelClosed(); }
             connection = this.connection;
-            if(connection == null) {
+            if (connection == null) {
                 connection = connectTask.connect();
-                if(connection == null) {
+                if (connection == null) {
                     throw ProtocolLogger.ROOT_LOGGER.channelClosed();
                 }
                 boolean ok = false;
@@ -85,7 +85,7 @@ public final class ProtocolConnectionManager {
                         }
                     });
                 } finally {
-                    if(!ok) {
+                    if (!ok) {
                         StreamUtils.safeClose(connection);
                     }
                 }
@@ -109,10 +109,10 @@ public final class ProtocolConnectionManager {
     public void shutdown() {
         final Connection connection;
         synchronized (this) {
-            if(shutdown) return;
+            if (shutdown) { return; }
             shutdown = true;
             connection = this.connection;
-            if(connectTask != null) {
+            if (connectTask != null) {
                 connectTask.shutdown();
             }
         }
@@ -128,9 +128,9 @@ public final class ProtocolConnectionManager {
      */
     private void onConnectionClose(final Connection closed) {
         synchronized (this) {
-            if(connection == closed) {
+            if (connection == closed) {
                 connection = null;
-                if(shutdown) {
+                if (shutdown) {
                     connectTask = DISCONNECTED;
                     return;
                 }
@@ -190,11 +190,12 @@ public final class ProtocolConnectionManager {
     /**
      * Create a new connection manager, based on an existing connection.
      *
-     * @param connection the existing connection
+     * @param connection  the existing connection
      * @param openHandler a connection open handler
      * @return the connected manager
      */
-    public static ProtocolConnectionManager create(final Connection connection, final ConnectionOpenHandler openHandler) {
+    public static ProtocolConnectionManager create(final Connection connection,
+            final ConnectionOpenHandler openHandler) {
         return create(new EstablishedConnection(connection, openHandler));
     }
 
@@ -202,10 +203,11 @@ public final class ProtocolConnectionManager {
      * Create a new connection manager, which will try to connect using the protocol connection configuration.
      *
      * @param configuration the connection configuration
-     * @param openHandler the connection open handler
+     * @param openHandler   the connection open handler
      * @return the connection manager
      */
-    public static ProtocolConnectionManager create(final ProtocolConnectionConfiguration configuration, final ConnectionOpenHandler openHandler) {
+    public static ProtocolConnectionManager create(final ProtocolConnectionConfiguration configuration,
+            final ConnectionOpenHandler openHandler) {
         return create(new EstablishingConnection(configuration, openHandler));
     }
 
@@ -213,11 +215,12 @@ public final class ProtocolConnectionManager {
      * Create a new connection manager, which will try to connect using the protocol connection configuration.
      *
      * @param configuration the connection configuration
-     * @param openHandler the connection open handler
-     * @param next the next connect connectTask used once disconnected
+     * @param openHandler   the connection open handler
+     * @param next          the next connect connectTask used once disconnected
      * @return the connection manager
      */
-    public static ProtocolConnectionManager create(final ProtocolConnectionConfiguration configuration, final ConnectionOpenHandler openHandler, final ConnectTask next) {
+    public static ProtocolConnectionManager create(final ProtocolConnectionConfiguration configuration,
+            final ConnectionOpenHandler openHandler, final ConnectTask next) {
         return create(new EstablishingConnection(configuration, openHandler, next));
     }
 
@@ -237,13 +240,15 @@ public final class ProtocolConnectionManager {
         private final ConnectionOpenHandler openHandler;
         private final ProtocolConnectionConfiguration configuration;
 
-        protected EstablishingConnection(final ProtocolConnectionConfiguration configuration, final ConnectionOpenHandler openHandler) {
+        protected EstablishingConnection(final ProtocolConnectionConfiguration configuration,
+                final ConnectionOpenHandler openHandler) {
             this.configuration = configuration;
             this.openHandler = openHandler;
             this.next = this;
         }
 
-        protected EstablishingConnection(final ProtocolConnectionConfiguration configuration, final ConnectionOpenHandler openHandler, final ConnectTask next) {
+        protected EstablishingConnection(final ProtocolConnectionConfiguration configuration,
+                final ConnectionOpenHandler openHandler, final ConnectTask next) {
             this.configuration = configuration;
             this.openHandler = openHandler;
             this.next = next;
@@ -274,6 +279,7 @@ public final class ProtocolConnectionManager {
 
         private final Connection connection;
         private final ConnectionOpenHandler openHandler;
+
         private EstablishedConnection(final Connection connection, final ConnectionOpenHandler openHandler) {
             this.connection = connection;
             this.openHandler = openHandler;
@@ -301,8 +307,8 @@ public final class ProtocolConnectionManager {
     }
 
     /**
-     * A {@code ConnectTask} that can be returned from {@link ConnectTask#connectionClosed()}
-     * to terminate further attempts to connect.
+     * A {@code ConnectTask} that can be returned from {@link ConnectTask#connectionClosed()} to terminate further
+     * attempts to connect.
      */
     public static final ConnectTask DISCONNECTED = new ConnectTask() {
 

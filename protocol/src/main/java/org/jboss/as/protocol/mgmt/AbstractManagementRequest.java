@@ -31,7 +31,6 @@ import org.jboss.as.protocol.StreamUtils;
  *
  * @param <T> the response type
  * @param <A> the attachment type
- *
  * @author Emanuel Muckenhuber
  */
 public abstract class AbstractManagementRequest<T, A> implements ManagementRequest<T, A> {
@@ -40,14 +39,16 @@ public abstract class AbstractManagementRequest<T, A> implements ManagementReque
      * Send the request.
      *
      * @param resultHandler the result handler
-     * @param context the request context
-     * @param output the data output
+     * @param context       the request context
+     * @param output        the data output
      * @throws IOException
      */
-    protected abstract void sendRequest(ActiveOperation.ResultHandler<T> resultHandler, ManagementRequestContext<A> context, FlushableDataOutput output) throws IOException;
+    protected abstract void sendRequest(ActiveOperation.ResultHandler<T> resultHandler,
+            ManagementRequestContext<A> context, FlushableDataOutput output) throws IOException;
 
     @Override
-    public void sendRequest(final ActiveOperation.ResultHandler<T> resultHandler, final ManagementRequestContext<A> context) throws IOException {
+    public void sendRequest(final ActiveOperation.ResultHandler<T> resultHandler,
+            final ManagementRequestContext<A> context) throws IOException {
         final FlushableDataOutput output = context.writeMessage(context.getRequestHeader());
         try {
             sendRequest(resultHandler, context, output);
@@ -59,7 +60,8 @@ public abstract class AbstractManagementRequest<T, A> implements ManagementReque
     }
 
     @Override
-    public void handleFailed(final ManagementResponseHeader header, final ActiveOperation.ResultHandler<T> resultHandler) {
+    public void handleFailed(final ManagementResponseHeader header,
+            final ActiveOperation.ResultHandler<T> resultHandler) {
         resultHandler.failed(new IOException(header.getError()));
     }
 

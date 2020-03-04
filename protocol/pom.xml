@@ -34,12 +34,40 @@
         <jboss.logging-tools.version>2.2.1.Final</jboss.logging-tools.version>
         <jboss.remoting.version>5.0.17.Final</jboss.remoting.version>
         <jboss.xnio.version>3.7.7.Final</jboss.xnio.version>
+        <wildfly.client-config.version>1.0.1.Final</wildfly.client-config.version>
+        <wildfly.elytron.version>1.11.2.Final</wildfly.elytron.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.wildfly.halos</groupId>
             <artifactId>jboss-threads</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.client</groupId>
+            <artifactId>wildfly-client-config</artifactId>
+            <version>${wildfly.client-config.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.wildfly.common</groupId>
+                    <artifactId>wildfly-common</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.logging</groupId>
+                    <artifactId>jboss-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.security</groupId>
+            <artifactId>wildfly-elytron</artifactId>
+            <version>${wildfly.elytron.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jboss.logging</groupId>
@@ -50,11 +78,15 @@
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging-annotations</artifactId>
             <version>${jboss.logging-tools.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging-processor</artifactId>
             <version>${jboss.logging-tools.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.jboss.remoting</groupId>
@@ -62,16 +94,24 @@
             <version>${jboss.remoting.version}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>jboss-logging</artifactId>
-                    <groupId>org.jboss.logging</groupId>
+                    <groupId>org.wildfly.client</groupId>
+                    <artifactId>wildfly-client-config</artifactId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>wildfly-common</artifactId>
                     <groupId>org.wildfly.common</groupId>
+                    <artifactId>wildfly-common</artifactId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>xnio-api</artifactId>
+                    <groupId>org.wildfly.security</groupId>
+                    <artifactId>wildfly-elytron</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.logging</groupId>
+                    <artifactId>jboss-logging</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>org.jboss.xnio</groupId>
+                    <artifactId>xnio-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -81,8 +121,12 @@
             <version>${jboss.xnio.version}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>jboss-threads</artifactId>
+                    <groupId>org.wildfly.client</groupId>
+                    <artifactId>wildfly-client-config</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>org.jboss.threads</groupId>
+                    <artifactId>jboss-threads</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

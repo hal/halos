@@ -29,8 +29,8 @@ import java.io.IOException;
 import org.jboss.as.protocol.logging.ProtocolLogger;
 
 /**
- * ManagementProtocol header used for management operation responses. Provides the default header fields from
- * {@link ManagementProtocolHeader}.
+ * ManagementProtocol header used for management operation responses. Provides the default header fields from {@link
+ * ManagementProtocolHeader}.
  *
  * @author John Bailey
  * @author Kabir Khan
@@ -44,9 +44,9 @@ public class ManagementResponseHeader extends ManagementProtocolHeader {
     /**
      * Construct an instance with the protocol version for the header.
      *
-     * @param version The protocol version
+     * @param version    The protocol version
      * @param responseId The response id
-     * @param error an optional error description
+     * @param error      an optional error description
      */
     public ManagementResponseHeader(final int version, final int responseId, final String error) {
         super(version);
@@ -119,7 +119,7 @@ public class ManagementResponseHeader extends ManagementProtocolHeader {
     }
 
     public static ManagementResponseHeader create(final ManagementProtocolHeader header) {
-        return create(ManagementRequestHeader.class.cast(header));
+        return create((ManagementRequestHeader) header);
     }
 
     public static ManagementResponseHeader create(final ManagementRequestHeader header) {
@@ -128,7 +128,8 @@ public class ManagementResponseHeader extends ManagementProtocolHeader {
 
     public static ManagementResponseHeader create(final ManagementRequestHeader header, Throwable error) {
         final int workingVersion = Math.min(ManagementProtocol.VERSION, header.getVersion());
-        return new ManagementResponseHeader(workingVersion, header.getRequestId(), error != null ? error.getClass().getName() + ':' + error.getMessage() : null);
+        return new ManagementResponseHeader(workingVersion, header.getRequestId(),
+                error != null ? error.getClass().getName() + ':' + error.getMessage() : null);
     }
 
     public static ManagementResponseHeader create(final ManagementProtocolHeader header, int responseId) {

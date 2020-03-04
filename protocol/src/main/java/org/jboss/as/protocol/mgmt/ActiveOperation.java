@@ -26,19 +26,16 @@ import org.jboss.threads.AsyncFuture;
 import org.xnio.Cancellable;
 
 /**
- * Encapsulates information about a currently active operation, which
- * can require multiple messages exchanged between the client and the
- * server.
- *
- * An attachment is optional, but can be used to maintain a shared state between multiple requests.
- * It can be accessed using the {@link org.jboss.as.protocol.mgmt.ManagementRequestContext#getAttachment()}
- * from the request handler.
- *
+ * Encapsulates information about a currently active operation, which can require multiple messages exchanged between
+ * the client and the server.
+ * <p>
+ * An attachment is optional, but can be used to maintain a shared state between multiple requests. It can be accessed
+ * using the {@link org.jboss.as.protocol.mgmt.ManagementRequestContext#getAttachment()} from the request handler.
+ * <p>
  * An operation is seen as active until one of the methods on the {@link ActiveOperation.ResultHandler} are called.
  *
  * @param <T> the result type
  * @param <A> the attachment type
- *
  * @author Emanuel Muckenhuber
  */
 public interface ActiveOperation<T, A> {
@@ -88,16 +85,16 @@ public interface ActiveOperation<T, A> {
         /**
          * Set the result.
          *
-         * @return {@code true} if the result was successfully set, or {@code false} if a result was already set
          * @param result the result
+         * @return {@code true} if the result was successfully set, or {@code false} if a result was already set
          */
         boolean done(T result);
 
         /**
          * Mark the operation as failed.
          *
-         * @return {@code true} if the result was successfully set, or {@code false} if a result was already set
          * @param t the exception
+         * @return {@code true} if the result was successfully set, or {@code false} if a result was already set
          */
         boolean failed(Throwable t);
 
@@ -108,8 +105,8 @@ public interface ActiveOperation<T, A> {
     }
 
     /**
-     * A callback indicating when an operation is complete. This is not part of the ActiveOperation API itself,
-     * but rather is often provided by callers that trigger instantiation of an ActiveOperation in a process.
+     * A callback indicating when an operation is complete. This is not part of the ActiveOperation API itself, but
+     * rather is often provided by callers that trigger instantiation of an ActiveOperation in a process.
      *
      * @param <T> the result type
      */

@@ -22,11 +22,12 @@
 
 package org.jboss.as.protocol;
 
-import javax.net.ssl.SSLContext;
-import javax.security.auth.callback.CallbackHandler;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
+
+import javax.net.ssl.SSLContext;
+import javax.security.auth.callback.CallbackHandler;
 
 import org.jboss.as.protocol.logging.ProtocolLogger;
 import org.jboss.remoting3.Endpoint;
@@ -56,14 +57,14 @@ public class ProtocolConnectionConfiguration {
     protected ProtocolConnectionConfiguration() {
         // TODO AS7-6223 propagate clientBindAddress configuration up to end user level and get rid of this system property
         this.clientBindAddress = SecurityActions.getSystemProperty(JBOSS_CLIENT_SOCKET_BIND_ADDRESS);
-        if(this.clientBindAddress != null) {
-             ProtocolLogger.ROOT_LOGGER.deprecatedCLIConfiguration(JBOSS_CLIENT_SOCKET_BIND_ADDRESS);
+        if (this.clientBindAddress != null) {
+            ProtocolLogger.ROOT_LOGGER.deprecatedCLIConfiguration(JBOSS_CLIENT_SOCKET_BIND_ADDRESS);
         }
     }
 
     /**
-     * Checks that this object is in a usable state, with the minimal
-     * required properties (endpoint, optionMap, uri) set
+     * Checks that this object is in a usable state, with the minimal required properties (endpoint, optionMap, uri)
+     * set
      *
      * @throws IllegalArgumentException if any required properties are not set
      */
@@ -80,7 +81,7 @@ public class ProtocolConnectionConfiguration {
     public void setUri(URI uri) {
         this.uri = uri;
         if (uri != null) {
-            switch(uri.getScheme()) {
+            switch (uri.getScheme()) {
                 case "http-remoting":
                 case "remote+http":
                     this.sslEnabled = false;
@@ -148,7 +149,7 @@ public class ProtocolConnectionConfiguration {
     }
 
     public void setClientBindAddress(String clientBindAddress) {
-        if(clientBindAddress != null || this.clientBindAddress == null) {
+        if (clientBindAddress != null || this.clientBindAddress == null) {
             this.clientBindAddress = clientBindAddress;
         }
     }
@@ -181,7 +182,8 @@ public class ProtocolConnectionConfiguration {
         return create(endpoint, null, options);
     }
 
-    public static ProtocolConnectionConfiguration create(final Endpoint endpoint, final URI uri, final OptionMap options) {
+    public static ProtocolConnectionConfiguration create(final Endpoint endpoint, final URI uri,
+            final OptionMap options) {
         final ProtocolConnectionConfiguration configuration = new ProtocolConnectionConfiguration();
         configuration.setEndpoint(endpoint);
         configuration.setUri(uri);
@@ -194,7 +196,7 @@ public class ProtocolConnectionConfiguration {
     }
 
     static ProtocolConnectionConfiguration copy(final ProtocolConnectionConfiguration old,
-                                                final ProtocolConnectionConfiguration target) {
+            final ProtocolConnectionConfiguration target) {
         target.uri = old.uri;
         target.endpoint = old.endpoint;
         target.optionMap = old.optionMap;
