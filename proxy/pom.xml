@@ -147,6 +147,58 @@
                     </systemProperties>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${docker-plugin.version}</version>
+                <configuration>
+                    <containerNamePattern>halos_%a</containerNamePattern>
+                    <images>
+                        <image>
+                            <name>halos/wildfly</name>
+                            <alias>wf0</alias>
+                            <build>
+                                <contextDir>${basedir}/src/test/docker</contextDir>
+                            </build>
+                            <run>
+                                <ports>
+                                    <port>9990:9990</port>
+                                </ports>
+                                <wait>
+                                    <log>.+WildFly.+ started in \d+ms.+</log>
+                                    <time>60000</time>
+                                </wait>
+                            </run>
+                        </image>
+                        <image>
+                            <name>halos/wildfly</name>
+                            <alias>wf1</alias>
+                            <run>
+                                <ports>
+                                    <port>9991:9990</port>
+                                </ports>
+                                <wait>
+                                    <log>.+WildFly.+ started in \d+ms.+</log>
+                                    <time>60000</time>
+                                </wait>
+                            </run>
+                        </image>
+                        <image>
+                            <name>halos/wildfly</name>
+                            <alias>wf2</alias>
+                            <run>
+                                <ports>
+                                    <port>9992:9990</port>
+                                </ports>
+                                <wait>
+                                    <log>.+WildFly.+ started in \d+ms.+</log>
+                                    <time>60000</time>
+                                </wait>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -173,94 +225,25 @@
                         <version>${docker-plugin.version}</version>
                         <executions>
                             <execution>
-                                <id>build-wildfly</id>
+                                <id>build-halos-wildfly</id>
                                 <goals>
                                     <goal>build</goal>
                                 </goals>
                                 <phase>pre-integration-test</phase>
-                                <configuration>
-                                    <images>
-                                        <image>
-                                            <name>halos/wildfly</name>
-                                            <build>
-                                                <contextDir>${basedir}/src/test/docker</contextDir>
-                                            </build>
-                                        </image>
-                                    </images>
-                                </configuration>
                             </execution>
                             <execution>
-                                <id>start-wildflies</id>
+                                <id>start-halos-wildfly</id>
                                 <goals>
                                     <goal>start</goal>
                                 </goals>
                                 <phase>pre-integration-test</phase>
-                                <configuration>
-                                    <images>
-                                        <image>
-                                            <name>halos/wildfly</name>
-                                            <alias>wf0</alias>
-                                            <run>
-                                                <ports>
-                                                    <port>9990:9990</port>
-                                                </ports>
-                                                <wait>
-                                                    <log>.+WildFly.+ started in \d+ms.+</log>
-                                                    <time>60000</time>
-                                                </wait>
-                                            </run>
-                                        </image>
-                                        <image>
-                                            <name>halos/wildfly</name>
-                                            <alias>wf1</alias>
-                                            <run>
-                                                <ports>
-                                                    <port>9991:9990</port>
-                                                </ports>
-                                                <wait>
-                                                    <log>.+WildFly.+ started in \d+ms.+</log>
-                                                    <time>60000</time>
-                                                </wait>
-                                            </run>
-                                        </image>
-                                        <image>
-                                            <name>halos/wildfly</name>
-                                            <alias>wf2</alias>
-                                            <run>
-                                                <ports>
-                                                    <port>9992:9990</port>
-                                                </ports>
-                                                <wait>
-                                                    <log>.+WildFly.+ started in \d+ms.+</log>
-                                                    <time>60000</time>
-                                                </wait>
-                                            </run>
-                                        </image>
-                                    </images>
-                                </configuration>
                             </execution>
                             <execution>
-                                <id>stop-wildflies</id>
+                                <id>stop-halos-wildfly</id>
                                 <goals>
                                     <goal>stop</goal>
                                 </goals>
                                 <phase>post-integration-test</phase>
-                                <configuration>
-                                    <images>
-                                        <image>
-                                            <name>halos/wildfly</name>
-                                            <alias>wf0</alias>
-                                        </image>
-                                        <image>
-                                            <name>halos/wildfly</name>
-                                            <alias>wf1</alias>
-                                        </image>
-                                        <image>
-                                            <name>halos/wildfly</name>
-                                            <alias>wf2</alias>
-                                        </image>
-                                    </images>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
