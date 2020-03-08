@@ -1,3 +1,3 @@
-goog.provide('halos.endpoints');
+goog.provide('halos');
 /** @define {string} */
-halos.endpoints.management = goog.define('halos.endpoints.management', '/v1/management');
+halos.managementEndpoint = goog.define('halos.managementEndpoint', '/v1/management');

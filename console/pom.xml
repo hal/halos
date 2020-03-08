@@ -30,6 +30,7 @@
     <packaging>war</packaging>
 
     <properties>
+        <halos.management-endpoint>http://localhost:8080/v1/management</halos.management-endpoint>
         <j2cl-compilation.level>BUNDLE</j2cl-compilation.level>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -85,18 +86,6 @@
 
     <build>
         <finalName>${project.artifactId}</finalName>
-
-<!--
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>org/wildfly/halos/**/*.java</include>
-                    <include>org/wildfly/halos/**/*.js</include>
-                </includes>
-            </resource>
-        </resources>
--->
 
         <plugins>
             <plugin>
@@ -190,7 +179,7 @@
                     <entrypoint>org.wildfly.halos.console.Console</entrypoint>
                     <initialScriptFilename>halos.js</initialScriptFilename>
                     <defines>
-                        <halos.endpoints.management>foo</halos.endpoints.management>
+                        <halos.managementEndpoint>${halos.management-endpoint}</halos.managementEndpoint>
                     </defines>
                 </configuration>
             </plugin>
@@ -237,6 +226,7 @@
         <profile>
             <id>prod</id>
             <properties>
+                <halos.management-endpoint>/v1/management</halos.management-endpoint>
                 <j2cl-compilation.level>ADVANCED</j2cl-compilation.level>
             </properties>
         </profile>

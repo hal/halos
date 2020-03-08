@@ -33,7 +33,7 @@ public class Console implements EntryPoint {
                 .add(new NavigationItem(Ids.MANAGEMENT_MODEL_ITEM, "Management Model", "#"));
 
         HTMLPreElement dmr;
-        String property = System.getProperty("halos.endpoints.management");
+        String property = System.getProperty("halos.managementEndpoint");
         Page page = page()
                 .add(header("halOS", "#"))
                 .add(sidebar().add(navigation))
