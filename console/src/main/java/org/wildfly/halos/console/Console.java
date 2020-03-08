@@ -33,6 +33,7 @@ public class Console implements EntryPoint {
                 .add(new NavigationItem(Ids.MANAGEMENT_MODEL_ITEM, "Management Model", "#"));
 
         HTMLPreElement dmr;
+        String property = System.getProperty("halos.endpoints.management");
         Page page = page()
                 .add(header("halOS", "#"))
                 .add(sidebar().add(navigation))
@@ -41,6 +42,7 @@ public class Console implements EntryPoint {
                                 .add(content()
                                         .add(h(1, "halOS"))
                                         .add(p().textContent("WildFly management console for OpenShift."))
+                                        .add(p().textContent("property: '" + property + "'."))
                                         .add(dmr = pre().element()))));
 
         body().addAll(page, toast());

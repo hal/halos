@@ -212,8 +212,8 @@
                         "description" => "Holds configuration of location resource",
                         "model-description" => undefined
                     },
-                    "filter-ref" => {
-                        "description" => "Reference to filter",
+                    "interceptor-ref" => {
+                        "description" => "Reference to interceptor",
                         "model-description" => undefined
                     }
                 }

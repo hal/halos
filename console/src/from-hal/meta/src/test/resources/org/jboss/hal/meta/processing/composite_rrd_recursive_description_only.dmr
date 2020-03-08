@@ -69,7 +69,7 @@
                 "configuration" => {
                     "description" => "null",
                     "model-description" => {
-                        "filter" => {
+                        "interceptor" => {
                             "description" => "Undertow filters",
                             "attributes" => {},
                             "operations" => undefined,
@@ -79,7 +79,7 @@
                                     "description" => "The error pages",
                                     "model-description" => {"*" => {
                                         "description" => "The error pages",
-                                        "access-constraints" => {"sensitive" => {"undertow-filter" => {"type" => "undertow"}}},
+                                        "access-constraints" => {"sensitive" => {"undertow-interceptor" => {"type" => "undertow"}}},
                                         "attributes" => {
                                             "code" => {
                                                 "type" => INT,
@@ -107,15 +107,15 @@
                                         "children" => {}
                                     }}
                                 },
-                                "expression-filter" => {
-                                    "description" => "A filter parsed from the undertow expression language",
+                                "expression-interceptor" => {
+                                    "description" => "A interceptor parsed from the undertow expression language",
                                     "model-description" => {"*" => {
-                                        "description" => "A filter parsed from the undertow expression language",
-                                        "access-constraints" => {"sensitive" => {"undertow-filter" => {"type" => "undertow"}}},
+                                        "description" => "A interceptor parsed from the undertow expression language",
+                                        "access-constraints" => {"sensitive" => {"undertow-interceptor" => {"type" => "undertow"}}},
                                         "attributes" => {
                                             "expression" => {
                                                 "type" => STRING,
-                                                "description" => "The expression that defines the filter",
+                                                "description" => "The expression that defines the interceptor",
                                                 "expressions-allowed" => true,
                                                 "nillable" => false,
                                                 "min-length" => 1L,
@@ -126,7 +126,7 @@
                                             },
                                             "module" => {
                                                 "type" => STRING,
-                                                "description" => "Module to use to load the filter definitions",
+                                                "description" => "Module to use to load the interceptor definitions",
                                                 "expressions-allowed" => true,
                                                 "nillable" => true,
                                                 "min-length" => 1L,
@@ -142,10 +142,10 @@
                                     }}
                                 },
                                 "gzip" => {
-                                    "description" => "Defines gzip filter",
+                                    "description" => "Defines gzip interceptor",
                                     "model-description" => {"*" => {
-                                        "description" => "Defines gzip filter",
-                                        "access-constraints" => {"sensitive" => {"undertow-filter" => {"type" => "undertow"}}},
+                                        "description" => "Defines gzip interceptor",
+                                        "access-constraints" => {"sensitive" => {"undertow-interceptor" => {"type" => "undertow"}}},
                                         "attributes" => {},
                                         "operations" => undefined,
                                         "notifications" => undefined,
@@ -156,7 +156,7 @@
                                     "description" => "A mod-cluster front end load balancer",
                                     "model-description" => {"*" => {
                                         "description" => "A mod-cluster front end load balancer",
-                                        "access-constraints" => {"sensitive" => {"undertow-filter" => {"type" => "undertow"}}},
+                                        "access-constraints" => {"sensitive" => {"undertow-interceptor" => {"type" => "undertow"}}},
                                         "attributes" => {
                                             "advertise-frequency" => {
                                                 "type" => INT,
@@ -352,7 +352,7 @@
                                             "model-description" => {"*" => {
                                                 "description" => "Runtime representation of a mod_cluster balancer",
                                                 "storage" => "runtime-only",
-                                                "access-constraints" => {"sensitive" => {"undertow-filter" => {"type" => "undertow"}}},
+                                                "access-constraints" => {"sensitive" => {"undertow-interceptor" => {"type" => "undertow"}}},
                                                 "attributes" => {
                                                     "max-attempts" => {
                                                         "type" => INT,
@@ -423,7 +423,7 @@
                                                         "model-description" => {"*" => {
                                                             "description" => "Runtime representation of a mod_cluster node",
                                                             "storage" => "runtime-only",
-                                                            "access-constraints" => {"sensitive" => {"undertow-filter" => {"type" => "undertow"}}},
+                                                            "access-constraints" => {"sensitive" => {"undertow-interceptor" => {"type" => "undertow"}}},
                                                             "attributes" => {
                                                                 "aliases" => {
                                                                     "type" => LIST,
@@ -576,7 +576,7 @@
                                                                 "model-description" => {"*" => {
                                                                     "description" => "Runtime representation of a mod_cluster context",
                                                                     "storage" => "runtime-only",
-                                                                    "access-constraints" => {"sensitive" => {"undertow-filter" => {"type" => "undertow"}}},
+                                                                    "access-constraints" => {"sensitive" => {"undertow-interceptor" => {"type" => "undertow"}}},
                                                                     "attributes" => {
                                                                         "requests" => {
                                                                             "type" => INT,
@@ -609,7 +609,7 @@
                                                         "model-description" => {"*" => {
                                                             "description" => "A load balancing group",
                                                             "storage" => "runtime-only",
-                                                            "access-constraints" => {"sensitive" => {"undertow-filter" => {"type" => "undertow"}}},
+                                                            "access-constraints" => {"sensitive" => {"undertow-interceptor" => {"type" => "undertow"}}},
                                                             "attributes" => {},
                                                             "operations" => undefined,
                                                             "notifications" => undefined,
@@ -622,10 +622,10 @@
                                     }}
                                 },
                                 "rewrite" => {
-                                    "description" => "A rewrite (or redirect) filter",
+                                    "description" => "A rewrite (or redirect) interceptor",
                                     "model-description" => {"*" => {
-                                        "description" => "A rewrite (or redirect) filter",
-                                        "access-constraints" => {"sensitive" => {"undertow-filter" => {"type" => "undertow"}}},
+                                        "description" => "A rewrite (or redirect) interceptor",
+                                        "access-constraints" => {"sensitive" => {"undertow-interceptor" => {"type" => "undertow"}}},
                                         "attributes" => {
                                             "redirect" => {
                                                 "type" => BOOLEAN,
@@ -658,7 +658,7 @@
                                     "description" => "Connection limiter handler",
                                     "model-description" => {"*" => {
                                         "description" => "Connection limiter handler",
-                                        "access-constraints" => {"sensitive" => {"undertow-filter" => {"type" => "undertow"}}},
+                                        "access-constraints" => {"sensitive" => {"undertow-interceptor" => {"type" => "undertow"}}},
                                         "attributes" => {
                                             "max-concurrent-requests" => {
                                                 "type" => INT,
@@ -685,10 +685,10 @@
                                     }}
                                 },
                                 "response-header" => {
-                                    "description" => "Response header filter allows you to add custom headers.",
+                                    "description" => "Response header interceptor allows you to add custom headers.",
                                     "model-description" => {"*" => {
-                                        "description" => "Response header filter allows you to add custom headers.",
-                                        "access-constraints" => {"sensitive" => {"undertow-filter" => {"type" => "undertow"}}},
+                                        "description" => "Response header interceptor allows you to add custom headers.",
+                                        "access-constraints" => {"sensitive" => {"undertow-interceptor" => {"type" => "undertow"}}},
                                         "attributes" => {
                                             "header-name" => {
                                                 "type" => STRING,
@@ -718,11 +718,11 @@
                                         "children" => {}
                                     }}
                                 },
-                                "custom-filter" => {
-                                    "description" => "Custom filter",
+                                "custom-interceptor" => {
+                                    "description" => "Custom interceptor",
                                     "model-description" => {"*" => {
-                                        "description" => "Custom filter",
-                                        "access-constraints" => {"sensitive" => {"undertow-filter" => {"type" => "undertow"}}},
+                                        "description" => "Custom interceptor",
+                                        "access-constraints" => {"sensitive" => {"undertow-interceptor" => {"type" => "undertow"}}},
                                         "attributes" => {
                                             "class-name" => {
                                                 "type" => STRING,
@@ -1086,9 +1086,9 @@
                                 "storage" => "configuration",
                                 "restart-required" => "all-services"
                             },
-                            "eager-filter-initialization" => {
+                            "eager-interceptor-initialization" => {
                                 "type" => BOOLEAN,
-                                "description" => "If true undertow calls filter init() on deployment start rather than when first requested.",
+                                "description" => "If true undertow calls interceptor init() on deployment start rather than when first requested.",
                                 "expressions-allowed" => true,
                                 "nillable" => true,
                                 "default" => false,
@@ -1842,10 +1842,10 @@
                                                 }},
                                                 "operations" => undefined,
                                                 "notifications" => undefined,
-                                                "children" => {"filter-ref" => {
-                                                    "description" => "Reference to filter",
+                                                "children" => {"interceptor-ref" => {
+                                                    "description" => "Reference to interceptor",
                                                     "model-description" => {"*" => {
-                                                        "description" => "Reference to filter",
+                                                        "description" => "Reference to interceptor",
                                                         "attributes" => {
                                                             "predicate" => {
                                                                 "type" => STRING,
@@ -1860,7 +1860,7 @@
                                                             },
                                                             "priority" => {
                                                                 "type" => INT,
-                                                                "description" => "Defines filter order, it should be set to 1 or more, higher number instructs server to be included earlier in handler chain than others under same context.",
+                                                                "description" => "Defines interceptor order, it should be set to 1 or more, higher number instructs server to be included earlier in handler chain than others under same context.",
                                                                 "expressions-allowed" => true,
                                                                 "nillable" => true,
                                                                 "default" => 1,
@@ -1878,10 +1878,10 @@
                                                 }}
                                             }}
                                         },
-                                        "filter-ref" => {
-                                            "description" => "Reference to filter",
+                                        "interceptor-ref" => {
+                                            "description" => "Reference to interceptor",
                                             "model-description" => {"*" => {
-                                                "description" => "Reference to filter",
+                                                "description" => "Reference to interceptor",
                                                 "attributes" => {
                                                     "predicate" => {
                                                         "type" => STRING,
@@ -1896,7 +1896,7 @@
                                                     },
                                                     "priority" => {
                                                         "type" => INT,
-                                                        "description" => "Defines filter order, it should be set to 1 or more, higher number instructs server to be included earlier in handler chain than others under same context.",
+                                                        "description" => "Defines interceptor order, it should be set to 1 or more, higher number instructs server to be included earlier in handler chain than others under same context.",
                                                         "expressions-allowed" => true,
                                                         "nillable" => true,
                                                         "default" => 1,
@@ -3463,10 +3463,10 @@
                                         }},
                                         "operations" => undefined,
                                         "notifications" => undefined,
-                                        "children" => {"filter-ref" => {
-                                            "description" => "Reference to filter",
+                                        "children" => {"interceptor-ref" => {
+                                            "description" => "Reference to interceptor",
                                             "model-description" => {"*" => {
-                                                "description" => "Reference to filter",
+                                                "description" => "Reference to interceptor",
                                                 "attributes" => {
                                                     "predicate" => {
                                                         "type" => STRING,
@@ -3481,7 +3481,7 @@
                                                     },
                                                     "priority" => {
                                                         "type" => INT,
-                                                        "description" => "Defines filter order, it should be set to 1 or more, higher number instructs server to be included earlier in handler chain than others under same context.",
+                                                        "description" => "Defines interceptor order, it should be set to 1 or more, higher number instructs server to be included earlier in handler chain than others under same context.",
                                                         "expressions-allowed" => true,
                                                         "nillable" => true,
                                                         "default" => 1,
@@ -3499,10 +3499,10 @@
                                         }}
                                     }}
                                 },
-                                "filter-ref" => {
-                                    "description" => "Reference to filter",
+                                "interceptor-ref" => {
+                                    "description" => "Reference to interceptor",
                                     "model-description" => {"*" => {
-                                        "description" => "Reference to filter",
+                                        "description" => "Reference to interceptor",
                                         "attributes" => {
                                             "predicate" => {
                                                 "type" => STRING,
@@ -3517,7 +3517,7 @@
                                             },
                                             "priority" => {
                                                 "type" => INT,
-                                                "description" => "Defines filter order, it should be set to 1 or more, higher number instructs server to be included earlier in handler chain than others under same context.",
+                                                "description" => "Defines interceptor order, it should be set to 1 or more, higher number instructs server to be included earlier in handler chain than others under same context.",
                                                 "expressions-allowed" => true,
                                                 "nillable" => true,
                                                 "default" => 1,
@@ -5003,10 +5003,10 @@
                             }},
                             "operations" => undefined,
                             "notifications" => undefined,
-                            "children" => {"filter-ref" => {
-                                "description" => "Reference to filter",
+                            "children" => {"interceptor-ref" => {
+                                "description" => "Reference to interceptor",
                                 "model-description" => {"*" => {
-                                    "description" => "Reference to filter",
+                                    "description" => "Reference to interceptor",
                                     "attributes" => {
                                         "predicate" => {
                                             "type" => STRING,
@@ -5021,7 +5021,7 @@
                                         },
                                         "priority" => {
                                             "type" => INT,
-                                            "description" => "Defines filter order, it should be set to 1 or more, higher number instructs server to be included earlier in handler chain than others under same context.",
+                                            "description" => "Defines interceptor order, it should be set to 1 or more, higher number instructs server to be included earlier in handler chain than others under same context.",
                                             "expressions-allowed" => true,
                                             "nillable" => true,
                                             "default" => 1,
@@ -5039,10 +5039,10 @@
                             }}
                         }}
                     },
-                    "filter-ref" => {
-                        "description" => "Reference to filter",
+                    "interceptor-ref" => {
+                        "description" => "Reference to interceptor",
                         "model-description" => {"*" => {
-                            "description" => "Reference to filter",
+                            "description" => "Reference to interceptor",
                             "attributes" => {
                                 "predicate" => {
                                     "type" => STRING,
@@ -5057,7 +5057,7 @@
                                 },
                                 "priority" => {
                                     "type" => INT,
-                                    "description" => "Defines filter order, it should be set to 1 or more, higher number instructs server to be included earlier in handler chain than others under same context.",
+                                    "description" => "Defines interceptor order, it should be set to 1 or more, higher number instructs server to be included earlier in handler chain than others under same context.",
                                     "expressions-allowed" => true,
                                     "nillable" => true,
                                     "default" => 1,

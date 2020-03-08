@@ -102,7 +102,7 @@
                 },
                 "where" => {
                     "type" => OBJECT,
-                    "description" => "a list of filter criteria tuples (i.e. 'running=true')",
+                    "description" => "a list of interceptor criteria tuples (i.e. 'running=true')",
                     "expressions-allowed" => false,
                     "required" => false,
                     "nillable" => true,
@@ -852,7 +852,7 @@
                         },
                         "where" => {
                             "type" => OBJECT,
-                            "description" => "a list of filter criteria tuples (i.e. 'running=true')",
+                            "description" => "a list of interceptor criteria tuples (i.e. 'running=true')",
                             "expressions-allowed" => false,
                             "required" => false,
                             "nillable" => true,
@@ -1653,7 +1653,7 @@
                                         },
                                         "where" => {
                                             "type" => OBJECT,
-                                            "description" => "a list of filter criteria tuples (i.e. 'running=true')",
+                                            "description" => "a list of interceptor criteria tuples (i.e. 'running=true')",
                                             "expressions-allowed" => false,
                                             "required" => false,
                                             "nillable" => true,
@@ -2452,7 +2452,7 @@
                                         },
                                         "where" => {
                                             "type" => OBJECT,
-                                            "description" => "a list of filter criteria tuples (i.e. 'running=true')",
+                                            "description" => "a list of interceptor criteria tuples (i.e. 'running=true')",
                                             "expressions-allowed" => false,
                                             "required" => false,
                                             "nillable" => true,
@@ -3251,7 +3251,7 @@
                                         },
                                         "where" => {
                                             "type" => OBJECT,
-                                            "description" => "a list of filter criteria tuples (i.e. 'running=true')",
+                                            "description" => "a list of interceptor criteria tuples (i.e. 'running=true')",
                                             "expressions-allowed" => false,
                                             "required" => false,
                                             "nillable" => true,
@@ -4072,7 +4072,7 @@
                                     },
                                     "where" => {
                                         "type" => OBJECT,
-                                        "description" => "a list of filter criteria tuples (i.e. 'running=true')",
+                                        "description" => "a list of interceptor criteria tuples (i.e. 'running=true')",
                                         "expressions-allowed" => false,
                                         "required" => false,
                                         "nillable" => true,

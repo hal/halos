@@ -31,6 +31,8 @@
 
     <properties>
         <j2cl-compilation.level>BUNDLE</j2cl-compilation.level>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <j2cl-plugin.version>0.13-SNAPSHOT</j2cl-plugin.version>
         <tomcat7-plugin.version>2.2</tomcat7-plugin.version>
@@ -84,14 +86,17 @@
     <build>
         <finalName>${project.artifactId}</finalName>
 
+<!--
         <resources>
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
                     <include>org/wildfly/halos/**/*.java</include>
+                    <include>org/wildfly/halos/**/*.js</include>
                 </includes>
             </resource>
         </resources>
+-->
 
         <plugins>
             <plugin>
@@ -172,12 +177,21 @@
                             <goal>build</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>watch</id>
+                        <goals>
+                            <goal>watch</goal>
+                        </goals>
+                    </execution>
                 </executions>
                 <configuration>
                     <defaultWebappDirectory>${project.build.directory}/gwt/launcherDir</defaultWebappDirectory>
                     <compilationLevel>${j2cl-compilation.level}</compilationLevel>
                     <entrypoint>org.wildfly.halos.console.Console</entrypoint>
                     <initialScriptFilename>halos.js</initialScriptFilename>
+                    <defines>
+                        <halos.endpoints.management>foo</halos.endpoints.management>
+                    </defines>
                 </configuration>
             </plugin>
             <plugin>
