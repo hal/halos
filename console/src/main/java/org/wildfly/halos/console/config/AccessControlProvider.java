@@ -13,19 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.console.resources;
+package org.wildfly.halos.console.config;
 
-/**
- * IDs used in HTML elements and across multiple classes. Please add IDs to this interface even if there's already an
- * equivalent or similar constant in {@code ModelDescriptionConstants} (SoC).
- * <p>
- * The IDs defined here are used by QA. So please make sure IDs are not spread over the code base but gathered in this
- * interface.
- */
-public interface Ids {
-
-    String MANAGEMENT_MODEL_ITEM = "management-model";
-    String RESOURCES_ITEM = "resources";
-    String ROOT_CONTAINER = "halos-root";
-    String SERVER_ITEM = "server";
+public enum AccessControlProvider {
+    SIMPLE, RBAC
 }

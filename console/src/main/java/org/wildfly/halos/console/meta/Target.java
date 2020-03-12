@@ -13,19 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.console.resources;
+package org.wildfly.halos.console.meta;
 
-/**
- * IDs used in HTML elements and across multiple classes. Please add IDs to this interface even if there's already an
- * equivalent or similar constant in {@code ModelDescriptionConstants} (SoC).
- * <p>
- * The IDs defined here are used by QA. So please make sure IDs are not spread over the code base but gathered in this
- * interface.
- */
-public interface Ids {
+public enum Target {
+    OPERATION(":"), ATTRIBUTE("@");
 
-    String MANAGEMENT_MODEL_ITEM = "management-model";
-    String RESOURCES_ITEM = "resources";
-    String ROOT_CONTAINER = "halos-root";
-    String SERVER_ITEM = "server";
+    static Target parse(String input) {
+        if (OPERATION.symbol.equals(input)) {
+            return OPERATION;
+        } else if (ATTRIBUTE.symbol.equals(input)) {
+            return ATTRIBUTE;
+        } else {
+            throw new IllegalArgumentException("Illegal symbol: '" + input + "'");
+        }
+    }
+
+    private String symbol;
+
+    Target(final String symbol) {
+        this.symbol = symbol;
+    }
+
+    public String symbol() {
+        return symbol;
+    }
 }

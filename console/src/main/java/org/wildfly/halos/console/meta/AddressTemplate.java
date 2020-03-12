@@ -59,7 +59,7 @@ public final class AddressTemplate implements Iterable<AddressTemplate.Segment> 
         return new AddressTemplate(withSlash(template));
     }
 
-    /** Creates a new address template from a well known placeholder. */
+    /** Creates a new address template from a well-known placeholder. */
     // public static AddressTemplate of(Expression placeholder) {
     //     return AddressTemplate.of(String.join("/", placeholder.expression()));
     // }

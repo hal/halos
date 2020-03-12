@@ -17,4 +17,6 @@ package org.wildfly.halos.console.resources;
 
 /** UI related constants used in more than one place. */
 public interface UIConstants {
+
+    String CONSTRAINT = "constraint";
 }

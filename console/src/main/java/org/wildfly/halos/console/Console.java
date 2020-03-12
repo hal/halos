@@ -1,11 +1,14 @@
 package org.wildfly.halos.console;
 
+import javax.annotation.PostConstruct;
+
 import elemental2.dom.HTMLPreElement;
 import org.gwtproject.core.client.EntryPoint;
 import org.patternfly.components.Navigation;
 import org.patternfly.components.NavigationItem;
 import org.patternfly.components.Page;
 import org.treblereel.gwt.crysknife.client.Application;
+import org.treblereel.gwt.crysknife.client.ComponentScan;
 import org.wildfly.halos.console.dispatch.Dispatcher;
 import org.wildfly.halos.console.dmr.Operation;
 import org.wildfly.halos.console.dmr.ResourceAddress;
@@ -23,10 +26,16 @@ import static org.patternfly.resources.Constants.light;
 import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.READ_RESOURCE_OPERATION;
 
 @Application
+@ComponentScan("org.wildfly.halos.console")
 public class Console implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
+        new ConsoleBootstrap(this).initialize();
+    }
+
+    @PostConstruct
+    void init() {
         Navigation navigation = Navigation.vertical(false)
                 .add(new NavigationItem(Ids.SERVER_ITEM, "Server", "#"))
                 .add(new NavigationItem(Ids.RESOURCES_ITEM, "Resources", "#"))

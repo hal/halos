@@ -21,7 +21,6 @@ package org.wildfly.halos.console.dmr;
  * @author Brian Stansberry
  * @author Harald Pehl
  */
-@SuppressWarnings("unused")
 public interface ModelDescriptionConstants {
 
     // HAL_* attributes are used internally only!

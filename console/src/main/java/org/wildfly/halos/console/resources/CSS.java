@@ -20,4 +20,6 @@ package org.wildfly.halos.console.resources;
  * or GWT magic. They're just here to have them in one place.
  */
 public interface CSS {
+
+    String rbacHidden = "rbac-hidden";
 }

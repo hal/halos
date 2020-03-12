@@ -16,10 +16,13 @@
 package org.wildfly.halos.console.dispatch;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import elemental2.dom.Headers;
 import elemental2.dom.RequestInit;
 import elemental2.promise.Promise;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wildfly.halos.console.dmr.Composite;
 import org.wildfly.halos.console.dmr.CompositeResult;
 import org.wildfly.halos.console.dmr.ModelNode;
@@ -31,10 +34,11 @@ import static org.wildfly.halos.console.dispatch.RequestHeader.CONTENT_TYPE;
 import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.RESULT;
 
 /** Executes operations against the management endpoint. */
+@Singleton
 public class Dispatcher {
 
     static final String APPLICATION_DMR_ENCODED = "application/dmr-encoded";
-    // private static final Logger logger = LoggerFactory.getLogger(Dispatcher.class);
+    private static final Logger logger = LoggerFactory.getLogger(Dispatcher.class);
 
     // private final Endpoints endpoints;
 

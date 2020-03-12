@@ -39,10 +39,14 @@
         <tomcat7-plugin.version>2.2</tomcat7-plugin.version>
 
         <crysknife.version>0.1-SNAPSHOT</crysknife.version>
+        <domino.version>1.0-rc.4</domino.version>
+        <elemental2.version>1.0.0</elemental2.version>
         <elemento.version>HEAD-SNAPSHOT</elemento.version>
+        <guava.version>28.2-jre</guava.version>
         <gwt-core.version>1.0-SNAPSHOT</gwt-core.version>
         <patternfly.html.version>2.65.0</patternfly.html.version>
         <patternfly.java.version>0.0.1</patternfly.java.version>
+        <slf4j.version>1.8.0-beta2</slf4j.version>
     </properties>
 
     <dependencies>
@@ -73,14 +77,56 @@
             <version>${crysknife.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.dominokit</groupId>
+            <artifactId>domino-slf4j-logger</artifactId>
+            <version>${domino.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.jboss.elemento</groupId>
             <artifactId>elemento-core</artifactId>
             <version>${elemento.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.elemental2</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.elemental2</groupId>
+            <artifactId>elemental2-core</artifactId>
+            <version>${elemental2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.elemental2</groupId>
+            <artifactId>elemental2-dom</artifactId>
+            <version>${elemental2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.elemental2</groupId>
+            <artifactId>elemental2-webstorage</artifactId>
+            <version>${elemental2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>org.gwtproject.core</groupId>
             <artifactId>gwt-core</artifactId>
             <version>${gwt-core.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>elemental2-dom</artifactId>
+                    <groupId>com.google.elemental2</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

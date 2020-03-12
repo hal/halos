@@ -17,4 +17,6 @@ package org.wildfly.halos.console.resources;
 
 /** Common names and technical terms which are not meant to be translated. */
 public interface Names {
+
+    String NOT_AVAILABLE = "n/a";
 }
