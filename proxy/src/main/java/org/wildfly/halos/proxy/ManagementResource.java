@@ -25,17 +25,17 @@ public class ManagementResource {
     static final String DMR_ENCODED = "application/dmr-encoded";
 
     @Inject
-    Dispatcher dispatcher;
+    Instances instances;
 
     @POST
     public Response execute(InputStream inputStream) {
-        if (dispatcher.isEmpty()) {
+        if (instances.isEmpty()) {
             return Response.status(Status.NOT_FOUND).entity("No instances registered.").build();
         } else {
             try {
                 ModelNode modelNode = ModelNode.fromBase64(inputStream);
                 Operation operation = Operation.Factory.create(modelNode);
-                ModelNode result = dispatcher.execute(operation);
+                ModelNode result = instances.execute(operation);
                 return Response.ok(result).build();
             } catch (IOException e) {
                 return Response.serverError().entity("Unable to read operation: " + e.getMessage()).build();
@@ -46,11 +46,11 @@ public class ManagementResource {
     @POST
     @Path("/{name}")
     public Response executeSingle(@PathParam("name") String name, InputStream inputStream) {
-        if (dispatcher.hasInstance(name)) {
+        if (instances.hasInstance(name)) {
             try {
                 ModelNode modelNode = ModelNode.fromBase64(inputStream);
                 Operation operation = Operation.Factory.create(modelNode);
-                ModelNode result = dispatcher.executeSingle(name, operation);
+                ModelNode result = instances.executeSingle(name, operation);
                 if (result != null) {
                     return Response.ok(result).build();
                 } else {

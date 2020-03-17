@@ -17,22 +17,22 @@ import javax.ws.rs.core.Response.Status;
 @Produces(MediaType.APPLICATION_JSON)
 public class InstanceResource {
 
-    @Inject Dispatcher dispatcher;
+    @Inject Instances instances;
 
     @GET
     public Iterable<Instance> list() {
-        return dispatcher.instances();
+        return instances;
     }
 
     @POST
     public Response register(Instance instance) {
-        if (dispatcher.hasInstance(instance.name)) {
+        if (instances.hasInstance(instance.name)) {
             return Response.status(Status.NOT_MODIFIED).build();
         } else {
             try {
-                dispatcher.register(instance);
+                instances.register(instance);
                 return Response.status(Status.CREATED).entity(instance).build();
-            } catch (DispatcherException e) {
+            } catch (ManagementException e) {
                 return Response.serverError().entity(e.getMessage()).build();
             }
         }
@@ -42,12 +42,12 @@ public class InstanceResource {
     @Path("/{name}")
     public Response unregister(@PathParam("name") String name) {
         try {
-            if (dispatcher.unregister(name)) {
+            if (instances.unregister(name)) {
                 return Response.noContent().build();
             } else {
                 return Response.status(Status.NOT_FOUND).entity("No instance found for '" + name + "'.").build();
             }
-        } catch (DispatcherException e) {
+        } catch (ManagementException e) {
             return Response.serverError().entity(e.getMessage()).build();
         }
     }

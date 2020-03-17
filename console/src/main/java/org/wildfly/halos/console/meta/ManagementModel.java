@@ -44,7 +44,6 @@ public class ManagementModel {
         return Version.EMPTY_VERSION;
     }
 
-
     // ------------------------------------------------------ supports methods (A-Z)
 
     /**

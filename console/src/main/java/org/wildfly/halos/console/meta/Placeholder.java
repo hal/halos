@@ -1,25 +1,30 @@
 package org.wildfly.halos.console.meta;
 
+import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.DEPLOYMENT;
+
 public class Placeholder {
 
-    private final String name;
-    private final String resource;
+    // ------------------------------------------------------ well-known placeholders
+
+    public static final Placeholder SELECTED_RESOURCE = new Placeholder("selected.resource");
+    public static final Placeholder SELECTED_DEPLOYMENT = new Placeholder("selected.deployment", DEPLOYMENT);
+
+    // ------------------------------------------------------ instance
+
+    public final String name;
+    public final String resource;
+
+    public Placeholder(String name) {
+        this(name, null);
+    }
 
     public Placeholder(String name, String resource) {
         this.name = name;
         this.resource = resource;
     }
 
-    public String getName() {
-        return name;
-    }
-
     /** @return the {@code name} surrounded by "{" and "}" */
-    public String getExpression() {
+    public String expression() {
         return "{" + name + "}";
-    }
-
-    public String getResource() {
-        return resource;
     }
 }

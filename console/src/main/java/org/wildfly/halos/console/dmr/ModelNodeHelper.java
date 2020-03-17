@@ -32,34 +32,23 @@ import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.HAL_INDEX;
  */
 public class ModelNodeHelper {
 
-    private static final String ENCODED_SLASH = "%2F";
-
-    public static String encodeValue(String value) {
-        return value.replace("/", ENCODED_SLASH);
-    }
-
-    public static String decodeValue(String value) {
-        return value.replace(ENCODED_SLASH, "/");
-    }
-
     /**
-     * Tries to get a deeply nested model node from the specified model node. Nested paths must be separated with "/".
+     * Tries to get a deeply nested model node from the specified model node. Nested paths must be separated with ".".
      *
      * @param modelNode The model node to read from
-     * @param path      A path separated with "/"
-     * @return The nested node or an empty / undefined model node
+     * @param path      A path separated with "."
+     * @return The nested node, or an undefined model node.
      */
     public static ModelNode failSafeGet(ModelNode modelNode, String path) {
         ModelNode undefined = new ModelNode();
 
         if (path != null && path.length() != 0) {
-            String[] segments = path.split("/");
+            String[] segments = path.split("\\.");
             if (segments.length > 0) {
                 ModelNode context = modelNode;
                 for (String segment : segments) {
-                    String safeSegment = decodeValue(segment);
-                    if (context.hasDefined(safeSegment)) {
-                        context = context.get(safeSegment);
+                    if (context.hasDefined(segment)) {
+                        context = context.get(segment);
                     } else {
                         break;
                     }

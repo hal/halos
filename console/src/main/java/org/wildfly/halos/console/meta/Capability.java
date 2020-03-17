@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class Capability {
 
-    private final String name;
+    public final String name;
     private final Set<AddressTemplate> templates;
 
     public Capability(final String name) {
@@ -33,15 +33,11 @@ public class Capability {
         return "Capability(" + name + " -> " + templates + ")";
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void addTemplate(final AddressTemplate template) {
         templates.add(template);
     }
 
-    public Iterable<AddressTemplate> getTemplates() {
+    public Iterable<AddressTemplate> templates() {
         return templates;
     }
 }

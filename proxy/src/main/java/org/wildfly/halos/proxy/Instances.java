@@ -3,7 +3,7 @@ package org.wildfly.halos.proxy;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -24,7 +24,7 @@ import org.jboss.logging.Logger;
 
 /** Manages connections to the WildFly management endpoints and execute DMR operations. */
 @ApplicationScoped
-class Dispatcher {
+class Instances implements Iterable<Instance> {
 
     private static final String REMOTE_HTTP = "remote+http";
     private static Logger log = Logger.getLogger("halos.proxy.dispatcher");
@@ -32,11 +32,11 @@ class Dispatcher {
     private final SortedMap<Instance, ModelControllerClient> clients;
 
     @Inject
-    Dispatcher() {
+    Instances() {
         this.clients = new TreeMap<>();
     }
 
-    void register(Instance instance) throws DispatcherException {
+    void register(Instance instance) throws ManagementException {
         try {
             InetAddress address = InetAddress.getByName(instance.host);
             ModelControllerClient client = ModelControllerClient.Factory.create(REMOTE_HTTP, address,
@@ -61,11 +61,11 @@ class Dispatcher {
         } catch (UnknownHostException e) {
             String error = String.format("Unable to connect to instance %s: %s", instance, e.getMessage());
             log.error(error);
-            throw new DispatcherException(error, e);
+            throw new ManagementException(error, e);
         }
     }
 
-    boolean unregister(String name) throws DispatcherException {
+    boolean unregister(String name) throws ManagementException {
         Map.Entry<Instance, ModelControllerClient> entry = findByName(name);
         if (entry != null) {
             Instance instance = entry.getKey();
@@ -77,7 +77,7 @@ class Dispatcher {
             } catch (IOException e) {
                 String error = String.format("Unable to close client for %s: %s", instance, e.getMessage());
                 log.error(error);
-                throw new DispatcherException(error, e);
+                throw new ManagementException(error, e);
             } finally {
                 clients.remove(instance);
             }
@@ -93,8 +93,9 @@ class Dispatcher {
         return findByName(name) != null;
     }
 
-    Iterable<Instance> instances() {
-        return clients.keySet();
+    @Override
+    public Iterator<Instance> iterator() {
+        return clients.keySet().iterator();
     }
 
     ModelNode execute(Operation operation) {

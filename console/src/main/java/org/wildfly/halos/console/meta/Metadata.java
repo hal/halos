@@ -15,11 +15,9 @@
  */
 package org.wildfly.halos.console.meta;
 
-import java.util.function.Supplier;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wildfly.halos.console.config.Instance;
+import org.wildfly.halos.console.config.Instances;
 import org.wildfly.halos.console.dmr.ModelNode;
 
 import static org.wildfly.halos.console.meta.AddressTemplate.ROOT;
@@ -31,7 +29,7 @@ public class Metadata {
     private static final Logger logger = LoggerFactory.getLogger(Metadata.class);
 
     public static Metadata empty() {
-        return new Metadata(ROOT, () -> RWX, new ResourceDescription(new ModelNode()),
+        return new Metadata(ROOT, new ResourceDescription(new ModelNode()), RWX,
                 new Capabilities(null));
     }
 
@@ -41,37 +39,27 @@ public class Metadata {
 
     /** Constructs a Metadata with read-write-execution permissions, and a non-working capabilities object. */
     public static Metadata staticDescription(ResourceDescription description) {
-        return new Metadata(ROOT, () -> RWX, new ResourceDescription(description), new Capabilities(null));
+        return new Metadata(ROOT, new ResourceDescription(description), RWX, new Capabilities(null));
     }
 
     /**
      * Constructs a Metadata with read-write-execution permissions, and a working capabilities object based on the
      * environment object.
      */
-    public static Metadata staticDescription(ResourceDescription description, Instance instance) {
-        return new Metadata(ROOT, () -> RWX, new ResourceDescription(description), new Capabilities(instance));
+    public static Metadata staticDescription(ResourceDescription description, Instances instances) {
+        return new Metadata(ROOT, new ResourceDescription(description), RWX, new Capabilities(instances));
     }
 
-    private final Supplier<SecurityContext> securityContext;
     public final AddressTemplate template;
     public final ResourceDescription description;
+    public final SecurityContext securityContext;
     public final Capabilities capabilities;
 
-    public Metadata(AddressTemplate template, Supplier<SecurityContext> securityContext,
-            ResourceDescription description, Capabilities capabilities) {
+    Metadata(AddressTemplate template, ResourceDescription description, SecurityContext securityContext,
+            Capabilities capabilities) {
         this.template = template;
-        this.securityContext = securityContext;
         this.description = description;
+        this.securityContext = securityContext;
         this.capabilities = capabilities;
-    }
-
-    /** @return the security context */
-    public SecurityContext securityContext() {
-        if (securityContext != null && securityContext.get() != null) {
-            return securityContext.get();
-        } else {
-            logger.error("No security context found for {}. Return SecurityContext.READ_ONLY", template);
-            return SecurityContext.READ_ONLY;
-        }
     }
 }

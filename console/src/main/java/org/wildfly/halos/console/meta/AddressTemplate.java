@@ -15,42 +15,59 @@
  */
 package org.wildfly.halos.console.meta;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import jsinterop.annotations.JsIgnore;
 import org.wildfly.halos.console.dmr.ModelNode;
-import org.wildfly.halos.console.dmr.ModelNodeHelper;
-import org.wildfly.halos.console.dmr.Property;
 import org.wildfly.halos.console.dmr.ResourceAddress;
 
 import static java.util.stream.Collectors.joining;
 
 /**
- * Template for a DMR address which might contain multiple variable parts.
+ * Template for a DMR address which can contain variable parts.
  * <p>
- * An address template can be defined using the following BNF:
+ * An address template can be defined using the following EBNF:
  * <pre>
- * &lt;address template&gt; ::= "/" | &lt;segment&gt;
- * &lt;segment&gt;          ::= &lt;tuple&gt; | &lt;segment&gt;"/"&lt;tuple&gt;
- * &lt;tuple&gt;            ::= &lt;variable&gt; | &lt;key&gt;"="&lt;value&gt;
- * &lt;variable&gt;         ::= "{"&lt;alpha&gt;"}"
- * &lt;key&gt;              ::= &lt;alpha&gt;
- * &lt;value&gt;            ::= &lt;variable&gt; | &lt;alpha&gt; | "*"
- * &lt;alpha&gt;            ::= &lt;upper&gt; | &lt;lower&gt;
- * &lt;upper&gt;            ::= "A" | "B" | … | "Z"
- * &lt;lower&gt;            ::= "a" | "b" | … | "z"
+ * AddressTemplate = "/" | Segment ;
+ * Segment          = Tuple | Segment "/" Tuple ;
+ * Tuple            = Variable | Key "=" Value ;
+ * Variable         = "{" Alphanumeric "}" ;
+ * Key              = Alphanumeric ;
+ * Value            = Variable | Alphanumeric | "*" ;
  * </pre>
  * <p>
- * To get a fully qualified address from an address template use the method <code>resolve()</code>.
+ * Examples for valid address templates are
+ * <pre>
+ * /
+ * subsystem=io
+ * {selected.server}
+ * {selected.server}/deployment=foo
+ * subsystem=logging/logger={selection}
+ * </pre>
+ * <p>
+ * To get a fully qualified address from an address template use the method {@link #resolve(StatementContext)}.
  */
 public final class AddressTemplate implements Iterable<AddressTemplate.Segment> {
 
     /** The root template */
     public static final AddressTemplate ROOT = AddressTemplate.of("/");
     public static final String EQUALS = "=";
+
+    // ------------------------------------------------------ encode / decode
+
+    private static final String ENCODED_SLASH = "%2F";
+
+    private static String encodeValue(String value) {
+        return value.replace("/", ENCODED_SLASH);
+    }
+
+    private static String decodeValue(String value) {
+        return value.replace(ENCODED_SLASH, "/");
+    }
 
     // ------------------------------------------------------ factory methods
 
@@ -60,65 +77,8 @@ public final class AddressTemplate implements Iterable<AddressTemplate.Segment> 
     }
 
     /** Creates a new address template from a well-known placeholder. */
-    // public static AddressTemplate of(Expression placeholder) {
-    //     return AddressTemplate.of(String.join("/", placeholder.expression()));
-    // }
-
-    /**
-     * Creates a new address template from a placeholder and an encoded string template. '/' characters inside values
-     * must have been encoded using {@link ModelNodeHelper#encodeValue(String)}.
-     */
-    // public static AddressTemplate of(Expression placeholder, String template) {
-    //     return AddressTemplate.of(String.join("/", placeholder.expression(), withoutSlash(template)));
-    // }
-
-    /**
-     * Turns a resource address into an address template which is the opposite of {@link #resolve(StatementContext,
-     * String...)}.
-     */
-    @JsIgnore
-    public static AddressTemplate of(ResourceAddress address) {
-        return of(address, null);
-    }
-
-    /**
-     * Turns a resource address into an address template which is the opposite of {@link #resolve(StatementContext,
-     * String...)}. Use the {@link Unresolver} function to specify how the segments of the resource address are
-     * "unresolved". It is called for each segment of the specified resource address.
-     */
-    @JsIgnore
-    public static AddressTemplate of(ResourceAddress address, Unresolver unresolver) {
-        int index = 0;
-        boolean first = true;
-        StringBuilder builder = new StringBuilder();
-        if (address.isDefined()) {
-            int size = address.size();
-            for (Iterator<Property> iterator = address.asPropertyList().iterator(); iterator.hasNext(); ) {
-                Property property = iterator.next();
-                String name = property.getName();
-                String value = property.getValue().asString();
-                Segment segment = new Segment(name, value);
-
-                String unresolvedSegment = unresolver == null
-                        ? name + EQUALS + value
-                        : unresolver.unresolve(segment, first, !iterator.hasNext(), index, size);
-                builder.append(unresolvedSegment);
-
-                if (iterator.hasNext()) {
-                    builder.append("/");
-                }
-                first = false;
-                index++;
-            }
-        }
-        return of(builder.toString());
-    }
-
-    private static String withoutSlash(String template) {
-        if (template != null) {
-            return template.startsWith("/") ? template.substring(1) : template;
-        }
-        return null;
+    public static AddressTemplate of(Placeholder placeholder) {
+        return AddressTemplate.of(String.join("/", placeholder.expression()));
     }
 
     private static String withSlash(String template) {
@@ -130,15 +90,14 @@ public final class AddressTemplate implements Iterable<AddressTemplate.Segment> 
 
     // ------------------------------------------------------ template instance
 
-    private final String template;
+    public final String template;
     private final LinkedList<Segment> segments;
 
-    /**
-     * Creates a new instance from an encoded string template. '/' characters inside values must have been encoded using
-     * {@link ModelNodeHelper#encodeValue(String)}
-     *
-     * @param template the encoded template.
-     */
+    private AddressTemplate(List<Segment> segments) {
+        this.segments = new LinkedList<>(segments);
+        this.template = join(segments);
+    }
+
     private AddressTemplate(String template) {
         assert template != null : "template must not be null";
         this.segments = parse(template);
@@ -200,8 +159,7 @@ public final class AddressTemplate implements Iterable<AddressTemplate.Segment> 
 
     /**
      * Appends the specified encoded template to this template and returns a new template. If the specified template
-     * does not start with a slash, '/' is automatically appended. '/' characters inside values must have been encoded
-     * using {@link ModelNodeHelper#encodeValue(String)}.
+     * does not start with a slash, '/' is automatically appended.
      *
      * @param template the encoded template to append (makes no difference whether it starts with '/' or not)
      * @return a new template
@@ -230,7 +188,7 @@ public final class AddressTemplate implements Iterable<AddressTemplate.Segment> 
     }
 
     /** @return the parent address template or the root template */
-    public AddressTemplate getParent() {
+    public AddressTemplate parent() {
         if (isEmpty() || size() == 1) {
             return AddressTemplate.of("/");
         } else {
@@ -271,68 +229,63 @@ public final class AddressTemplate implements Iterable<AddressTemplate.Segment> 
         return segments.iterator();
     }
 
-    /** @return the address template */
-    String getTemplate() {
-        return template;
-    }
-
-
     // ------------------------------------------------------ resolve
 
-    /**
-     * Resolve this address template against the specified statement context.
-     *
-     * @param context   the statement context
-     * @param wildcards An optional list of values which are used to resolve any wildcards in this address template from
-     *                  left to right
-     * @return a fully qualified resource address which might be empty, but which does not contain any variable parts.
-     */
-    public ResourceAddress resolve(StatementContext context, String... wildcards) {
-        if (isEmpty()) {
-            return ResourceAddress.root();
+    public AddressTemplate wildcards(String first, String... rest) {
+        List<String> wildcards = new ArrayList<>();
+        wildcards.add(first);
+        if (rest != null) {
+            wildcards.addAll(Arrays.asList(rest));
         }
 
-        int wildcardCount = 0;
-        ModelNode model = new ModelNode();
-
+        List<Segment> replacedSegments = new ArrayList<>();
+        Iterator<String> wi = wildcards.iterator();
         for (Segment segment : segments) {
-            String key;
-            String value;
-            // if (segment.hasKey()) {
-                key = segment.key;
-                if (isVariable(segment.value)) {
-                    value = context.resolve(segment);
-                } else if ("*".equals(segment.value) && wildcards != null &&
-                        wildcards.length > 0 && wildcardCount < wildcards.length) {
-                    value = wildcards[wildcardCount];
-                    wildcardCount++;
-                } else {
-                    value = segment.value;
-                }
-            // } else {
-            //     Expression expression = Expression.from(segment.value);
-            //     if (expression == null) {
-            //         throw new IllegalArgumentException(
-            //                 "Invalid or unknown expression '" + segment.value + "' in address template " + this);
-            //     }
-            //     key = expression.resource();
-            //     value = context.resolve(segment);
-            // }
-            model.add(key, ModelNodeHelper.decodeValue(value));
+            if (wi.hasNext() && segment.hasKey() && "*".equals(segment.value)) {
+                replacedSegments.add(new Segment(segment.key, wi.next()));
+            } else {
+                replacedSegments.add(new Segment(segment.key, segment.value));
+            }
         }
-        return new ResourceAddress(model);
+        return AddressTemplate.of(join(replacedSegments));
     }
 
-    private boolean isVariable(String value) {
-        return value != null && value.startsWith("{") && value.endsWith("}");
+    public ResourceAddress resolve(StatementContext context) {
+        return resolve(context, null);
+    }
+
+    public ResourceAddress resolve(StatementContext context, Resolver resolver) {
+        if (resolver != null) {
+            ModelNode model = new ModelNode();
+            for (int i = 0; i < segments.size(); i++) {
+                Segment segment = segments.get(i);
+                Segment resolved = resolver.resolve(context, this, segment,
+                        i == 0, i == segments.size() - 1, i);
+                model.add(resolved.key, decodeValue(segment.value));
+            }
+            return new ResourceAddress(model);
+
+        } else {
+            if (isEmpty()) {
+                return ResourceAddress.root();
+            }
+
+            ModelNode model = new ModelNode();
+            for (Segment segment : segments) {
+                Segment resolved = context.resolve(segment);
+                model.add(resolved.key, decodeValue(segment.value));
+            }
+            return new ResourceAddress(model);
+        }
     }
 
     // ------------------------------------------------------ inner classes
 
     @FunctionalInterface
-    public interface Unresolver {
+    public interface Resolver {
 
-        String unresolve(Segment segment, boolean first, boolean last, int index, int size);
+        Segment resolve(StatementContext context, AddressTemplate template, Segment segment,
+                boolean first, boolean last, int index);
     }
 
     public static class Segment {
@@ -340,18 +293,25 @@ public final class AddressTemplate implements Iterable<AddressTemplate.Segment> 
         public final String key;
         public final String value;
 
-        Segment(String key, String value) {
-            this.key = key;
-            this.value = value;
-        }
-
         Segment(String value) {
-            this.key = null;
-            this.value = value;
+            this(null, value);
         }
 
-        boolean hasKey() {
+        public Segment(String key, String value) {
+            this.key = key;
+            this.value = encodeValue(value);
+        }
+
+        public boolean hasKey() {
             return key != null;
+        }
+
+        public boolean containsPlaceholder() {
+            return value != null && value.startsWith("{") && value.endsWith("}");
+        }
+
+        public String placeholder() {
+            return containsPlaceholder() ? value.substring(1, value.length() - 1) : null;
         }
 
         @Override

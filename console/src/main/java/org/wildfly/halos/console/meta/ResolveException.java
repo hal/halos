@@ -15,9 +15,9 @@
  */
 package org.wildfly.halos.console.meta;
 
-/** Function to resolve a {@link SecurityContext} from a {@link Constraint}. */
-@FunctionalInterface
-public interface SecurityContextProvider {
+public class ResolveException extends RuntimeException {
 
-    SecurityContext resolve(Constraint constraint);
+    public ResolveException(String message) {
+        super(message);
+    }
 }

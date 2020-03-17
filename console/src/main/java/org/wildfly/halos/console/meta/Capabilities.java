@@ -20,40 +20,46 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.wildfly.halos.console.config.Instance;
+import org.wildfly.halos.console.config.Instances;
 
 /** Provides access to static fall-back capabilities for servers which don't support a capabilities-registry. */
+@Singleton
 public class Capabilities {
 
-    private final Instance instance;
+    private final Instances instances;
     private final Map<String, Capability> registry;
 
     @Inject
-    public Capabilities(Instance instance) {
-        this.instance = instance;
+    public Capabilities(Instances instances) {
+        this.instances = instances;
         this.registry = new HashMap<>();
     }
 
     public boolean supportsSuggestions() {
-        return instance != null && ManagementModel.supportsCapabilitiesRegistry(instance.managementVersion);
+        for (Instance instance : instances) {
+            if (!ManagementModel.supportsCapabilitiesRegistry(instance.managementVersion)) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    /**
-     * Looks up a capability from the local cache. Returns an empty collection if no such capability was found.
-     */
-    public Iterable<AddressTemplate> lookup(final String name) {
+    /** Looks up a capability from the local cache. Returns an empty collection if no such capability was found. */
+    public Iterable<AddressTemplate> lookup(String name) {
         if (contains(name)) {
-            return registry.get(name).getTemplates();
+            return registry.get(name).templates();
         }
         return Collections.emptyList();
     }
 
-    public boolean contains(final String name) {
+    public boolean contains(String name) {
         return registry.containsKey(name);
     }
 
-    public void register(final String name, final AddressTemplate first, final AddressTemplate... rest) {
+    public void register(String name, AddressTemplate first, AddressTemplate... rest) {
         safeGet(name).addTemplate(first);
         if (rest != null) {
             for (AddressTemplate template : rest) {
@@ -62,24 +68,24 @@ public class Capabilities {
         }
     }
 
-    public void register(final String name, final Iterable<AddressTemplate> templates) {
+    public void register(String name, Iterable<AddressTemplate> templates) {
         for (AddressTemplate template : templates) {
             safeGet(name).addTemplate(template);
         }
     }
 
-    public void register(final Capability capability) {
-        if (contains(capability.getName())) {
-            Capability existing = registry.get(capability.getName());
-            for (AddressTemplate template : capability.getTemplates()) {
+    public void register(Capability capability) {
+        if (contains(capability.name)) {
+            Capability existing = registry.get(capability.name);
+            for (AddressTemplate template : capability.templates()) {
                 existing.addTemplate(template);
             }
         } else {
-            registry.put(capability.getName(), capability);
+            registry.put(capability.name, capability);
         }
     }
 
-    private Capability safeGet(final String name) {
+    private Capability safeGet(String name) {
         if (registry.containsKey(name)) {
             return registry.get(name);
         } else {

@@ -28,7 +28,7 @@ import org.wildfly.halos.console.resources.UIConstants;
 import static elemental2.dom.DomGlobal.document;
 import static java.util.stream.StreamSupport.stream;
 import static org.jboss.elemento.Elements.findAll;
-import static org.wildfly.halos.console.resources.CSS.rbacHidden;
+import static org.patternfly.resources.CSS.util;
 
 /**
  * Helper class to process elements with constraints in their {@code data-constraint} attributes. Toggles the element's
@@ -41,7 +41,7 @@ public class ElementGuard {
      */
     public static void toggle(HTMLElement element, boolean condition) {
         if (new Visible().test(element)) {
-            Elements.toggle(element, rbacHidden, condition);
+            Elements.toggle(element, CSS.rbacHidden, condition);
         }
     }
 
@@ -73,13 +73,13 @@ public class ElementGuard {
 
         @Override
         public boolean test(HTMLElement element) {
-            return element != null && !element.classList.contains(org.patternfly.resources.CSS.util("display-none"));
+            return Elements.isVisible(element) && !element.classList.contains(util("display-none"));
         }
     }
 
 
     /** Toggle the CSS class {@link CSS#rbacHidden} based on the element's constraints. */
-    public static class Toggle implements Consumer<Element> {
+    public static class Toggle implements Consumer<HTMLElement> {
 
         private final AuthorisationDecision authorisationDecision;
 
@@ -88,14 +88,11 @@ public class ElementGuard {
         }
 
         @Override
-        public void accept(Element element) {
-            if (element instanceof HTMLElement) {
-                HTMLElement htmlElement = (HTMLElement) element;
-                String data = String.valueOf(htmlElement.dataset.get(UIConstants.CONSTRAINT));
-                if (data != null) {
-                    Constraints constraints = Constraints.parse(data);
-                    Elements.toggle(htmlElement, rbacHidden, !authorisationDecision.isAllowed(constraints));
-                }
+        public void accept(HTMLElement element) {
+            String data = String.valueOf(element.dataset.get(UIConstants.CONSTRAINT));
+            if (data != null) {
+                Constraints constraints = Constraints.parse(data);
+                Elements.toggle(element, CSS.rbacHidden, !authorisationDecision.isAllowed(constraints));
             }
         }
     }

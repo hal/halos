@@ -23,6 +23,7 @@ import com.google.common.base.Splitter;
 
 import static com.google.common.base.Strings.emptyToNull;
 import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableSet;
 import static java.util.stream.Collectors.joining;
 
 /** A set of {@linkplain Constraint constraints} with an operator. */
@@ -126,7 +127,7 @@ public class Constraints implements Iterable<Constraint> {
     // ------------------------------------------------------ instance
 
     private final LinkedHashSet<Constraint> constraints;
-    private final Operator operator;
+    public final Operator operator;
 
     private Constraints(LinkedHashSet<Constraint> constraints, Operator operator) {
         this.constraints = constraints;
@@ -166,11 +167,7 @@ public class Constraints implements Iterable<Constraint> {
         return constraints.contains(o);
     }
 
-    public Set<Constraint> getConstraints() {
-        return constraints;
-    }
-
-    public Operator getOperator() {
-        return operator;
+    public Set<Constraint> constraints() {
+        return unmodifiableSet(constraints);
     }
 }

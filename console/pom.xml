@@ -39,7 +39,7 @@
         <tomcat7-plugin.version>2.2</tomcat7-plugin.version>
 
         <crysknife.version>0.1-SNAPSHOT</crysknife.version>
-        <domino.version>1.0-rc.4</domino.version>
+        <domino.version>1.0-rc.5-SNAPSHOT</domino.version>
         <elemental2.version>1.0.0</elemental2.version>
         <elemento.version>HEAD-SNAPSHOT</elemento.version>
         <guava.version>28.2-jre</guava.version>
@@ -48,6 +48,18 @@
         <patternfly.java.version>0.0.1</patternfly.java.version>
         <slf4j.version>1.8.0-beta2</slf4j.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.dominokit.domino</groupId>
+                <artifactId>domino</artifactId>
+                <version>${domino.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -84,7 +96,6 @@
         <dependency>
             <groupId>org.dominokit</groupId>
             <artifactId>domino-slf4j-logger</artifactId>
-            <version>${domino.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.elemento</groupId>
@@ -200,6 +211,7 @@
                     </execution>
                 </executions>
             </plugin>
+<!--
             <plugin>
                 <groupId>com.vertispan.j2cl</groupId>
                 <artifactId>j2cl-maven-plugin</artifactId>
@@ -229,6 +241,7 @@
                     </defines>
                 </configuration>
             </plugin>
+-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -280,14 +293,23 @@
 
     <repositories>
         <repository>
+            <id>sonatype-snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+        <repository>
             <id>google-snapshots</id>
             <name>OSS Sonatype</name>
             <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
-        </repository>
-        <repository>
-            <id>sonatype-snapshots</id>
-            <name>Sonatype Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
         </repository>
         <repository>
             <id>vertispan-releases</id>
@@ -298,17 +320,24 @@
             <id>vertispan-j2cl-snapshots</id>
             <name>Vertispan hosted artifacts-snapshots</name>
             <url>https://repo.vertispan.com/j2cl/</url>
-        </repository>
-        <repository>
-            <id>vertispan-gwt3-snapshots</id>
-            <name>Vertispan Snapshots</name>
-            <url>https://repo.vertispan.com/gwt-snapshot/</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
+                <updatePolicy>always</updatePolicy>
                 <checksumPolicy>fail</checksumPolicy>
             </snapshots>
         </repository>
+        <!--
+                <repository>
+                    <id>vertispan-gwt3-snapshots</id>
+                    <name>Vertispan Snapshots</name>
+                    <url>https://repo.vertispan.com/gwt-snapshot/</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>always</updatePolicy>
+                        <checksumPolicy>fail</checksumPolicy>
+                    </snapshots>
+                </repository>
+        -->
     </repositories>
 
     <pluginRepositories>

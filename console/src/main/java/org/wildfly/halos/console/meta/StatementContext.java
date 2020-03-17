@@ -15,15 +15,43 @@
  */
 package org.wildfly.halos.console.meta;
 
-/** Contains global state which is updated as you navigate in the console. */
+/** Holds global state which can be used when resolving an {@linkplain AddressTemplate address template}. */
 public interface StatementContext {
 
     StatementContext NOOP = new StatementContext() {
         @Override
-        public String resolve(AddressTemplate.Segment segment) {
-            return segment.toString();
+        public AddressTemplate.Segment resolve(AddressTemplate.Segment segment) {
+            return segment;
+        }
+
+        @Override
+        public void addPlaceholder(Placeholder placeholder) {
+            // noop
+        }
+
+        @Override
+        public Placeholder getPlaceholder(String name) {
+            return null;
+        }
+
+        @Override
+        public String getValue(Placeholder placeHolder) {
+            return null;
+        }
+
+        @Override
+        public void assignValue(String placeholder, String value) {
+            // noop
         }
     };
 
-    String resolve(AddressTemplate.Segment segment);
+    AddressTemplate.Segment resolve(AddressTemplate.Segment segment);
+
+    void addPlaceholder(Placeholder placeholder);
+
+    Placeholder getPlaceholder(String name);
+
+    String getValue(Placeholder placeHolder);
+
+    void assignValue(String placeholder, String value);
 }

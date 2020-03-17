@@ -25,9 +25,8 @@ import org.wildfly.halos.console.config.Instance;
 import static org.wildfly.halos.console.meta.Constraints.Operator.AND;
 
 /**
- * Class to decide whether a single or a set of constraints are allowed according to a given security context. The
- * security context must be provided by a {@link SecurityContextProvider}. {@code isAllowed()} returns {@code true} if
- * the security context was resolved and the constraint is valid.
+ * Class to decide whether a single, or a set of constraints are allowed according to a given security context. {@code
+ * isAllowed()} returns {@code true} if the security context was resolved, and the constraint is valid.
  * <p>
  * To hide or disable UI elements, use one of the following strategies:
  * <dl>
@@ -45,36 +44,14 @@ import static org.wildfly.halos.console.meta.Constraints.Operator.AND;
  */
 public class AuthorisationDecision {
 
-    // ------------------------------------------------------ factory methods
-
-    public static AuthorisationDecision from(Instance instance, SecurityContextRegistry securityContextRegistry) {
-        return new AuthorisationDecision(instance, constraint -> {
-            if (securityContextRegistry.contains(constraint.getTemplate())) {
-                return securityContextRegistry.lookup(constraint.getTemplate());
-            }
-            return null;
-        });
-    }
-
-    public static AuthorisationDecision from(Instance instance, SecurityContext securityContext) {
-        return new AuthorisationDecision(instance, constraint -> securityContext);
-    }
-
-    public static AuthorisationDecision from(Instance instance, SecurityContextProvider provider) {
-        return new AuthorisationDecision(instance, provider);
-    }
-
-
-    // ------------------------------------------------------ instance
-
     private static final Logger logger = LoggerFactory.getLogger(AuthorisationDecision.class);
 
     private final Instance instance;
-    private final SecurityContextProvider provider;
+    private final SecurityContext securityContext;
 
-    private AuthorisationDecision(Instance instance, SecurityContextProvider provider) {
+    public AuthorisationDecision(Instance instance, SecurityContext securityContext) {
         this.instance = instance;
-        this.provider = provider;
+        this.securityContext = securityContext;
     }
 
     public boolean isAllowed(Constraints constraints) {
@@ -93,7 +70,7 @@ public class AuthorisationDecision {
                 index++;
             }
             int cardinality = bits.cardinality();
-            return constraints.getOperator() == AND ? cardinality == size : cardinality > 0;
+            return constraints.operator == AND ? cardinality == size : cardinality > 0;
         }
     }
 
@@ -101,44 +78,40 @@ public class AuthorisationDecision {
         if (instance.accessControlProvider == AccessControlProvider.SIMPLE) {
             return true;
         }
-        boolean allowed = false;
-        SecurityContext securityContext = provider.resolve(constraint);
-        if (securityContext != null) {
-            if (constraint.getTarget() == Target.OPERATION) {
-                switch (constraint.getPermission()) {
-                    case EXECUTABLE:
-                        allowed = securityContext.isExecutable(constraint.getName());
-                        break;
-                    case READABLE:
-                    case WRITABLE:
-                        logger.error("Unsupported permission in constraint {}. Only {} is allowed for target {}.",
-                                constraint, Permission.EXECUTABLE.name().toLowerCase(),
-                                Target.OPERATION.name().toLowerCase());
-                        break;
-                    default:
-                        break;
-                }
 
-            } else if (constraint.getTarget() == Target.ATTRIBUTE) {
-                switch (constraint.getPermission()) {
-                    case READABLE:
-                        allowed = securityContext.isReadable(constraint.getName());
-                        break;
-                    case WRITABLE:
-                        allowed = securityContext.isWritable(constraint.getName());
-                        break;
-                    case EXECUTABLE:
-                        logger.error("Unsupported permission in constraint {}. Only ({}|{}) are allowed for target {}.",
-                                constraint, Permission.READABLE.name().toLowerCase(),
-                                Permission.WRITABLE.name().toLowerCase(),
-                                Target.ATTRIBUTE.name().toLowerCase());
-                        break;
-                    default:
-                        break;
-                }
+        boolean allowed = false;
+        if (constraint.target == Target.OPERATION) {
+            switch (constraint.permission) {
+                case EXECUTABLE:
+                    allowed = securityContext.isExecutable(constraint.name);
+                    break;
+                case READABLE:
+                case WRITABLE:
+                    logger.error("Unsupported permission in constraint {}. Only {} is allowed for target {}.",
+                            constraint, Permission.EXECUTABLE.name().toLowerCase(),
+                            Target.OPERATION.name().toLowerCase());
+                    break;
+                default:
+                    break;
             }
-        } else {
-            logger.warn("No security context found for {}", constraint);
+
+        } else if (constraint.target == Target.ATTRIBUTE) {
+            switch (constraint.permission) {
+                case READABLE:
+                    allowed = securityContext.isReadable(constraint.name);
+                    break;
+                case WRITABLE:
+                    allowed = securityContext.isWritable(constraint.name);
+                    break;
+                case EXECUTABLE:
+                    logger.error("Unsupported permission in constraint {}. Only ({}|{}) are allowed for target {}.",
+                            constraint, Permission.READABLE.name().toLowerCase(),
+                            Permission.WRITABLE.name().toLowerCase(),
+                            Target.ATTRIBUTE.name().toLowerCase());
+                    break;
+                default:
+                    break;
+            }
         }
         return allowed;
     }

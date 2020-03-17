@@ -17,7 +17,7 @@ package org.wildfly.halos.console.meta;
 
 public class MissingMetadataException extends RuntimeException {
 
-    public MissingMetadataException(final String type, final AddressTemplate address) {
+    public MissingMetadataException(String type, AddressTemplate address) {
         super("Missing metadata: [" + type + "] @ " + address);
     }
 }

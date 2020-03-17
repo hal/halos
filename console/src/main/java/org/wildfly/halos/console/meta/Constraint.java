@@ -49,10 +49,10 @@ public class Constraint {
     private static final JsRegExp CONSTRAINT_REGEX = new JsRegExp(
             "^(readable|writable|executable)\\(([\\w{}=*\\-\\/\\.]+)(:|@)([\\w\\-]+)\\)$"); //NON-NLS
 
-    private final AddressTemplate template;
-    private final Target target;
-    private final String name;
-    private final Permission permission;
+    public final AddressTemplate template;
+    public final Target target;
+    public final String name;
+    public final Permission permission;
 
     private Constraint(AddressTemplate template, String name, Target target, Permission permission) {
         this.template = template;
@@ -100,21 +100,5 @@ public class Constraint {
 
     public String data() {
         return toString();
-    }
-
-    public AddressTemplate getTemplate() {
-        return template;
-    }
-
-    public Target getTarget() {
-        return target;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Permission getPermission() {
-        return permission;
     }
 }
