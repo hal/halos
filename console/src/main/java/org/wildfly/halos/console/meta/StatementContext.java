@@ -25,33 +25,33 @@ public interface StatementContext {
         }
 
         @Override
-        public void addPlaceholder(Placeholder placeholder) {
+        public void add(Placeholder placeholder) {
             // noop
         }
 
         @Override
-        public Placeholder getPlaceholder(String name) {
+        public Placeholder placeholder(String name) {
             return null;
         }
 
         @Override
-        public String getValue(Placeholder placeHolder) {
+        public String value(Placeholder placeHolder) {
             return null;
         }
 
         @Override
-        public void assignValue(String placeholder, String value) {
+        public void assign(String placeholder, String value) {
             // noop
         }
     };
 
     AddressTemplate.Segment resolve(AddressTemplate.Segment segment);
 
-    void addPlaceholder(Placeholder placeholder);
+    void add(Placeholder placeholder);
 
-    Placeholder getPlaceholder(String name);
+    Placeholder placeholder(String name);
 
-    String getValue(Placeholder placeHolder);
+    String value(Placeholder placeHolder);
 
-    void assignValue(String placeholder, String value);
+    void assign(String placeholder, String value);
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.console.meta;
+package org.wildfly.halos.console.meta.capability;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,6 +24,8 @@ import javax.inject.Singleton;
 
 import org.wildfly.halos.console.config.Instance;
 import org.wildfly.halos.console.config.Instances;
+import org.wildfly.halos.console.meta.AddressTemplate;
+import org.wildfly.halos.console.config.ManagementModel;
 
 /** Provides access to static fall-back capabilities for servers which don't support a capabilities-registry. */
 @Singleton

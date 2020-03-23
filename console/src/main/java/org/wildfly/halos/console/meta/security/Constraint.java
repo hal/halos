@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.console.meta;
+package org.wildfly.halos.console.meta.security;
 
 import elemental2.core.JsRegExp;
 import elemental2.core.RegExpResult;
+import org.wildfly.halos.console.meta.AddressTemplate;
 
-import static org.wildfly.halos.console.meta.Target.ATTRIBUTE;
-import static org.wildfly.halos.console.meta.Target.OPERATION;
+import static org.wildfly.halos.console.meta.security.Target.ATTRIBUTE;
+import static org.wildfly.halos.console.meta.security.Target.OPERATION;
 
 /** A constraint for an attribute or operation of a DMR resource. */
 public class Constraint {

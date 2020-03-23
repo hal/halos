@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.console.meta;
+package org.wildfly.halos.console.meta.security;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import elemental2.dom.Element;
 import elemental2.dom.HTMLElement;
 import org.jboss.elemento.By;
 import org.jboss.elemento.Elements;

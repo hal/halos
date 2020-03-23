@@ -1,4 +1,4 @@
-package org.wildfly.halos.console;
+package org.wildfly.halos.console.core;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,11 +10,17 @@ import org.wildfly.halos.console.meta.Placeholder;
 import org.wildfly.halos.console.meta.ResolveException;
 import org.wildfly.halos.console.meta.StatementContext;
 
-import static org.wildfly.halos.console.meta.Placeholder.SELECTED_DEPLOYMENT;
-import static org.wildfly.halos.console.meta.Placeholder.SELECTED_RESOURCE;
+import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.DEPLOYMENT;
 
 @Singleton
 public class CoreStatementContext implements StatementContext {
+
+    // ------------------------------------------------------ well-known placeholders
+
+    public static final Placeholder SELECTED_RESOURCE = new Placeholder("selected.resource");
+    public static final Placeholder SELECTED_DEPLOYMENT = new Placeholder("selected.deployment", DEPLOYMENT);
+
+    // ------------------------------------------------------ instance
 
     private final Map<String, Placeholder> placeholders;
     private final Map<Placeholder, String> values;
@@ -22,17 +28,17 @@ public class CoreStatementContext implements StatementContext {
     public CoreStatementContext() {
         placeholders = new HashMap<>();
         values = new HashMap<>();
-        addPlaceholder(SELECTED_RESOURCE);
-        addPlaceholder(SELECTED_DEPLOYMENT);
+        add(SELECTED_RESOURCE);
+        add(SELECTED_DEPLOYMENT);
     }
 
     @Override
     public AddressTemplate.Segment resolve(AddressTemplate.Segment segment) {
         if (segment.containsPlaceholder()) {
-            String placeholderName = segment.placeholder();
-            Placeholder placeholder = getPlaceholder(placeholderName);
+            String name = segment.placeholder();
+            Placeholder placeholder = placeholder(name);
             if (placeholder != null) {
-                String resolvedValue = getValue(placeholder);
+                String resolvedValue = value(placeholder);
                 if (resolvedValue != null) {
                     if (segment.hasKey()) {
                         // key={placeholder}
@@ -46,7 +52,7 @@ public class CoreStatementContext implements StatementContext {
                             "No value found for placeholder " + placeholder.name + " in segment " + segment);
                 }
             } else {
-                throw new ResolveException("Unknown placeholder " + placeholderName + " in segment " + segment);
+                throw new ResolveException("Unknown placeholder " + name + " in segment " + segment);
             }
         } else {
             return segment;
@@ -54,17 +60,17 @@ public class CoreStatementContext implements StatementContext {
     }
 
     @Override
-    public void addPlaceholder(Placeholder placeholder) {
+    public void add(Placeholder placeholder) {
         placeholders.put(placeholder.name, placeholder);
     }
 
     @Override
-    public Placeholder getPlaceholder(String name) {
+    public Placeholder placeholder(String name) {
         return placeholders.get(name);
     }
 
     @Override
-    public void assignValue(String placeholder, String value) {
+    public void assign(String placeholder, String value) {
         Placeholder p = placeholders.get(placeholder);
         if (p != null) {
             values.put(p, value);
@@ -72,7 +78,7 @@ public class CoreStatementContext implements StatementContext {
     }
 
     @Override
-    public String getValue(Placeholder placeHolder) {
+    public String value(Placeholder placeHolder) {
         return values.get(placeHolder);
     }
 }

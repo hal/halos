@@ -13,11 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.console.meta;
+package org.wildfly.halos.console.meta.security;
 
-public enum Permission {
+public enum Target {
+    OPERATION(":"), ATTRIBUTE("@");
 
-    READABLE,
-    WRITABLE,
-    EXECUTABLE
+    static Target parse(String input) {
+        if (OPERATION.symbol.equals(input)) {
+            return OPERATION;
+        } else if (ATTRIBUTE.symbol.equals(input)) {
+            return ATTRIBUTE;
+        } else {
+            throw new IllegalArgumentException("Illegal symbol: '" + input + "'");
+        }
+    }
+
+    private String symbol;
+
+    Target(final String symbol) {
+        this.symbol = symbol;
+    }
+
+    public String symbol() {
+        return symbol;
+    }
 }

@@ -68,16 +68,6 @@ public class Composite extends Operation implements Iterable<Operation> {
         return this;
     }
 
-    public Composite addHeader(String name, String value) {
-        get(OPERATION_HEADERS).get(name).set(value);
-        return this;
-    }
-
-    public Composite addHeader(String name, boolean value) {
-        get(OPERATION_HEADERS).get(name).set(value);
-        return this;
-    }
-
     @Override
     public Iterator<Operation> iterator() {
         return operations.iterator();
@@ -92,6 +82,9 @@ public class Composite extends Operation implements Iterable<Operation> {
     public int size() {
         return operations.size();
     }
+
+    @Override
+    public Operation get(int index) {return operations.get(index);}
 
     /** @return a string representation of this composite */
     @Override

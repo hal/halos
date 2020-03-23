@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.console.meta;
+package org.wildfly.halos.console.meta.security;
 
 import java.util.BitSet;
 
@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.wildfly.halos.console.config.AccessControlProvider;
 import org.wildfly.halos.console.config.Instance;
 
-import static org.wildfly.halos.console.meta.Constraints.Operator.AND;
+import static org.wildfly.halos.console.meta.security.Constraints.Operator.AND;
 
 /**
  * Class to decide whether a single, or a set of constraints are allowed according to a given security context. {@code

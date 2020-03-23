@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.console.meta;
+package org.wildfly.halos.console.config;
 
 import org.wildfly.halos.console.config.Version;
 import org.wildfly.halos.console.dmr.ModelNode;

@@ -23,15 +23,28 @@ import java.util.stream.StreamSupport;
 /** Represents the result of a composite operation. */
 public class CompositeResult implements Iterable<ModelNode> {
 
+    private final Composite composite;
     private final LinkedHashMap<String, ModelNode> steps;
 
-    public CompositeResult(ModelNode steps) {
+    public CompositeResult(Composite composite, ModelNode steps) {
+        this.composite = composite;
         this.steps = new LinkedHashMap<>();
         if (steps.isDefined()) {
             for (Property property : steps.asPropertyList()) {
                 this.steps.put(property.getName(), property.getValue());
             }
         }
+    }
+
+    /**
+     * @param index zero-based!
+     * @return the related operation
+     */
+    public Operation operation(int index) {
+        if (index < composite.size()) {
+            return composite.get(index);
+        }
+        return null;
     }
 
     /**

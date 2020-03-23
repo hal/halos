@@ -13,31 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.console.meta;
+package org.wildfly.halos.console.meta.security;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+public enum Permission {
 
-public class Capability {
-
-    public final String name;
-    private final Set<AddressTemplate> templates;
-
-    public Capability(final String name) {
-        this.name = name;
-        this.templates = new LinkedHashSet<>();
-    }
-
-    @Override
-    public String toString() {
-        return "Capability(" + name + " -> " + templates + ")";
-    }
-
-    public void addTemplate(final AddressTemplate template) {
-        templates.add(template);
-    }
-
-    public Iterable<AddressTemplate> templates() {
-        return templates;
-    }
+    READABLE,
+    WRITABLE,
+    EXECUTABLE
 }

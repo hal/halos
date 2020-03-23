@@ -25,9 +25,9 @@ import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.*;
 /** Represents a DMR operation. */
 public class Operation extends ModelNode {
 
-    private final String name;
-    private final ResourceAddress address;
-    private final ModelNode parameter;
+    public final String name;
+    public final ResourceAddress address;
+    public final ModelNode parameter;
     private final ModelNode header;
     private final Set<String> roles;
 
@@ -84,36 +84,8 @@ public class Operation extends ModelNode {
         }
     }
 
-    /** @return the name of the operation */
-    public String getName() {
-        return get(OP).asString();
-    }
-
-    /** @return the address of the operation */
-    public ResourceAddress getAddress() {
-        return address;
-    }
-
-    /** @return the parameters of the operation */
-    public ModelNode getParameter() {
-        return parameter;
-    }
-
-    /** @return the header of the operation */
-    public ModelNode getHeader() {
-        return header;
-    }
-
     public boolean hasParameter() {
         return parameter.isDefined() && !parameter.asList().isEmpty();
-    }
-
-    public Set<String> getRoles() {
-        return roles;
-    }
-
-    public Operation runAs(Set<String> runAs) {
-        return new Operation(name, address, parameter, header, new HashSet<>(runAs));
     }
 
     /** @return the string representation of the operation as used in the CLI */

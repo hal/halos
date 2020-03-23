@@ -15,6 +15,8 @@
  */
 package org.wildfly.halos.console.dispatch;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -53,13 +55,12 @@ public class Dispatcher {
         return dmr(operation);
     }
 
-    public Promise<CompositeResult> execute(Composite operations) {
-        return dmr(operations)
-                .then(modelNode -> new Promise<>((resolve, reject) -> resolve.onInvoke(compositeResult(modelNode))));
+    public Promise<CompositeResult> execute(Composite composite) {
+        return dmr(composite).then(modelNode -> Promise.resolve(compositeResult(composite, modelNode)));
     }
 
-    private CompositeResult compositeResult(ModelNode modelNode) {
-        return new CompositeResult(modelNode.get(RESULT));
+    private CompositeResult compositeResult(Composite composite, ModelNode modelNode) {
+        return new CompositeResult(composite, modelNode.get(RESULT));
     }
 
     // ------------------------------------------------------ dmr
@@ -69,13 +70,13 @@ public class Dispatcher {
         headers.append(ACCEPT.header(), APPLICATION_DMR_ENCODED);
         headers.append(CONTENT_TYPE.header(), APPLICATION_DMR_ENCODED);
 
-        RequestInit init = RequestInit.create();
-        init.setMode("cors");
-        init.setMethod("POST");
-        init.setHeaders(headers);
-        init.setBody(operation.toBase64String());
+        RequestInit request = RequestInit.create();
+        request.setMode("cors");
+        request.setMethod("POST");
+        request.setHeaders(headers);
+        request.setBody(operation.toBase64String());
 
-        return fetch("http://localhost:8080/v1/management", init)
+        return fetch("http://localhost:8080/v1/management", request)
                 .then(response -> {
                     if (response.ok) {
                         return response.text();
@@ -84,6 +85,6 @@ public class Dispatcher {
                                 response.status + " " + response.statusText);
                     }
                 })
-                .then(payload -> new Promise<>((resolve, reject) -> resolve.onInvoke(ModelNode.fromBase64(payload))));
+                .then(payload -> Promise.resolve(ModelNode.fromBase64(payload)));
     }
 }

@@ -1,6 +1,6 @@
 package org.wildfly.halos.console.meta;
 
-class WildcardResolver implements AddressTemplate.Resolver {
+class WildcardResolver implements AddressTemplate.SegmentResolver {
 
     @Override
     public AddressTemplate.Segment resolve(StatementContext context, AddressTemplate template,
@@ -11,7 +11,7 @@ class WildcardResolver implements AddressTemplate.Resolver {
                 return new AddressTemplate.Segment(segment.key, "*");
             } else {
                 String placeholderName = segment.placeholder();
-                Placeholder placeholder = context.getPlaceholder(placeholderName);
+                Placeholder placeholder = context.placeholder(placeholderName);
                 if (placeholder == null) {
                     throw new ResolveException("Unknown placeholder " + placeholderName + " in " + template);
                 }

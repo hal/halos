@@ -33,11 +33,11 @@ import static java.util.stream.Collectors.joining;
  * An address template can be defined using the following EBNF:
  * <pre>
  * AddressTemplate = "/" | Segment ;
- * Segment          = Tuple | Segment "/" Tuple ;
- * Tuple            = Variable | Key "=" Value ;
- * Variable         = "{" Alphanumeric "}" ;
- * Key              = Alphanumeric ;
- * Value            = Variable | Alphanumeric | "*" ;
+ * Segment         = Tuple | Segment "/" Tuple ;
+ * Tuple           = Placeholder | Key "=" Value ;
+ * Placeholder     = "{" Alphanumeric "}" ;
+ * Key             = Alphanumeric ;
+ * Value           = Placeholder | Alphanumeric | "*" ;
  * </pre>
  * <p>
  * Examples for valid address templates are
@@ -56,6 +56,8 @@ public final class AddressTemplate implements Iterable<AddressTemplate.Segment> 
     /** The root template */
     public static final AddressTemplate ROOT = AddressTemplate.of("/");
     public static final String EQUALS = "=";
+    private SegmentResolver STATEMENT_CONTEXT_RESOLVER = (context, template, segment, first, last, index) ->
+            context.resolve(segment);
 
     // ------------------------------------------------------ encode / decode
 
@@ -229,7 +231,7 @@ public final class AddressTemplate implements Iterable<AddressTemplate.Segment> 
         return segments.iterator();
     }
 
-    // ------------------------------------------------------ resolve
+    // ------------------------------------------------------ wildcards & resolve
 
     public AddressTemplate wildcards(String first, String... rest) {
         List<String> wildcards = new ArrayList<>();
@@ -251,28 +253,22 @@ public final class AddressTemplate implements Iterable<AddressTemplate.Segment> 
     }
 
     public ResourceAddress resolve(StatementContext context) {
-        return resolve(context, null);
+        return resolveInternal(context, STATEMENT_CONTEXT_RESOLVER);
     }
 
-    public ResourceAddress resolve(StatementContext context, Resolver resolver) {
-        if (resolver != null) {
+    public ResourceAddress resolve(StatementContext context, SegmentResolver resolver) {
+        return resolveInternal(context, resolver);
+    }
+
+    private ResourceAddress resolveInternal(StatementContext context, SegmentResolver resolver) {
+        if (isEmpty()) {
+            return ResourceAddress.root();
+        } else {
             ModelNode model = new ModelNode();
             for (int i = 0; i < segments.size(); i++) {
                 Segment segment = segments.get(i);
                 Segment resolved = resolver.resolve(context, this, segment,
                         i == 0, i == segments.size() - 1, i);
-                model.add(resolved.key, decodeValue(segment.value));
-            }
-            return new ResourceAddress(model);
-
-        } else {
-            if (isEmpty()) {
-                return ResourceAddress.root();
-            }
-
-            ModelNode model = new ModelNode();
-            for (Segment segment : segments) {
-                Segment resolved = context.resolve(segment);
                 model.add(resolved.key, decodeValue(segment.value));
             }
             return new ResourceAddress(model);
@@ -282,7 +278,7 @@ public final class AddressTemplate implements Iterable<AddressTemplate.Segment> 
     // ------------------------------------------------------ inner classes
 
     @FunctionalInterface
-    public interface Resolver {
+    public interface SegmentResolver {
 
         Segment resolve(StatementContext context, AddressTemplate template, Segment segment,
                 boolean first, boolean last, int index);
