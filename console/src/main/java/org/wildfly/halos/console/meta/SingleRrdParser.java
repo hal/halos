@@ -33,16 +33,12 @@ import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.*;
 class SingleRrdParser {
 
     private final RrdResult rrdResult;
-    private final boolean recursive;
-    // private final ResourceDescriptionAddressProcessor addressProcessor;
 
-    SingleRrdParser(RrdResult rrdResult, boolean recursive) {
+    SingleRrdParser(RrdResult rrdResult) {
         this.rrdResult = rrdResult;
-        // this.addressProcessor = new ResourceDescriptionAddressProcessor();
-        this.recursive = recursive;
     }
 
-    RrdResult parse(ResourceAddress address, ModelNode modelNode) {
+    RrdResult parse(ResourceAddress address, ModelNode modelNode, boolean recursive) {
         if (modelNode.getType() == ModelType.LIST) {
             for (ModelNode nestedNode : modelNode.asList()) {
                 ResourceAddress nestedAddress = new ResourceAddress(nestedNode.get(ADDRESS));
@@ -58,23 +54,15 @@ class SingleRrdParser {
     private void parseSingle(ResourceAddress address, ModelNode modelNode, boolean recursive) {
         // resource description
         if (!rrdResult.containsResourceDescription(address) && modelNode.hasDefined(DESCRIPTION)) {
-            // TODO normalize address
-            // rrdResult.addResourceDescription(addressProcessor.apply(address), new ResourceDescription(modelNode));
-            ResourceDescription resourceDescription = new ResourceDescription(modelNode);
-            if (recursive) {
-                resourceDescription.get(HAL_RECURSIVE).set(true);
-            }
-            rrdResult.addResourceDescription(address, resourceDescription);
+            ResourceDescription resourceDescription = new ResourceDescription(modelNode, recursive);
+            rrdResult.addResourceDescription(resourceDescriptionAddress(address), resourceDescription);
         }
 
         // security context
         ModelNode accessControl = modelNode.get(ACCESS_CONTROL);
         if (accessControl.isDefined()) {
             if (!rrdResult.containsSecurityContext(address) && accessControl.hasDefined(DEFAULT)) {
-                SecurityContext securityContext = new SecurityContext(accessControl.get(DEFAULT));
-                if (recursive) {
-                    securityContext.get(HAL_RECURSIVE).set(true);
-                }
+                SecurityContext securityContext = new SecurityContext(accessControl.get(DEFAULT), recursive);
                 rrdResult.addSecurityContext(address, securityContext);
             }
 
@@ -85,7 +73,8 @@ class SingleRrdParser {
                     ModelNode exception = property.getValue();
                     ResourceAddress exceptionAddress = new ResourceAddress(exception.get(ADDRESS));
                     if (!rrdResult.containsSecurityContext(exceptionAddress)) {
-                        rrdResult.addSecurityContext(exceptionAddress, new SecurityContext(exception));
+                        // only the top-level result gets the recursive flag
+                        rrdResult.addSecurityContext(exceptionAddress, new SecurityContext(exception, false));
                     }
                 }
             }
@@ -109,5 +98,10 @@ class SingleRrdParser {
                 }
             }
         }
+    }
+
+    private ResourceAddress resourceDescriptionAddress(ResourceAddress address) {
+        // TODO adjust resource address for resource descriptions
+        return address;
     }
 }

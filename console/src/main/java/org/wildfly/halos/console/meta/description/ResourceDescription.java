@@ -21,13 +21,14 @@ import org.wildfly.halos.console.dmr.ModelNode;
 import org.wildfly.halos.console.dmr.ModelNodeHelper;
 import org.wildfly.halos.console.dmr.ModelType;
 import org.wildfly.halos.console.dmr.Property;
+import org.wildfly.halos.console.meta.MetadataRegistry;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.*;
 
 /** Contains the resource and attribute descriptions from the read-resource-description operation. */
-/* TODO Refactor methods which use the 'path' parameter (too error prone). Instead use a fluent API:
+/* TODO Refactor methods which use the 'path' parameter (too error prone). Instead, use a fluent API:
  *
  * ResourceDescription description = ...;
  *
@@ -43,7 +44,10 @@ import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.*;
  */
 public class ResourceDescription extends ModelNode {
 
-    public ResourceDescription(ModelNode payload) {
+    public final boolean recursive;
+
+    public ResourceDescription(ModelNode payload, boolean recursive) {
+        this.recursive = recursive;
         set(payload);
     }
 

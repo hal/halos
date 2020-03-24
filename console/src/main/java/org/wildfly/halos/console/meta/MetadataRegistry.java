@@ -16,10 +16,7 @@
 package org.wildfly.halos.console.meta;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.IntFunction;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -33,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.wildfly.halos.console.dispatch.Dispatcher;
 import org.wildfly.halos.console.dmr.Composite;
 import org.wildfly.halos.console.dmr.CompositeResult;
+import org.wildfly.halos.console.dmr.ModelNode;
 import org.wildfly.halos.console.dmr.Operation;
 import org.wildfly.halos.console.dmr.ResourceAddress;
 import org.wildfly.halos.console.meta.capability.Capabilities;
@@ -51,6 +49,8 @@ public class MetadataRegistry {
     private static final int RESOURCE_DESCRIPTION_SIZE = 250;
     private static final int SECURITY_CONTEXT_SIZE = 300;
     private static final String DEFAULT_LOCALE = "en";
+    private static final CompositeResult OPTIONAL_COMPOSITE_RESULT = new CompositeResult(new Composite(),
+            new ModelNode());
     private static final Logger logger = LoggerFactory.getLogger(MetadataRegistry.class);
 
     private final Dispatcher dispatcher;
@@ -83,66 +83,79 @@ public class MetadataRegistry {
 
     // ------------------------------------------------------ find all
 
-    public Promise<Map<AddressTemplate, Metadata>> findAll(Iterable<AddressTemplate> templates) {
-        return findAll(templates, false);
-    }
-
-    // TODO Use metadata request to set scope ((none-)recursive, optional) for each template independently.
-    public Promise<Map<AddressTemplate, Metadata>> findAll(Iterable<AddressTemplate> templates, boolean recursive) {
-        Map<AddressTemplate, Metadata> allMetadata = failSafeGet(templates, recursive);
-        if (allMetadata.values().stream().allMatch(Metadata::allPresent)) {
-            return Promise.resolve(allMetadata);
+    public Promise<MetadataResult> findAll(MetadataRequest request) {
+        MetadataResult result = failSafeGet(request);
+        if (result.allPresent()) {
+            return Promise.resolve(result);
 
         } else {
             List<Operation> operations = new ArrayList<>();
-            allMetadata.forEach((template, metadata) -> operations.addAll(rrdOperations(template, metadata)));
-            if (operations.isEmpty()) {
-                throw new MetadataException("Unable to create r-r-d operation for " + templates);
+            List<Operation> optionalOperations = new ArrayList<>();
+            result.forEach((template, metadata) -> {
+                if (metadata.requestedScope.optional()) {
+                    optionalOperations.addAll(rrdOperations(template, metadata));
+                } else {
+                    operations.addAll(rrdOperations(template, metadata));
+                }
+            });
+            if (operations.isEmpty() && optionalOperations.isEmpty()) {
+                throw new MetadataException("Unable to create r-r-d operations for " + request);
             }
+            List<Promise<CompositeResult>> promises = new ArrayList<>();
             List<List<Operation>> piles = Lists.partition(operations, BATCH_SIZE);
-            Promise<CompositeResult>[] promises = piles.stream()
+            piles.stream()
                     .map(Composite::new)
                     .map(dispatcher::execute)
-                    .toArray((IntFunction<Promise<CompositeResult>[]>) Promise[]::new);
-            return Promise.all(promises).then(results -> {
-                for (CompositeResult compositeResult : results) {
-                    RrdResult rrdResult = new CompositeRrdParser(recursive).parse(compositeResult);
-                    resourceDescriptions.putAll(rrdResult.resourceDescriptions);
-                    securityContexts.putAll(rrdResult.securityContexts);
-                }
-                allMetadata.replaceAll((template, metadata) -> get(template)); // use get now instead of failSafeGet
-                return Promise.resolve(allMetadata);
-            });
+                    .forEach(promises::add);
+            optionalOperations.stream()
+                    .map(operation -> dispatcher
+                            .execute(new Composite(operations))
+                            .catch_(error -> Promise.resolve(OPTIONAL_COMPOSITE_RESULT)))
+                    .forEach(promises::add);
+            //noinspection unchecked
+            Promise<CompositeResult>[] allPromises = promises.toArray(new Promise[0]);
+            return Promise.all(allPromises)
+                    .then(results -> {
+                        for (CompositeResult compositeResult : results) {
+                            if (compositeResult != OPTIONAL_COMPOSITE_RESULT) {
+                                RrdResult rrdResult = new CompositeRrdParser().parse(compositeResult);
+                                resourceDescriptions.putAll(rrdResult.resourceDescriptions);
+                                securityContexts.putAll(rrdResult.securityContexts);
+                            }
+                        }
+                        result.replaceAll((template, metadata) -> get(template)); // use get now instead of failSafeGet
+                        return Promise.resolve(result);
+                    });
         }
     }
 
     // ------------------------------------------------------ find
 
     public Promise<Metadata> find(AddressTemplate template) {
-        return find(template, false);
+        return find(template, Scope.NORMAL);
     }
 
-    public Promise<Metadata> find(AddressTemplate template, boolean recursive) {
-        Metadata metadata = failSafeGet(template, recursive);
+    public Promise<Metadata> find(AddressTemplate template, Scope scope) {
+        Metadata metadata = failSafeGet(template, scope);
         if (metadata.allPresent()) {
             return Promise.resolve(metadata);
 
         } else {
             List<Operation> operations = rrdOperations(template, metadata);
             if (operations.isEmpty()) {
-                throw new MetadataException("Unable to create r-r-d operation for " + template);
+                throw new MetadataException("Unable to create r-r-d operation for " + scope.andTemplate(template));
             } else if (operations.size() == 1) {
                 Operation operation = operations.get(0);
                 return dispatcher.execute(operation).then(modelNode -> {
-                    RrdResult rrdResult = new SingleRrdParser(new RrdResult(), recursive)
-                            .parse(operation.address,modelNode);
+                    RrdResult rrdResult = new SingleRrdParser(new RrdResult())
+                            .parse(operation.address, modelNode, scope.recursive());
                     resourceDescriptions.putAll(rrdResult.resourceDescriptions);
                     securityContexts.putAll(rrdResult.securityContexts);
                     return Promise.resolve(get(template)); // use get now instead of failSafeGet
                 });
             } else {
                 return dispatcher.execute(new Composite(operations)).then(compositeResult -> {
-                    RrdResult rrdResult = new CompositeRrdParser(recursive).parse(compositeResult);
+                    RrdResult rrdResult = new CompositeRrdParser().parse(compositeResult);
                     resourceDescriptions.putAll(rrdResult.resourceDescriptions);
                     securityContexts.putAll(rrdResult.securityContexts);
                     return Promise.resolve(get(template)); // use get now instead of failSafeGet
@@ -154,36 +167,36 @@ public class MetadataRegistry {
     // ------------------------------------------------------ get
 
     public Metadata get(AddressTemplate template) {
-        return get(template, false);
+        return get(template, Scope.NORMAL);
     }
 
-    public Metadata get(AddressTemplate template, boolean recursive) {
-        Metadata metadata = failSafeGet(template, recursive);
-        if (metadata.description == null) {
-            throw new MetadataException("No resource description found for " + template);
-        }
-        if (metadata.securityContext == null) {
-            throw new MetadataException("No security context found for " + template);
+    public Metadata get(AddressTemplate template, Scope scope) {
+        Metadata metadata = failSafeGet(template, scope);
+        if (!metadata.allPresent()) {
+            if (metadata.description == null) {
+                throw new MetadataException("No resource description found for " + scope.andTemplate(template));
+            }
+            if (metadata.securityContext == null) {
+                throw new MetadataException("No security context found for " + scope.andTemplate(template));
+            }
         }
         return metadata;
     }
 
     // ------------------------------------------------------ internals
 
-    private Map<AddressTemplate, Metadata> failSafeGet(Iterable<AddressTemplate> templates, boolean recursive) {
-        Map<AddressTemplate, Metadata> metadata = new HashMap<>();
-        for (AddressTemplate template : templates) {
-            metadata.put(template, failSafeGet(template, recursive));
-        }
-        return metadata;
+    private MetadataResult failSafeGet(MetadataRequest request) {
+        MetadataResult result = new MetadataResult();
+        request.forEach((template, scope) -> result.put(template, failSafeGet(template, scope)));
+        return result;
     }
 
-    private Metadata failSafeGet(AddressTemplate template, boolean recursive) {
+    private Metadata failSafeGet(AddressTemplate template, Scope scope) {
         ResourceAddress rdAddress = template.resolve(statementContext, resolvers.resourceDescriptionResolver());
         ResourceAddress scAddress = template.resolve(statementContext, resolvers.securityContextResolver());
         ResourceDescription resourceDescription = resourceDescriptions.getIfPresent(rdAddress);
         SecurityContext securityContext = securityContexts.getIfPresent(scAddress);
-        return new Metadata(template, resourceDescription, securityContext, capabilities, recursive);
+        return new Metadata(template, resourceDescription, securityContext, capabilities, scope);
     }
 
     private List<Operation> rrdOperations(AddressTemplate template, Metadata metadata) {
@@ -218,12 +231,40 @@ public class MetadataRegistry {
 
         return builders.stream()
                 .map(builder -> {
-                    if (metadata.recursive) {
+                    if (metadata.requestedScope == Scope.RECURSIVE
+                            || metadata.requestedScope == Scope.OPTIONAL_RECURSIVE) {
                         builder.param(RECURSIVE_DEPTH, RRD_DEPTH);
                     }
                     builder.param(LOCALE, DEFAULT_LOCALE);
                     return builder.build();
                 })
                 .collect(toList());
+    }
+
+    // ------------------------------------------------------ inner classes
+
+    public enum Scope {
+        NORMAL(""),
+        RECURSIVE("recursive:/"),
+        OPTIONAL("opt:/"),
+        OPTIONAL_RECURSIVE("opt+recursive:/");
+
+        private final String prefix;
+
+        Scope(String prefix) {
+            this.prefix = prefix;
+        }
+
+        boolean recursive() {
+            return this == RECURSIVE || this == OPTIONAL_RECURSIVE;
+        }
+
+        boolean optional() {
+            return this == OPTIONAL || this == OPTIONAL_RECURSIVE;
+        }
+
+        String andTemplate(AddressTemplate template) {
+            return prefix + template;
+        }
     }
 }

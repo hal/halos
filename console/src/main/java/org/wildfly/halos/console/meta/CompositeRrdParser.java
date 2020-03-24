@@ -26,33 +26,29 @@ import org.wildfly.halos.console.dmr.Operation;
 import org.wildfly.halos.console.dmr.Property;
 import org.wildfly.halos.console.dmr.ResourceAddress;
 
-import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.ADDRESS;
-import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.HOST;
-import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.RESULT;
-import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.SERVER;
+import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.*;
 
 class CompositeRrdParser {
 
     private static final Logger logger = LoggerFactory.getLogger(CompositeRrdParser.class);
 
-    private final boolean recursive;
+    private final RrdResult rrdResult;
 
-    public CompositeRrdParser(boolean recursive) {
-        this.recursive = recursive;
+    public CompositeRrdParser() {
+        rrdResult = new RrdResult();
     }
 
     RrdResult parse(CompositeResult compositeResult) {
         int index = 0;
-        RrdResult rrdResult = new RrdResult();
-
         for (ModelNode step : compositeResult) {
             if (step.isFailure()) {
                 throw new MetadataException("Failed step 'step-" + (index + 1) + "' in composite rrd result: " +
                         step.getFailureDescription());
             }
 
+            Operation operation = compositeResult.operation(index);
+            boolean recursive = operation != null && operation.get(RECURSIVE_DEPTH).asInt(0) > 1;
             ModelNode stepResult = step.get(RESULT);
-
             if (stepResult.getType() == ModelType.LIST) {
                 // multiple rrd results each with its own address
                 for (ModelNode modelNode : stepResult.asList()) {
@@ -61,19 +57,17 @@ class CompositeRrdParser {
                         ResourceAddress operationAddress = operationAddress(compositeResult, index);
                         ResourceAddress resultAddress = new ResourceAddress(modelNode.get(ADDRESS));
                         ResourceAddress resolvedAddress = makeFqAddress(operationAddress, resultAddress);
-
-                        new SingleRrdParser(rrdResult, recursive).parse(resolvedAddress, result);
+                        new SingleRrdParser(rrdResult).parse(resolvedAddress, result, recursive);
                     }
                 }
 
             } else {
                 // a single rrd result
                 ResourceAddress address = operationAddress(compositeResult, index);
-                new SingleRrdParser(rrdResult, recursive).parse(address, stepResult);
+                new SingleRrdParser(rrdResult).parse(address, stepResult, recursive);
             }
             index++;
         }
-
         return rrdResult;
     }
 

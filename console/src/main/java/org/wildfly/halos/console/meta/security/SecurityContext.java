@@ -15,8 +15,6 @@
  */
 package org.wildfly.halos.console.meta.security;
 
-import jsinterop.annotations.JsIgnore;
-import jsinterop.annotations.JsProperty;
 import org.wildfly.halos.console.dmr.ModelNode;
 
 import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.*;
@@ -25,7 +23,7 @@ import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.*;
 public class SecurityContext extends ModelNode {
 
     /** A security context with hardcoded permissions to read resources, write and execute operations are not allowed. */
-    public static final SecurityContext READ_ONLY = new SecurityContext(new ModelNode()) {
+    public static final SecurityContext READ_ONLY = new SecurityContext(new ModelNode(), false) {
         @Override
         public boolean isReadable() {
             return true;
@@ -53,7 +51,7 @@ public class SecurityContext extends ModelNode {
     };
 
     /** A security context with hardcoded permissions to read, write and execute any resource. */
-    public static final SecurityContext RWX = new SecurityContext(new ModelNode()) {
+    public static final SecurityContext RWX = new SecurityContext(new ModelNode(), false) {
         @Override
         public boolean isReadable() {
             return true;
@@ -80,30 +78,25 @@ public class SecurityContext extends ModelNode {
         }
     };
 
-    @JsIgnore
-    public SecurityContext(ModelNode payload) {
+    public final boolean recursive;
+
+    public SecurityContext(ModelNode payload, boolean recursive) {
+        this.recursive = recursive;
         set(payload);
     }
 
-    /**
-     * @return whether the security context is readable
-     */
-    @JsProperty
+    /** @return whether the security context is readable */
     public boolean isReadable() {
         return get(READ).asBoolean();
     }
 
-    /**
-     * @return whether the security context is writable
-     */
-    @JsProperty
+    /** @return whether the security context is writable */
     public boolean isWritable() {
         return get(WRITE).asBoolean();
     }
 
     /**
      * @param attribute The attribute to check.
-     *
      * @return whether the attribute is readable
      */
     public boolean isReadable(String attribute) {
@@ -114,7 +107,6 @@ public class SecurityContext extends ModelNode {
 
     /**
      * @param attribute The attribute to check.
-     *
      * @return whether the attribute is writable
      */
     public boolean isWritable(String attribute) {
@@ -125,7 +117,6 @@ public class SecurityContext extends ModelNode {
 
     /**
      * @param operation The operation to check.
-     *
      * @return whether the operation is executable
      */
     public boolean isExecutable(String operation) {
