@@ -15,23 +15,21 @@
  */
 package org.wildfly.halos.console.meta.security;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.google.common.base.Splitter;
-
-import static com.google.common.base.Strings.emptyToNull;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.stream.Collectors.joining;
+import static org.wildfly.halos.console.util.Strings.emptyToNull;
 
 /** A set of {@linkplain Constraint constraints} with an operator. */
 public class Constraints implements Iterable<Constraint> {
 
     public enum Operator {
         AND("&"), OR("|");
-
 
         private final String operator;
 
@@ -74,9 +72,7 @@ public class Constraints implements Iterable<Constraint> {
         LinkedHashSet<Constraint> set = new LinkedHashSet<>();
         set.add(first);
         if (rest != null) {
-            for (Constraint constraint : rest) {
-                set.add(constraint);
-            }
+            Collections.addAll(set, rest);
         }
         return new Constraints(set, Operator.OR);
     }
@@ -106,10 +102,7 @@ public class Constraints implements Iterable<Constraint> {
             } else {
                 operator = Operator.AND;
             }
-            Iterable<String> values = Splitter.on(operator.operator)
-                    .omitEmptyStrings()
-                    .trimResults()
-                    .split(input);
+            String[] values = input.split(operator.operator);
             LinkedHashSet<Constraint> constraints = new LinkedHashSet<>();
             for (String value : values) {
                 try {

@@ -1,4 +1,4 @@
-package org.wildfly.halos.console.dispatch;
+package org.wildfly.halos.console.dmr;
 
 public class DispatcherException extends RuntimeException {
 

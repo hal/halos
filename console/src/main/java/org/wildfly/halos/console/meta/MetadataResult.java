@@ -2,6 +2,7 @@ package org.wildfly.halos.console.meta;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
@@ -21,9 +22,7 @@ public class MetadataResult {
         result.forEach(action);
     }
 
-    boolean allPresent() {
-        return result.values().stream().allMatch(Metadata::allPresent);
-    }
+    public Set<Map.Entry<AddressTemplate, Metadata>> entrySet() {return result.entrySet();}
 
     Metadata put(AddressTemplate template, Metadata metadata) {
         return result.put(template, metadata);

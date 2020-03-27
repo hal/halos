@@ -19,34 +19,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.wildfly.halos.console.config.Instance;
-import org.wildfly.halos.console.config.Instances;
 import org.wildfly.halos.console.meta.AddressTemplate;
-import org.wildfly.halos.console.config.ManagementModel;
 
 /** Provides access to static fall-back capabilities for servers which don't support a capabilities-registry. */
 @Singleton
 public class Capabilities {
 
-    private final Instances instances;
     private final Map<String, Capability> registry;
 
-    @Inject
-    public Capabilities(Instances instances) {
-        this.instances = instances;
+    public Capabilities() {
         this.registry = new HashMap<>();
-    }
-
-    public boolean supportsSuggestions() {
-        for (Instance instance : instances) {
-            if (!ManagementModel.supportsCapabilitiesRegistry(instance.managementVersion)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /** Looks up a capability from the local cache. Returns an empty collection if no such capability was found. */

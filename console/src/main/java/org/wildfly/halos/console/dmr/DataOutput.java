@@ -15,7 +15,7 @@
  */
 package org.wildfly.halos.console.dmr;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import elemental2.core.ArrayBuffer;
 import elemental2.core.DataView;
@@ -37,8 +37,7 @@ class DataOutput {
         for (int i = 0; i < length; i++) {
             array[i] = bytes.getAt(i);
         }
-        //noinspection CharsetObjectCanBeUsed
-        return new String(array, Charset.forName("ISO-8859-1"));
+        return new String(array, StandardCharsets.ISO_8859_1);
     }
 
 

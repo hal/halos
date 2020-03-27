@@ -3,7 +3,8 @@ package org.wildfly.halos.proxy;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -16,24 +17,35 @@ import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.sasl.RealmCallback;
 
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.operators.multi.processors.UnicastProcessor;
 import org.jboss.as.controller.client.ModelControllerClient;
 import org.jboss.as.controller.client.Operation;
 import org.jboss.as.controller.client.helpers.ClientConstants;
 import org.jboss.dmr.ModelNode;
 import org.jboss.logging.Logger;
+import org.wildfly.halos.proxy.InstanceModification.Modification;
+
+import static java.util.Collections.unmodifiableList;
 
 /** Manages connections to the WildFly management endpoints and execute DMR operations. */
 @ApplicationScoped
-class Instances implements Iterable<Instance> {
+class Instances {
 
     private static final String REMOTE_HTTP = "remote+http";
     private static Logger log = Logger.getLogger("halos.proxy.dispatcher");
 
     private final SortedMap<Instance, ModelControllerClient> clients;
+    private final UnicastProcessor<InstanceModification> processor;
+    private final Multi<InstanceModification> modifications;
 
     @Inject
     Instances() {
         this.clients = new TreeMap<>();
+        this.processor = UnicastProcessor.create();
+        this.modifications = processor
+                .broadcast().toAllSubscribers()
+                .on().overflow().dropPreviousItems();
     }
 
     void register(Instance instance) throws ManagementException {
@@ -56,8 +68,10 @@ class Instances implements Iterable<Instance> {
                             }
                         }
                     });
-            clients.put(instance, client);
-            log.infof("Created client for %s", instance);
+            ModelControllerClient added = clients.put(instance, client);
+            Modification modification = added != null ? Modification.MODIFIED : Modification.ADDED;
+            processor.onNext(new InstanceModification(modification, instance.name));
+            log.infof("Registered client for %s.", instance);
         } catch (UnknownHostException e) {
             String error = String.format("Unable to connect to instance %s: %s", instance, e.getMessage());
             log.error(error);
@@ -65,7 +79,7 @@ class Instances implements Iterable<Instance> {
         }
     }
 
-    boolean unregister(String name) throws ManagementException {
+    void unregister(String name) throws ManagementException {
         Map.Entry<Instance, ModelControllerClient> entry = findByName(name);
         if (entry != null) {
             Instance instance = entry.getKey();
@@ -73,16 +87,15 @@ class Instances implements Iterable<Instance> {
             try {
                 client.close();
                 log.infof("Closed client for %s", instance);
-                return true;
             } catch (IOException e) {
                 String error = String.format("Unable to close client for %s: %s", instance, e.getMessage());
                 log.error(error);
                 throw new ManagementException(error, e);
             } finally {
                 clients.remove(instance);
+                processor.onNext(new InstanceModification(Modification.REMOVED, instance.name));
             }
         }
-        return false;
     }
 
     boolean isEmpty() {
@@ -93,14 +106,17 @@ class Instances implements Iterable<Instance> {
         return findByName(name) != null;
     }
 
-    @Override
-    public Iterator<Instance> iterator() {
-        return clients.keySet().iterator();
+    public List<Instance> instances() {
+        return unmodifiableList(new ArrayList<>(clients.keySet()));
+    }
+
+    Multi<InstanceModification> modifications() {
+        return modifications;
     }
 
     ModelNode execute(Operation operation) {
         ModelNode result = new ModelNode();
-        clients.forEach((instance, client) -> wrapResult(result, instance, client, operation));
+        clients.forEach((instance, client) -> executeAndWrap(client, operation, instance, result));
         return result;
     }
 
@@ -108,7 +124,7 @@ class Instances implements Iterable<Instance> {
         Map.Entry<Instance, ModelControllerClient> entry = findByName(name);
         if (entry != null) {
             ModelNode result = new ModelNode();
-            wrapResult(result, entry.getKey(), entry.getValue(), operation);
+            executeAndWrap(entry.getValue(), operation, entry.getKey(), result);
             return result;
         } else {
             log.errorf("Unable to find client for instance %1s. Did you register %1s?", name);
@@ -116,7 +132,8 @@ class Instances implements Iterable<Instance> {
         }
     }
 
-    private void wrapResult(ModelNode container, Instance instance, ModelControllerClient client, Operation operation) {
+    private void executeAndWrap(ModelControllerClient client, Operation operation,
+            Instance instance, ModelNode modelNode) {
         ModelNode result;
         try {
             result = client.execute(operation);
@@ -127,7 +144,7 @@ class Instances implements Iterable<Instance> {
             result.get(ClientConstants.OUTCOME).set("failed");
             result.get(ClientConstants.FAILURE_DESCRIPTION).set(e.getMessage());
         }
-        container.get(instance.name).set(result);
+        modelNode.get(instance.name).set(result);
     }
 
     private Map.Entry<Instance, ModelControllerClient> findByName(String name) {

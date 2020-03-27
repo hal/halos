@@ -16,18 +16,18 @@
 package org.wildfly.halos.console.meta;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Lists;
 import elemental2.promise.Promise;
+import jsinterop.base.Js;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wildfly.halos.console.dispatch.Dispatcher;
+import org.wildfly.halos.console.dmr.Dispatcher;
 import org.wildfly.halos.console.dmr.Composite;
 import org.wildfly.halos.console.dmr.CompositeResult;
 import org.wildfly.halos.console.dmr.ModelNode;
@@ -36,6 +36,7 @@ import org.wildfly.halos.console.dmr.ResourceAddress;
 import org.wildfly.halos.console.meta.capability.Capabilities;
 import org.wildfly.halos.console.meta.description.ResourceDescription;
 import org.wildfly.halos.console.meta.security.SecurityContext;
+import org.wildfly.halos.console.util.Lists;
 
 import static java.util.stream.Collectors.toList;
 import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.*;
@@ -46,8 +47,8 @@ public class MetadataRegistry {
 
     private static final int RRD_DEPTH = 3;
     private static final int BATCH_SIZE = 3;
-    private static final int RESOURCE_DESCRIPTION_SIZE = 250;
-    private static final int SECURITY_CONTEXT_SIZE = 300;
+    // private static final int RESOURCE_DESCRIPTION_SIZE = 250;
+    // private static final int SECURITY_CONTEXT_SIZE = 300;
     private static final String DEFAULT_LOCALE = "en";
     private static final CompositeResult OPTIONAL_COMPOSITE_RESULT = new CompositeResult(new Composite(),
             new ModelNode());
@@ -57,8 +58,8 @@ public class MetadataRegistry {
     private final StatementContext statementContext;
     private final SegmentResolvers resolvers;
     private final Capabilities capabilities;
-    private final Cache<ResourceAddress, ResourceDescription> resourceDescriptions;
-    private final Cache<ResourceAddress, SecurityContext> securityContexts;
+    private final Map<ResourceAddress, ResourceDescription> resourceDescriptions;
+    private final Map<ResourceAddress, SecurityContext> securityContexts;
 
     @Inject
     public MetadataRegistry(Dispatcher dispatcher, StatementContext statementContext, SegmentResolvers resolvers,
@@ -67,35 +68,41 @@ public class MetadataRegistry {
         this.statementContext = statementContext;
         this.resolvers = resolvers;
         this.capabilities = capabilities;
-        this.resourceDescriptions = CacheBuilder.newBuilder()
-                .maximumSize(RESOURCE_DESCRIPTION_SIZE)
-                .recordStats()
-                .removalListener(notification -> logger.debug("Remove {} from resource description cache: {}",
-                        notification.getKey(), notification.getCause()))
-                .build();
-        this.securityContexts = CacheBuilder.newBuilder()
-                .maximumSize(SECURITY_CONTEXT_SIZE)
-                .recordStats()
-                .removalListener(notification -> logger.debug("Remove {} from security context cache: {}",
-                        notification.getKey(), notification.getCause()))
-                .build();
+        this.resourceDescriptions = new HashMap<>();
+        // this.resourceDescriptions = CacheBuilder.newBuilder()
+        //         .maximumSize(RESOURCE_DESCRIPTION_SIZE)
+        //         .recordStats()
+        //         .removalListener(notification -> logger.debug("Remove {} from resource description cache: {}",
+        //                 notification.getKey(), notification.getCause()))
+        //         .build();
+        this.securityContexts = new HashMap<>();
+        // this.securityContexts = CacheBuilder.newBuilder()
+        //         .maximumSize(SECURITY_CONTEXT_SIZE)
+        //         .recordStats()
+        //         .removalListener(notification -> logger.debug("Remove {} from security context cache: {}",
+        //                 notification.getKey(), notification.getCause()))
+        //         .build();
     }
 
     // ------------------------------------------------------ find all
 
+    @SuppressWarnings("unchecked")
     public Promise<MetadataResult> findAll(MetadataRequest request) {
         MetadataResult result = failSafeGet(request);
-        if (result.allPresent()) {
+        if (allPresent(request, result)) {
             return Promise.resolve(result);
 
         } else {
             List<Operation> operations = new ArrayList<>();
             List<Operation> optionalOperations = new ArrayList<>();
-            result.forEach((template, metadata) -> {
-                if (metadata.requestedScope.optional()) {
-                    optionalOperations.addAll(rrdOperations(template, metadata));
-                } else {
-                    operations.addAll(rrdOperations(template, metadata));
+            request.forEach((template, scope) -> {
+                Metadata metadata = result.get(template);
+                if (!allPresent(metadata, scope)) {
+                    if (scope.optional()) {
+                        optionalOperations.addAll(rrdOperations(template, metadata, scope));
+                    } else {
+                        operations.addAll(rrdOperations(template, metadata, scope));
+                    }
                 }
             });
             if (operations.isEmpty() && optionalOperations.isEmpty()) {
@@ -112,20 +119,20 @@ public class MetadataRegistry {
                             .execute(new Composite(operations))
                             .catch_(error -> Promise.resolve(OPTIONAL_COMPOSITE_RESULT)))
                     .forEach(promises::add);
-            //noinspection unchecked
-            Promise<CompositeResult>[] allPromises = promises.toArray(new Promise[0]);
-            return Promise.all(allPromises)
-                    .then(results -> {
-                        for (CompositeResult compositeResult : results) {
-                            if (compositeResult != OPTIONAL_COMPOSITE_RESULT) {
-                                RrdResult rrdResult = new CompositeRrdParser().parse(compositeResult);
-                                resourceDescriptions.putAll(rrdResult.resourceDescriptions);
-                                securityContexts.putAll(rrdResult.securityContexts);
-                            }
-                        }
-                        result.replaceAll((template, metadata) -> get(template)); // use get now instead of failSafeGet
-                        return Promise.resolve(result);
-                    });
+            // Use object to avoid ClassCastException, since CompositeResult is not a JS type!
+            Promise<Object>[] objects = promises.toArray(new Promise[0]);
+            return Promise.all(objects).then(results -> {
+                CompositeResult[] compositeResults = Js.uncheckedCast(results);
+                for (CompositeResult compositeResult : compositeResults) {
+                    if (compositeResult != OPTIONAL_COMPOSITE_RESULT) {
+                        RrdResult rrdResult = new CompositeRrdParser().parse(compositeResult);
+                        resourceDescriptions.putAll(rrdResult.resourceDescriptions);
+                        securityContexts.putAll(rrdResult.securityContexts);
+                    }
+                }
+                result.replaceAll((template, metadata) -> get(template)); // use get now instead of failSafeGet
+                return Promise.resolve(result);
+            });
         }
     }
 
@@ -136,12 +143,12 @@ public class MetadataRegistry {
     }
 
     public Promise<Metadata> find(AddressTemplate template, Scope scope) {
-        Metadata metadata = failSafeGet(template, scope);
-        if (metadata.allPresent()) {
+        Metadata metadata = failSafeGet(template);
+        if (allPresent(metadata, scope)) {
             return Promise.resolve(metadata);
 
         } else {
-            List<Operation> operations = rrdOperations(template, metadata);
+            List<Operation> operations = rrdOperations(template, metadata, scope);
             if (operations.isEmpty()) {
                 throw new MetadataException("Unable to create r-r-d operation for " + scope.andTemplate(template));
             } else if (operations.size() == 1) {
@@ -171,8 +178,8 @@ public class MetadataRegistry {
     }
 
     public Metadata get(AddressTemplate template, Scope scope) {
-        Metadata metadata = failSafeGet(template, scope);
-        if (!metadata.allPresent()) {
+        Metadata metadata = failSafeGet(template);
+        if (allPresent(metadata, scope)) {
             if (metadata.description == null) {
                 throw new MetadataException("No resource description found for " + scope.andTemplate(template));
             }
@@ -187,21 +194,41 @@ public class MetadataRegistry {
 
     private MetadataResult failSafeGet(MetadataRequest request) {
         MetadataResult result = new MetadataResult();
-        request.forEach((template, scope) -> result.put(template, failSafeGet(template, scope)));
+        request.forEach((template, scope) -> result.put(template, failSafeGet(template)));
         return result;
     }
 
-    private Metadata failSafeGet(AddressTemplate template, Scope scope) {
+    private Metadata failSafeGet(AddressTemplate template) {
         ResourceAddress rdAddress = template.resolve(statementContext, resolvers.resourceDescriptionResolver());
         ResourceAddress scAddress = template.resolve(statementContext, resolvers.securityContextResolver());
-        ResourceDescription resourceDescription = resourceDescriptions.getIfPresent(rdAddress);
-        SecurityContext securityContext = securityContexts.getIfPresent(scAddress);
-        return new Metadata(template, resourceDescription, securityContext, capabilities, scope);
+        ResourceDescription resourceDescription = resourceDescriptions.get(rdAddress);
+        SecurityContext securityContext = securityContexts.get(scAddress);
+        return new Metadata(template, resourceDescription, securityContext, capabilities);
     }
 
-    private List<Operation> rrdOperations(AddressTemplate template, Metadata metadata) {
+    private boolean allPresent(MetadataRequest request, MetadataResult result) {
+        for (Map.Entry<AddressTemplate, Scope> entry : request.entrySet()) {
+            AddressTemplate template = entry.getKey();
+            Scope scope = entry.getValue();
+            Metadata metadata = result.get(template);
+            if (!allPresent(metadata, scope)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean allPresent(Metadata metadata, Scope scope) {
+        boolean notNull = metadata.description != null && metadata.securityContext != null;
+        if (scope.recursive()) {
+            return notNull && metadata.description.recursive && metadata.securityContext.recursive;
+        }
+        return notNull;
+    }
+
+    private List<Operation> rrdOperations(AddressTemplate template, Metadata metadata, Scope scope) {
         List<Operation.Builder> builders = new ArrayList<>();
-        if (metadata.nothingPresent()) {
+        if (metadata.description == null && metadata.securityContext == null) {
             ResourceAddress rdAddress = template.resolve(statementContext, resolvers.resourceDescriptionResolver());
             ResourceAddress scAddress = template.resolve(statementContext, resolvers.securityContextResolver());
             if (rdAddress.equals(scAddress)) {
@@ -231,8 +258,7 @@ public class MetadataRegistry {
 
         return builders.stream()
                 .map(builder -> {
-                    if (metadata.requestedScope == Scope.RECURSIVE
-                            || metadata.requestedScope == Scope.OPTIONAL_RECURSIVE) {
+                    if (scope.recursive()) {
                         builder.param(RECURSIVE_DEPTH, RRD_DEPTH);
                     }
                     builder.param(LOCALE, DEFAULT_LOCALE);

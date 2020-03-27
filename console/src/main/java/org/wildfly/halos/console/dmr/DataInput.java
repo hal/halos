@@ -28,7 +28,6 @@ class DataInput {
         this.bytes = bytes;
     }
 
-
     // ------------------------------------------------------ read a-z
 
     private int read() {

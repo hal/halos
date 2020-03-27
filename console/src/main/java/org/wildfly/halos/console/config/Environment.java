@@ -15,11 +15,31 @@
  */
 package org.wildfly.halos.console.config;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /** Class holding information about halOS. */
 @Singleton
 public class Environment {
 
-    public Version halosVersion;
+    private final Endpoints endpoints;
+    public final Version version;
+    public final boolean cors;
+    public final String proxyUrl;
+    public final String restVersion;
+    public AccessControlProvider accessControlProvider;
+
+    @Inject
+    public Environment(Endpoints endpoints) {
+        this.endpoints = endpoints;
+        this.cors = Boolean.getBoolean(System.getProperty("halos.cors", "true"));
+        this.proxyUrl = System.getProperty("halos.proxy.url");
+        this.restVersion = System.getProperty("halos.rest.version");
+        this.version = Version.parseVersion(System.getProperty("halos.rest.version"));
+        this.accessControlProvider = AccessControlProvider.SIMPLE;
+    }
+
+    public void init() {
+        // TODO fetch environment from servers
+    }
 }

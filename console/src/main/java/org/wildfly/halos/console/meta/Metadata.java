@@ -15,9 +15,7 @@
  */
 package org.wildfly.halos.console.meta;
 
-import org.wildfly.halos.console.config.Instances;
 import org.wildfly.halos.console.dmr.ModelNode;
-import org.wildfly.halos.console.meta.MetadataRegistry.Scope;
 import org.wildfly.halos.console.meta.capability.Capabilities;
 import org.wildfly.halos.console.meta.description.ResourceDescription;
 import org.wildfly.halos.console.meta.security.SecurityContext;
@@ -29,54 +27,36 @@ import static org.wildfly.halos.console.meta.security.SecurityContext.RWX;
 public class Metadata {
 
     public static Metadata empty() {
-        return new Metadata(ROOT, new ResourceDescription(new ModelNode(), false), RWX,
-                new Capabilities(null), Scope.NORMAL);
+        return new Metadata(ROOT, new ResourceDescription(new ModelNode(), false), RWX, new Capabilities());
     }
 
     // public static Metadata staticDescription(TextResource description) {
     //     return Metadata.staticDescription(StaticResourceDescription.from(description));
     // }
 
-    /** Constructs a Metadata with read-write-execution permissions, and a non-working capabilities object. */
+    /** Constructs a Metadata with read-write-execution permissions. */
     public static Metadata staticDescription(ResourceDescription description) {
-        return new Metadata(ROOT, new ResourceDescription(description, false), RWX,
-                new Capabilities(null), Scope.NORMAL);
-    }
-
-    /**
-     * Constructs a Metadata with read-write-execution permissions, and a working capabilities object based on the
-     * environment object.
-     */
-    public static Metadata staticDescription(ResourceDescription description, Instances instances) {
-        return new Metadata(ROOT, new ResourceDescription(description, false), RWX,
-                new Capabilities(instances), Scope.NORMAL);
+        return new Metadata(ROOT, new ResourceDescription(description, false), RWX, new Capabilities());
     }
 
     public final AddressTemplate template;
     public final ResourceDescription description;
     public final SecurityContext securityContext;
     public final Capabilities capabilities;
-    final Scope requestedScope;
 
     Metadata(AddressTemplate template, ResourceDescription description, SecurityContext securityContext,
-            Capabilities capabilities, Scope requestedScope) {
+            Capabilities capabilities) {
         this.template = template;
         this.description = description;
         this.securityContext = securityContext;
         this.capabilities = capabilities;
-        this.requestedScope = requestedScope;
     }
 
-    boolean nothingPresent() {
-        return description == null && securityContext == null;
-    }
-
-    boolean allPresent() {
-        boolean notNull = description != null && securityContext != null;
-        if (requestedScope == Scope.RECURSIVE || requestedScope == Scope.OPTIONAL_RECURSIVE) {
-            return notNull && description.recursive && securityContext.recursive;
-        } else {
-            return notNull;
-        }
+    @Override
+    public String toString() {
+        return "Metadata(" + template + '\n' +
+                "resource description\n" + description + '\n' +
+                "security context\n" + securityContext +
+                ")";
     }
 }

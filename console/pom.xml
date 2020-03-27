@@ -30,7 +30,10 @@
     <packaging>war</packaging>
 
     <properties>
-        <halos.management-endpoint>http://localhost:8080/v1/management</halos.management-endpoint>
+        <halos.cors>true</halos.cors>
+        <halos.proxy.url>http://localhost:8080</halos.proxy.url>
+        <halos.rest.version>v1</halos.rest.version>
+        <halos.version>${project.version}</halos.version>
         <j2cl-compilation.level>BUNDLE</j2cl-compilation.level>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -62,6 +65,7 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- PatternFly -->
         <dependency>
             <groupId>org.patternfly</groupId>
             <artifactId>patternfly-java</artifactId>
@@ -72,6 +76,8 @@
             <artifactId>patternfly__patternfly</artifactId>
             <version>${patternfly.html.version}</version>
         </dependency>
+
+        <!-- Crysknife -->
         <dependency>
             <groupId>org.treblereel.gwt.crysknife</groupId>
             <artifactId>crysknife-annotations</artifactId>
@@ -89,14 +95,24 @@
             <version>${crysknife.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>org.treblereel.gwt.crysknife</groupId>
+            <artifactId>navigation-api</artifactId>
+            <version>${crysknife.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.dominokit</groupId>
-            <artifactId>domino-slf4j-logger</artifactId>
+            <groupId>org.treblereel.gwt.crysknife</groupId>
+            <artifactId>navigation-generator</artifactId>
+            <version>${crysknife.version}</version>
+            <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.auto</groupId>
+            <artifactId>auto-common</artifactId>
+            <version>0.10</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Elemento -->
         <dependency>
             <groupId>org.jboss.elemento</groupId>
             <artifactId>elemento-core</artifactId>
@@ -123,11 +139,8 @@
             <artifactId>elemental2-webstorage</artifactId>
             <version>${elemental2.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
+
+        <!-- GWT -->
         <dependency>
             <groupId>org.gwtproject.core</groupId>
             <artifactId>gwt-core</artifactId>
@@ -138,6 +151,17 @@
                     <groupId>com.google.elemental2</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.dominokit</groupId>
+            <artifactId>domino-slf4j-logger</artifactId>
         </dependency>
     </dependencies>
 
@@ -211,7 +235,6 @@
                     </execution>
                 </executions>
             </plugin>
-<!--
             <plugin>
                 <groupId>com.vertispan.j2cl</groupId>
                 <artifactId>j2cl-maven-plugin</artifactId>
@@ -237,11 +260,13 @@
                     <entrypoint>org.wildfly.halos.console.Console</entrypoint>
                     <initialScriptFilename>halos.js</initialScriptFilename>
                     <defines>
-                        <halos.managementEndpoint>${halos.management-endpoint}</halos.managementEndpoint>
+                        <halos.cors>${halos.cors}</halos.cors>
+                        <halos.proxy.url>${halos.proxy.url}</halos.proxy.url>
+                        <halos.rest.version>${halos.rest.version}</halos.rest.version>
+                        <halos.version>${halos.version}</halos.version>
                     </defines>
                 </configuration>
             </plugin>
--->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -285,7 +310,8 @@
         <profile>
             <id>prod</id>
             <properties>
-                <halos.management-endpoint>/v1/management</halos.management-endpoint>
+                <halos.cors>false</halos.cors>
+                <halos.proxy.url/>
                 <j2cl-compilation.level>ADVANCED</j2cl-compilation.level>
             </properties>
         </profile>
@@ -297,7 +323,7 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>daily</updatePolicy>
                 <checksumPolicy>fail</checksumPolicy>
             </snapshots>
         </repository>
@@ -307,7 +333,7 @@
             <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>daily</updatePolicy>
                 <checksumPolicy>fail</checksumPolicy>
             </snapshots>
         </repository>
@@ -322,22 +348,10 @@
             <url>https://repo.vertispan.com/j2cl/</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>daily</updatePolicy>
                 <checksumPolicy>fail</checksumPolicy>
             </snapshots>
         </repository>
-        <!--
-                <repository>
-                    <id>vertispan-gwt3-snapshots</id>
-                    <name>Vertispan Snapshots</name>
-                    <url>https://repo.vertispan.com/gwt-snapshot/</url>
-                    <snapshots>
-                        <enabled>true</enabled>
-                        <updatePolicy>always</updatePolicy>
-                        <checksumPolicy>fail</checksumPolicy>
-                    </snapshots>
-                </repository>
-        -->
     </repositories>
 
     <pluginRepositories>

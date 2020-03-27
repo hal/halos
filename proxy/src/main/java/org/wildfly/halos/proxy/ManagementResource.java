@@ -38,7 +38,7 @@ public class ManagementResource {
                 ModelNode result = instances.execute(operation);
                 return Response.ok(result).build();
             } catch (IOException e) {
-                return Response.serverError().entity("Unable to read operation: " + e.getMessage()).build();
+                return Response.serverError().entity("Unable to execute operation: " + e.getMessage()).build();
             }
         }
     }
@@ -57,7 +57,7 @@ public class ManagementResource {
                     return Response.status(Status.NOT_FOUND).entity("Instance " + name + " not found.").build();
                 }
             } catch (IOException e) {
-                return Response.serverError().entity("Unable to read operation: " + e.getMessage()).build();
+                return Response.serverError().entity("Unable to execute operation: " + e.getMessage()).build();
             }
         } else {
             return Response.status(Status.NOT_FOUND).entity("Instance " + name + " not found").build();

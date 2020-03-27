@@ -20,7 +20,7 @@ import java.util.BitSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wildfly.halos.console.config.AccessControlProvider;
-import org.wildfly.halos.console.config.Instance;
+import org.wildfly.halos.console.config.Environment;
 
 import static org.wildfly.halos.console.meta.security.Constraints.Operator.AND;
 
@@ -46,16 +46,16 @@ public class AuthorisationDecision {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthorisationDecision.class);
 
-    private final Instance instance;
+    private final Environment environment;
     private final SecurityContext securityContext;
 
-    public AuthorisationDecision(Instance instance, SecurityContext securityContext) {
-        this.instance = instance;
+    public AuthorisationDecision(Environment environment, SecurityContext securityContext) {
+        this.environment = environment;
         this.securityContext = securityContext;
     }
 
     public boolean isAllowed(Constraints constraints) {
-        if (instance.accessControlProvider == AccessControlProvider.SIMPLE || constraints.isEmpty()) {
+        if (environment.accessControlProvider == AccessControlProvider.SIMPLE || constraints.isEmpty()) {
             return true;
         }
 
@@ -75,7 +75,7 @@ public class AuthorisationDecision {
     }
 
     public boolean isAllowed(Constraint constraint) {
-        if (instance.accessControlProvider == AccessControlProvider.SIMPLE) {
+        if (environment.accessControlProvider == AccessControlProvider.SIMPLE) {
             return true;
         }
 

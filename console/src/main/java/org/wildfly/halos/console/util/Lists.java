@@ -4,15 +4,13 @@ import java.math.RoundingMode;
 import java.util.AbstractList;
 import java.util.List;
 
-import com.google.common.math.IntMath;
-
 import static org.wildfly.halos.console.util.Preconditions.checkArgument;
 import static org.wildfly.halos.console.util.Preconditions.checkElementIndex;
 import static org.wildfly.halos.console.util.Preconditions.checkNotNull;
 
-public class Lists {
+public final class Lists {
 
-    public <T> List<List<T>> partition(List<T> list, int size) {
+    public static <T> List<List<T>> partition(List<T> list, int size) {
         checkNotNull(list);
         checkArgument(size > 0);
         return new Partition<>(list, size);
@@ -45,5 +43,8 @@ public class Lists {
         public boolean isEmpty() {
             return list.isEmpty();
         }
+    }
+
+    private Lists() {
     }
 }

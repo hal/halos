@@ -17,11 +17,14 @@ package org.wildfly.halos.console.dmr;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
+
+import elemental2.core.ArrayBuffer;
 
 import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.FAILURE_DESCRIPTION;
 import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.OUTCOME;
@@ -34,23 +37,13 @@ import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.SUCCESS;
  */
 public class ModelNode implements Cloneable {
 
-    /**
-     * Creates a new node from a base64 encoded string
-     *
-     * @param encoded The base64 encoded string.
-     * @return the new model node
-     */
+    /** Creates a new node from a base64 encoded data */
     public static ModelNode fromBase64(String encoded) {
         // Bloody IE can't cope with line breaks when decoding base64!
         // String safeEncoded = CharMatcher.breakingWhitespace().removeFrom(encoded);
+        String decoded = Base64.decode(encoded);
         ModelNode node = new ModelNode();
-        if (encoded != null && encoded.length() != 0) {
-            String safeEncoded = encoded.trim();
-            safeEncoded = safeEncoded.replace("\n", "");
-            safeEncoded = safeEncoded.replace("\r", "");
-            String decoded = Base64.decode(safeEncoded);
-            node.readExternal(new DataInput(decoded.getBytes()));
-        }
+        node.readExternal(new DataInput(decoded.getBytes(StandardCharsets.ISO_8859_1)));
         return node;
     }
 

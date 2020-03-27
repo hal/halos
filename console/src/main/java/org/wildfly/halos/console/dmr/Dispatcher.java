@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.halos.console.dispatch;
+package org.wildfly.halos.console.dmr;
 
-import java.util.Objects;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -25,28 +25,29 @@ import elemental2.dom.RequestInit;
 import elemental2.promise.Promise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wildfly.halos.console.dmr.Composite;
-import org.wildfly.halos.console.dmr.CompositeResult;
-import org.wildfly.halos.console.dmr.ModelNode;
-import org.wildfly.halos.console.dmr.Operation;
+import org.wildfly.halos.console.config.Endpoints;
+import org.wildfly.halos.console.config.Environment;
 
 import static elemental2.dom.DomGlobal.fetch;
-import static org.wildfly.halos.console.dispatch.RequestHeader.ACCEPT;
-import static org.wildfly.halos.console.dispatch.RequestHeader.CONTENT_TYPE;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.wildfly.halos.console.dmr.ModelDescriptionConstants.RESULT;
 
 /** Executes operations against the management endpoint. */
 @Singleton
 public class Dispatcher {
 
-    static final String APPLICATION_DMR_ENCODED = "application/dmr-encoded";
-    private static final Logger logger = LoggerFactory.getLogger(Dispatcher.class);
+    private static final String ACCEPT = "Accept";
+    private static final String APPLICATION_DMR_ENCODED = "application/dmr-encoded";
+    private static final String CONTENT_TYPE = "Content-Type";
 
-    // private final Endpoints endpoints;
+    private final Environment environment;
+    private final Endpoints endpoints;
 
     @Inject
-    public Dispatcher() {
-        // this.endpoints = endpoints;
+    public Dispatcher(Environment environment, Endpoints endpoints) {
+        this.environment = environment;
+        this.endpoints = endpoints;
     }
 
     // ------------------------------------------------------ execute
@@ -56,27 +57,28 @@ public class Dispatcher {
     }
 
     public Promise<CompositeResult> execute(Composite composite) {
-        return dmr(composite).then(modelNode -> Promise.resolve(compositeResult(composite, modelNode)));
+        return dmr(composite).then(modelNode -> {
+            ModelNode steps = modelNode.get(RESULT);
+            return Promise.resolve(new CompositeResult(composite, steps));
+        });
     }
 
-    private CompositeResult compositeResult(Composite composite, ModelNode modelNode) {
-        return new CompositeResult(composite, modelNode.get(RESULT));
-    }
-
-    // ------------------------------------------------------ dmr
+    // ------------------------------------------------------ internals
 
     private Promise<ModelNode> dmr(Operation operation) {
         Headers headers = new Headers();
-        headers.append(ACCEPT.header(), APPLICATION_DMR_ENCODED);
-        headers.append(CONTENT_TYPE.header(), APPLICATION_DMR_ENCODED);
+        headers.append(ACCEPT, APPLICATION_DMR_ENCODED);
+        headers.append(CONTENT_TYPE, APPLICATION_DMR_ENCODED);
 
         RequestInit request = RequestInit.create();
-        request.setMode("cors");
+        if (environment.cors) {
+            request.setMode("cors");
+        }
         request.setMethod("POST");
         request.setHeaders(headers);
         request.setBody(operation.toBase64String());
 
-        return fetch("http://localhost:8080/v1/management", request)
+        return fetch(endpoints.management, request)
                 .then(response -> {
                     if (response.ok) {
                         return response.text();

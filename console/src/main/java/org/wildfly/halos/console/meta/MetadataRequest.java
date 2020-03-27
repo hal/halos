@@ -2,6 +2,7 @@ package org.wildfly.halos.console.meta;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 import static java.util.stream.Collectors.joining;
@@ -44,5 +45,9 @@ public class MetadataRequest {
 
     public void forEach(BiConsumer<? super AddressTemplate, ? super MetadataRegistry.Scope> action) {
         request.forEach(action);
+    }
+
+    public Set<Map.Entry<AddressTemplate, MetadataRegistry.Scope>> entrySet() {
+        return request.entrySet();
     }
 }
