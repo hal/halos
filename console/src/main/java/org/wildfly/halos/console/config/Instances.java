@@ -79,11 +79,9 @@ public class Instances {
                     }
                 }
             }
-            return null;
         };
         eventSource.onerror = error -> {
             logger.error("Error subscribing to instance modifications");
-            return null;
         };
     }
 
