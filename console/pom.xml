@@ -131,12 +131,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>com.google.auto</groupId>
-            <artifactId>auto-common</artifactId>
-            <version>0.10</version>
-            <scope>provided</scope>
-        </dependency>
 
         <!-- Elemento -->
         <dependency>
@@ -351,6 +345,16 @@
             <id>vertispan-j2cl-snapshots</id>
             <name>Vertispan hosted artifacts-snapshots</name>
             <url>https://repo.vertispan.com/j2cl/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>vertispan-snapshots</id>
+            <name>Vertispan Snapshots</name>
+            <url>https://repo.vertispan.com/gwt-snapshot/</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>daily</updatePolicy>
