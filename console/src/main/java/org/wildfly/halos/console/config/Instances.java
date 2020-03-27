@@ -3,7 +3,6 @@ package org.wildfly.halos.console.config;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -16,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import static elemental2.dom.DomGlobal.fetch;
 import static java.util.Arrays.asList;
+import static org.wildfly.halos.console.util.Strings.emptyToNull;
 
 @Singleton
 public class Instances {
@@ -50,7 +50,12 @@ public class Instances {
                     return Promise.resolve("");
                 })
                 .then(payload -> {
-                    instances.addAll(asList(payload.split(",")));
+                    if (emptyToNull(payload) != null) {
+                        String[] parts = payload.split(",");
+                        if (parts.length != 0) {
+                            instances.addAll(asList(parts));
+                        }
+                    }
                     setPrimary();
                     return null;
                 });
@@ -63,27 +68,23 @@ public class Instances {
 
         eventSource.onmessage = event -> {
             if (event.data != null) {
-                String[] data = event.data.split(",");
-                if (data.length == 2) {
-                    if ("ADDED".equals(data[0])) {
-                        instances.add(data[1]);
-                    } else if ("REMOVED".equals(data[0])) {
-                        instances.remove(data[1]);
+                String payload = String.valueOf(event.data);
+                String[] parts = payload.split(",");
+                if (parts.length == 2) {
+                    if ("ADDED".equals(parts[0])) {
+                        instances.add(parts[1]);
+                    } else if ("REMOVED".equals(parts[0])) {
+                        instances.remove(parts[1]);
                         setPrimary();
                     }
                 }
             }
+            return null;
         };
-        eventSource.onerror = error ->
-                logger.error("Error subscribing to instance modifications after: {}. Please reload halOS", error);
-    }
-
-    @PreDestroy
-    public void shutdown() {
-        if (eventSource != null) {
-            eventSource.close();
-            eventSource = null;
-        }
+        eventSource.onerror = error -> {
+            logger.error("Error subscribing to instance modifications");
+            return null;
+        };
     }
 
     private void setPrimary() {

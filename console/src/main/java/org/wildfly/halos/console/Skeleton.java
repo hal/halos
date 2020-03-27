@@ -21,7 +21,7 @@ public class Skeleton implements IsElement<HTMLDivElement> {
     private Page page;
 
     @Inject
-    public Skeleton(org.treblereel.gwt.crysknife.navigation.client.local.Navigation mainContent) {
+    public Skeleton(/*org.treblereel.gwt.crysknife.navigation.client.local.Navigation mainContent*/) {
         Navigation navigation = Navigation.vertical(false)
                 .add(new NavigationItem(Ids.SERVER_ITEM, "Server", "#"))
                 .add(new NavigationItem(Ids.RESOURCES_ITEM, "Resources", "#"))
@@ -31,7 +31,7 @@ public class Skeleton implements IsElement<HTMLDivElement> {
                 .add(header("halOS", "#"))
                 .add(sidebar().add(navigation))
                 .add(main(Ids.ROOT_CONTAINER)
-                        .add(mainContent.getContentPanel()));
+                        /*.add(mainContent.getContentPanel())*/);
     }
 
     @Override

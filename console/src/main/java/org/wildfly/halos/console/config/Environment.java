@@ -22,7 +22,6 @@ import javax.inject.Singleton;
 @Singleton
 public class Environment {
 
-    private final Endpoints endpoints;
     public final Version version;
     public final boolean cors;
     public final String proxyUrl;
@@ -30,16 +29,11 @@ public class Environment {
     public AccessControlProvider accessControlProvider;
 
     @Inject
-    public Environment(Endpoints endpoints) {
-        this.endpoints = endpoints;
-        this.cors = Boolean.getBoolean(System.getProperty("halos.cors", "true"));
-        this.proxyUrl = System.getProperty("halos.proxy.url");
-        this.restVersion = System.getProperty("halos.rest.version");
-        this.version = Version.parseVersion(System.getProperty("halos.rest.version"));
+    public Environment() {
+        this.cors = Boolean.parseBoolean(System.getProperty("halos.cors", "true"));
+        this.proxyUrl = System.getProperty("halos.proxy.url", "http://localhost:8080");
+        this.restVersion = System.getProperty("halos.rest.version", "v1");
+        this.version = Version.parseVersion(System.getProperty("halos.version", "0.0.1"));
         this.accessControlProvider = AccessControlProvider.SIMPLE;
-    }
-
-    public void init() {
-        // TODO fetch environment from servers
     }
 }

@@ -16,7 +16,6 @@
 package org.wildfly.halos.console.meta.security;
 
 import elemental2.core.JsRegExp;
-import elemental2.core.RegExpResult;
 import org.wildfly.halos.console.meta.AddressTemplate;
 
 import static org.wildfly.halos.console.meta.security.Target.ATTRIBUTE;
@@ -38,14 +37,13 @@ public class Constraint {
         if (!CONSTRAINT_REGEX.test(input)) {
             throw new IllegalArgumentException("Invalid constraint: " + input);
         }
-        RegExpResult result = CONSTRAINT_REGEX.exec(input);
+        String[] result = CONSTRAINT_REGEX.exec(input);
         if (result.length != 5) {
             throw new IllegalArgumentException("Invalid constraint: " + input);
         }
-        return new Constraint(AddressTemplate.of(result.getAt(2)), result.getAt(4),
-                Target.parse(result.getAt(3)), Permission.valueOf(result.getAt(1).toUpperCase()));
+        return new Constraint(AddressTemplate.of(result[2]), result[4],
+                Target.parse(result[3]), Permission.valueOf(result[1].toUpperCase()));
     }
-
 
     private static final JsRegExp CONSTRAINT_REGEX = new JsRegExp(
             "^(readable|writable|executable)\\(([\\w{}=*\\-\\/\\.]+)(:|@)([\\w\\-]+)\\)$"); //NON-NLS
