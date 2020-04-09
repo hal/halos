@@ -8,6 +8,7 @@ import org.jboss.elemento.IsElement;
 import org.patternfly.components.Navigation;
 import org.patternfly.components.NavigationItem;
 import org.patternfly.components.Page;
+import org.patternfly.resources.Theme;
 import org.wildfly.halos.console.resources.Ids;
 
 import static org.patternfly.components.Page.header;
@@ -29,7 +30,7 @@ public class Skeleton implements IsElement<HTMLDivElement> {
 
         page = page()
                 .add(header("halOS", "#"))
-                .add(sidebar().add(navigation))
+                .add(sidebar(Theme.DARK).add(navigation))
                 .add(main(Ids.ROOT_CONTAINER)
                         /*.add(mainContent.getContentPanel())*/);
     }

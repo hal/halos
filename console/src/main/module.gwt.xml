@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <inherits name="org.gwtproject.core.Core"/>
+    <inherits name="org.treblereel.gwt.crysknife.Crysknife"/>
+<!--    <inherits name="org.treblereel.gwt.crysknife.navigation.Navigation"/>-->
+    <inherits name="org.patternfly.PatternFly"/>
+
+    <entry-point class="org.wildfly.halos.console.Console"/>
+    <collapse-all-properties/>
+    <source path="console"/>
+</module>

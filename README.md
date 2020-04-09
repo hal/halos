@@ -29,7 +29,7 @@ The console is a [RIA](https://en.wikipedia.org/wiki/Rich_web_application) / [SP
 
 #### Technical Stack
 
-- GWT / J2CL
+- GWT
 - [Elemento](https://github.com/hal/elemento)
 - [Crysknife](https://github.com/treblereel/crysknife)
 - [PatternFly Java](https://github.com/patternfly-java/)

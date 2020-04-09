@@ -25,7 +25,6 @@ public class Instances {
     private final Environment environment;
     private final Endpoints endpoints;
     private final Set<String> instances;
-    private EventSource eventSource;
     public String primary;
 
     @Inject
@@ -64,7 +63,7 @@ public class Instances {
     public void subscribe() {
         EventSourceInit init = EventSourceInit.create();
         init.setWithCredentials(environment.cors);
-        eventSource = new EventSource(endpoints.instance + "/subscribe", init);
+        EventSource eventSource = new EventSource(endpoints.instance + "/subscribe", init);
 
         eventSource.onmessage = event -> {
             if (event.data != null) {
@@ -79,9 +78,11 @@ public class Instances {
                     }
                 }
             }
+            return null;
         };
         eventSource.onerror = error -> {
             logger.error("Error subscribing to instance modifications");
+            return null;
         };
     }
 

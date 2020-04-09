@@ -20,6 +20,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.jboss.elemento.Elements;
+import org.jboss.elemento.Id;
 
 /** A standard or scoped role used when RBAC is turned on. */
 public class Role {
@@ -114,7 +115,7 @@ public class Role {
 
     /** @return the unique ID of this role. */
     public String id() {
-        return Elements.buildId(name);
+        return Id.build(name);
     }
 
     /** @return true if this is a standard role, false otherwise. */

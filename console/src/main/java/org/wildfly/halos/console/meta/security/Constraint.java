@@ -16,7 +16,6 @@
 package org.wildfly.halos.console.meta.security;
 
 import elemental2.core.JsRegExp;
-import elemental2.core.RegExpResult;
 import org.wildfly.halos.console.meta.AddressTemplate;
 
 import static org.wildfly.halos.console.meta.security.Target.ATTRIBUTE;
@@ -35,6 +34,8 @@ public class Constraint {
 
     @SuppressWarnings("DuplicateStringLiteralInspection")
     public static Constraint parse(String input) throws IllegalArgumentException {
+        return null;
+/*
         if (!CONSTRAINT_REGEX.test(input)) {
             throw new IllegalArgumentException("Invalid constraint: " + input);
         }
@@ -44,6 +45,7 @@ public class Constraint {
         }
         return new Constraint(AddressTemplate.of(result.getAt(2)), result.getAt(4),
                 Target.parse(result.getAt(3)), Permission.valueOf(result.getAt(1).toUpperCase()));
+*/
     }
 
     private static final JsRegExp CONSTRAINT_REGEX = new JsRegExp(

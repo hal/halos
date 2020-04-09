@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright 2015-2016 Red Hat, Inc, and individual contributors.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~ https://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -27,27 +12,35 @@
 
     <artifactId>halos-console</artifactId>
     <name>halOS :: Console</name>
-    <packaging>war</packaging>
+    <packaging>gwt-app</packaging>
 
     <properties>
+        <!-- project / plugin related properties -->
+        <gwt.draftCompile>true</gwt.draftCompile>
+        <gwt.style>DETAILED</gwt.style>
         <halos.cors>true</halos.cors>
         <halos.proxy.url>http://localhost:8080</halos.proxy.url>
         <halos.rest.version>v1</halos.rest.version>
         <halos.version>${project.version}</halos.version>
-        <j2cl-compilation.level>BUNDLE</j2cl-compilation.level>
-        <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
 
-        <j2cl-plugin.version>0.13-SNAPSHOT</j2cl-plugin.version>
-        <properties.plugin>1.0.0</properties.plugin>
-        <tomcat7-plugin.version>2.2</tomcat7-plugin.version>
+        <!-- plugin versions -->
+        <frontend.plugin.version>1.9.1</frontend.plugin.version>
+        <gwt.plugin.version>1.0.0</gwt.plugin.version>
 
+        <!-- dependency versions -->
         <crysknife.version>0.1-SNAPSHOT</crysknife.version>
         <domino.version>1.0-rc.5-SNAPSHOT</domino.version>
+        <elemental2.version>1.0.0-RC1</elemental2.version>
         <elemento.version>HEAD-SNAPSHOT</elemento.version>
+        <gwt-com.version>HEAD-SNAPSHOT</gwt-com.version>
         <gwt-core.version>1.0-SNAPSHOT</gwt-core.version>
-        <patternfly.html.version>2.65.0</patternfly.html.version>
-        <patternfly.java.version>0.0.1</patternfly.java.version>
+        <gwt-datetimeformat.version>1.0-SNAPSHOT</gwt-datetimeformat.version>
+        <gwt-resources.version>1.0-SNAPSHOT</gwt-resources.version>
+        <node.version>v13.12.0</node.version>
+        <npm.version>6.14.4</npm.version>
+        <patternfly.version>2.43.1</patternfly.version>
         <slf4j.version>1.8.0-beta2</slf4j.version>
     </properties>
 
@@ -68,12 +61,7 @@
         <dependency>
             <groupId>org.patternfly</groupId>
             <artifactId>patternfly-java</artifactId>
-            <version>${patternfly.java.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>patternfly__patternfly</artifactId>
-            <version>${patternfly.html.version}</version>
+            <version>${patternfly.version}</version>
         </dependency>
 
         <!-- Crysknife -->
@@ -84,59 +72,63 @@
         </dependency>
         <dependency>
             <groupId>org.treblereel.gwt.crysknife</groupId>
-            <artifactId>crysknife-processor</artifactId>
-            <version>${crysknife.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.treblereel.gwt.crysknife</groupId>
             <artifactId>crysknife-core</artifactId>
             <version>${crysknife.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.google.elemental2</groupId>
-                    <artifactId>elemental2-dom</artifactId>
+                    <groupId>com.vertispan.jsinterop</groupId>
+                    <artifactId>base</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
+<!--
         <dependency>
             <groupId>org.treblereel.gwt.crysknife</groupId>
             <artifactId>navigation-api</artifactId>
             <version>${crysknife.version}</version>
-            <exclusions>
-                <!-- Should not be necessary! -->
-                <exclusion>
-                    <groupId>org.gwtproject.widgets</groupId>
-                    <artifactId>gwt-widgets</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.elemental2</groupId>
-                    <artifactId>elemental2-dom</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
+-->
+        <dependency>
+            <groupId>org.treblereel.gwt.crysknife</groupId>
+            <artifactId>crysknife-processor</artifactId>
+            <version>${crysknife.version}</version>
+            <scope>provided</scope>
+        </dependency>
+<!--
         <dependency>
             <groupId>org.treblereel.gwt.crysknife</groupId>
             <artifactId>navigation-generator</artifactId>
             <version>${crysknife.version}</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.treblereel.gwt.crysknife</groupId>
-                    <artifactId>templates-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.elemental2</groupId>
-                    <artifactId>elemental2-dom</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
+        <dependency>
+            <groupId>com.google.auto</groupId>
+            <artifactId>auto-common</artifactId>
+            <version>0.7</version>
+            <scope>provided</scope>
+        </dependency>
+-->
 
-        <!-- Elemento -->
+        <!-- Elemento & Elemental2 -->
         <dependency>
             <groupId>org.jboss.elemento</groupId>
             <artifactId>elemento-core</artifactId>
             <version>${elemento.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.elemental2</groupId>
+            <artifactId>elemental2-core</artifactId>
+            <version>${elemental2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.elemental2</groupId>
+            <artifactId>elemental2-dom</artifactId>
+            <version>${elemental2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.elemental2</groupId>
+            <artifactId>elemental2-webstorage</artifactId>
+            <version>${elemental2.version}</version>
         </dependency>
 
         <!-- GWT -->
@@ -144,12 +136,17 @@
             <groupId>org.gwtproject.core</groupId>
             <artifactId>gwt-core</artifactId>
             <version>${gwt-core.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.elemental2</groupId>
-                    <artifactId>elemental2-dom</artifactId>
-                </exclusion>
-            </exclusions>
+        </dependency>
+        <!-- Necessary by the GWT maven plugin -->
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <version>${gwt-com.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt-com.version}</version>
         </dependency>
 
         <!-- Logging -->
@@ -170,113 +167,6 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>src/main/webapp</directory>
-                            <includes>
-                                <include>patternfly.*</include>
-                            </includes>
-                        </fileset>
-                        <fileset>
-                            <directory>src/main/webapp/assets</directory>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack-patternfly</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.webjars.npm</groupId>
-                                    <artifactId>patternfly__patternfly</artifactId>
-                                    <version>${patternfly.html.version}</version>
-                                    <type>jar</type>
-                                </artifactItem>
-                            </artifactItems>
-                            <includes>**/assets/**,**/patternfly.*,</includes>
-                            <outputDirectory>${project.build.directory}/patternfly</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-patternfly</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <copy todir="${basedir}/src/main/webapp">
-                                    <fileset dir="${project.build.directory}/patternfly/">
-                                        <include name="**/assets/"/>
-                                        <include name="**/patternfly.*"/>
-                                    </fileset>
-                                    <cutdirsmapper dirs="5"/>
-                                </copy>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.vertispan.j2cl</groupId>
-                <artifactId>j2cl-maven-plugin</artifactId>
-                <version>${j2cl-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>build-js</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>watch</id>
-                        <goals>
-                            <goal>watch</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <defaultWebappDirectory>${project.build.directory}/gwt/launcherDir</defaultWebappDirectory>
-                    <compilationLevel>${j2cl-compilation.level}</compilationLevel>
-                    <entrypoint>org.wildfly.halos.console.Console</entrypoint>
-                    <initialScriptFilename>halos.js</initialScriptFilename>
-                    <defines>
-                        <halos.cors>${halos.cors}</halos.cors>
-                        <halos.proxy.url>${halos.proxy.url}</halos.proxy.url>
-                        <halos.rest.version>${halos.rest.version}</halos.rest.version>
-                        <halos.version>${halos.version}</halos.version>
-                    </defines>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <packagingExcludes>WEB-INF/classes/**</packagingExcludes>
-                    <packagingExcludes>WEB-INF/lib/**</packagingExcludes>
-                    <warName>${project.build.finalName}</warName>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
@@ -294,12 +184,38 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>${tomcat7-plugin.version}</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-generated-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/annotations</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>net.ltgt.gwt.maven</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt.plugin.version}</version>
+                <extensions>true</extensions>
                 <configuration>
-                    <contextFile>${basedir}/src/main/tomcat/context.xml</contextFile>
-                    <port>8888</port>
+                    <devmodeArgs>
+                        <devmodeArg>-startupUrl</devmodeArg>
+                        <devmodeArg>console/index.html</devmodeArg>
+                    </devmodeArgs>
+                    <draftCompile>${gwt.draftCompile}</draftCompile>
+                    <moduleName>org.wildfly.halos.Console</moduleName>
+                    <moduleShortName>console</moduleShortName>
+                    <sourceLevel>1.8</sourceLevel>
+                    <style>${gwt.style}</style>
                 </configuration>
             </plugin>
         </plugins>
@@ -309,65 +225,50 @@
         <profile>
             <id>prod</id>
             <properties>
-                <halos.cors>false</halos.cors>
-                <halos.proxy.url/>
-                <j2cl-compilation.level>ADVANCED</j2cl-compilation.level>
+                <gwt.draftCompile>false</gwt.draftCompile>
+                <gwt.style>OBFUSCATED</gwt.style>
+                <npm.task>build</npm.task>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>${frontend.plugin.version}</version>
+                        <configuration>
+                            <nodeVersion>${node.version}</nodeVersion>
+                            <npmVersion>${npm.version}</npmVersion>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>install node and npm</id>
+                                <goals>
+                                    <goal>install-node-and-npm</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>npm install</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>install</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>parcel</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>run build</arguments>
+                                </configuration>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
-
-    <repositories>
-        <repository>
-            <id>sonatype-snapshots-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>google-snapshots</id>
-            <name>OSS Sonatype</name>
-            <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>vertispan-releases</id>
-            <name>Vertispan hosted artifacts-releases</name>
-            <url>https://repo.vertispan.com/j2cl/</url>
-        </repository>
-        <repository>
-            <id>vertispan-j2cl-snapshots</id>
-            <name>Vertispan hosted artifacts-snapshots</name>
-            <url>https://repo.vertispan.com/j2cl/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>vertispan-snapshots</id>
-            <name>Vertispan Snapshots</name>
-            <url>https://repo.vertispan.com/gwt-snapshot/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>vertispan-releases</id>
-            <name>Vertispan hosted plugin-releases</name>
-            <url>https://repo.vertispan.com/j2cl/</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>

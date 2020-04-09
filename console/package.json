@@ -1,0 +1,35 @@
+{
+  "name": "model-graph-browser",
+  "version": "0.0.1",
+  "description": "RIA to analyze the management model of a WildFly instance.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel src/main/web/index.html --out-dir target/gwt/devmode/war/console --public-url /console/",
+    "build": "parcel build src/main/web/index.html --out-dir target/halos-console/console",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wildfly-model-graph/browser.git"
+  },
+  "keywords": [
+    "wildfly",
+    "model",
+    "graph"
+  ],
+  "author": "Harald Pehl",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/wildfly-model-graph/browser/issues"
+  },
+  "homepage": "https://github.com/wildfly-model-graph",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-change-file": "^1.3.0",
+    "sass": "^1.26.3"
+  },
+  "dependencies": {
+    "@patternfly/patternfly": "^2.71.3"
+  },
+  "parcel-plugin-change-file": {}
+}

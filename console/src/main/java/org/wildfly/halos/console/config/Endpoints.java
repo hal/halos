@@ -18,7 +18,7 @@ public class Endpoints {
         if (environment.proxyUrl != null) {
             baseUrl = stripEnd(environment.proxyUrl, "/") + "/" + environment.restVersion;
         } else {
-            baseUrl = location.protocol + "//" + location.hash + "/" + environment.restVersion;
+            baseUrl = location.getProtocol() + "//" + location.getHash() + "/" + environment.restVersion;
         }
         this.instance = baseUrl + "/instance";
         this.management = baseUrl + "/management";
