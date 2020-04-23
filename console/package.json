@@ -4,8 +4,8 @@
   "description": "RIA to analyze the management model of a WildFly instance.",
   "main": "index.js",
   "scripts": {
-    "dev": "parcel src/main/web/index.html --out-dir target/gwt/devmode/war/console --public-url /console/",
-    "build": "parcel build src/main/web/index.html --out-dir target/halos-console/console",
+    "dev": "parcel src/main/web/index.html --out-dir target/gwt/devmode/war/halos --public-url /halos/",
+    "build": "parcel build src/main/web/index.html --out-dir target/halos-console/halos --public-url ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,7 +29,7 @@
     "sass": "^1.26.3"
   },
   "dependencies": {
-    "@patternfly/patternfly": "^2.71.3"
+    "@patternfly/patternfly": "^2.71.5"
   },
   "parcel-plugin-change-file": {}
 }

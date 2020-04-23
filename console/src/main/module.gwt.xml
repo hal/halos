@@ -2,10 +2,9 @@
 <module>
     <inherits name="org.gwtproject.core.Core"/>
     <inherits name="org.treblereel.gwt.crysknife.Crysknife"/>
-<!--    <inherits name="org.treblereel.gwt.crysknife.navigation.Navigation"/>-->
+    <inherits name="org.treblereel.gwt.crysknife.navigation.Navigation"/>
     <inherits name="org.patternfly.PatternFly"/>
 
-    <entry-point class="org.wildfly.halos.console.Console"/>
+    <entry-point class="org.wildfly.halos.client.App"/>
     <collapse-all-properties/>
-    <source path="console"/>
 </module>

@@ -31,30 +31,16 @@
 
         <!-- dependency versions -->
         <crysknife.version>0.1-SNAPSHOT</crysknife.version>
-        <domino.version>1.0-rc.5-SNAPSHOT</domino.version>
         <elemental2.version>1.0.0-RC1</elemental2.version>
         <elemento.version>HEAD-SNAPSHOT</elemento.version>
         <gwt-com.version>HEAD-SNAPSHOT</gwt-com.version>
         <gwt-core.version>1.0-SNAPSHOT</gwt-core.version>
         <gwt-datetimeformat.version>1.0-SNAPSHOT</gwt-datetimeformat.version>
         <gwt-resources.version>1.0-SNAPSHOT</gwt-resources.version>
-        <node.version>v13.12.0</node.version>
+        <node.version>v13.13.0</node.version>
         <npm.version>6.14.4</npm.version>
         <patternfly.version>2.43.1</patternfly.version>
-        <slf4j.version>1.8.0-beta2</slf4j.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.dominokit.domino</groupId>
-                <artifactId>domino</artifactId>
-                <version>${domino.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <!-- PatternFly -->
@@ -81,33 +67,29 @@
                 </exclusion>
             </exclusions>
         </dependency>
-<!--
         <dependency>
             <groupId>org.treblereel.gwt.crysknife</groupId>
             <artifactId>navigation-api</artifactId>
             <version>${crysknife.version}</version>
         </dependency>
--->
         <dependency>
             <groupId>org.treblereel.gwt.crysknife</groupId>
             <artifactId>crysknife-processor</artifactId>
             <version>${crysknife.version}</version>
             <scope>provided</scope>
         </dependency>
-<!--
+        <dependency>
+            <groupId>org.treblereel.gwt.crysknife</groupId>
+            <artifactId>elemental2-generator</artifactId>
+            <version>${crysknife.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.treblereel.gwt.crysknife</groupId>
             <artifactId>navigation-generator</artifactId>
             <version>${crysknife.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.google.auto</groupId>
-            <artifactId>auto-common</artifactId>
-            <version>0.7</version>
-            <scope>provided</scope>
-        </dependency>
--->
 
         <!-- Elemento & Elemental2 -->
         <dependency>
@@ -148,41 +130,12 @@
             <artifactId>gwt-user</artifactId>
             <version>${gwt-com.version}</version>
         </dependency>
-
-        <!-- Logging -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.dominokit</groupId>
-            <artifactId>domino-slf4j-logger</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
         <finalName>${project.artifactId}</finalName>
 
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>halos-console-resources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>src/assembly/resources.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -209,11 +162,11 @@
                 <configuration>
                     <devmodeArgs>
                         <devmodeArg>-startupUrl</devmodeArg>
-                        <devmodeArg>console/index.html</devmodeArg>
+                        <devmodeArg>halos/index.html</devmodeArg>
                     </devmodeArgs>
                     <draftCompile>${gwt.draftCompile}</draftCompile>
                     <moduleName>org.wildfly.halos.Console</moduleName>
-                    <moduleShortName>console</moduleShortName>
+                    <moduleShortName>halos</moduleShortName>
                     <sourceLevel>1.8</sourceLevel>
                     <style>${gwt.style}</style>
                 </configuration>
@@ -264,6 +217,24 @@
                                     <arguments>run build</arguments>
                                 </configuration>
                                 <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>halos-console-resources</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <descriptors>
+                                        <descriptor>src/assembly/resources.xml</descriptor>
+                                    </descriptors>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
