@@ -1,17 +1,14 @@
 package org.wildfly.halos.client;
 
-import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import elemental2.dom.HTMLDivElement;
-import org.jboss.elemento.By;
 import org.jboss.elemento.IsElement;
 import org.patternfly.components.Navigation;
 import org.patternfly.components.NavigationItem;
 import org.patternfly.components.Page;
 import org.patternfly.resources.Theme;
-import org.treblereel.gwt.crysknife.navigation.client.local.api.NavigationSelector;
 import org.wildfly.halos.client.resources.Ids;
 
 import static org.patternfly.components.Page.header;
@@ -46,11 +43,5 @@ public class Skeleton implements IsElement<HTMLDivElement> {
     @Override
     public HTMLDivElement element() {
         return page.element();
-    }
-
-    @Produces
-    @NavigationSelector
-    public static By navigationSelector() {
-        return By.id(Ids.ROOT_CONTAINER);
     }
 }

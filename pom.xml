@@ -63,21 +63,6 @@
             </dependency>
             <dependency>
                 <groupId>org.wildfly.halos</groupId>
-                <artifactId>jboss-threads</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly.halos</groupId>
-                <artifactId>wildfly-protocol</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly.halos</groupId>
-                <artifactId>wildfly-controller-client</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly.halos</groupId>
                 <artifactId>halos-proxy</artifactId>
                 <version>${project.version}</version>
             </dependency>
