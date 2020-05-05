@@ -5,7 +5,6 @@ import java.io.InputStream;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,13 +12,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.jboss.as.controller.client.ModelControllerClient;
 import org.jboss.as.controller.client.Operation;
-import org.jboss.as.controller.client.helpers.Operations;
 import org.jboss.dmr.ModelNode;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import static org.wildfly.halos.proxy.ManagementResource.DMR_ENCODED;
 
 @Path("/v1/management")
@@ -31,9 +26,6 @@ public class ManagementResource {
 
     @Inject
     Instances instances;
-
-    @Inject
-    ModelControllerClient localhost;
 
     @POST
     public Response execute(InputStream inputStream) {
@@ -69,21 +61,6 @@ public class ManagementResource {
             }
         } else {
             return Response.status(Status.NOT_FOUND).entity("Instance " + name + " not found").build();
-        }
-    }
-
-    @GET
-    @Path("/localhost")
-    @Produces(APPLICATION_JSON)
-    public Response executeLocalhost() {
-        ModelNode operation = Operations.createOperation("read-resource");
-        operation.get("attributes-only").set(true);
-        operation.get("include-runtime").set(true);
-        try {
-            ModelNode modelNode = localhost.execute(operation);
-            return Response.ok(modelNode.toJSONString(false)).build();
-        } catch (IOException e) {
-            return Response.status(INTERNAL_SERVER_ERROR).build();
         }
     }
 }

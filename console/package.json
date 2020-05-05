@@ -26,7 +26,7 @@
   "devDependencies": {
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-change-file": "^1.3.0",
-    "sass": "^1.26.3"
+    "sass": "^1.26.5"
   },
   "dependencies": {
     "@patternfly/patternfly": "^2.71.5"

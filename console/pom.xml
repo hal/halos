@@ -26,6 +26,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
 
         <!-- plugin versions -->
+        <build-helper.plugin.version>3.1.0</build-helper.plugin.version>
         <frontend.plugin.version>1.9.1</frontend.plugin.version>
         <gwt.plugin.version>1.0.0</gwt.plugin.version>
 
@@ -139,6 +140,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build-helper.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>add-generated-source</id>
